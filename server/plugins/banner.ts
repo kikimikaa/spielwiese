@@ -1,19 +1,11 @@
-import { networkInterfaces } from 'node:os'
-import { pickLanIp } from '../../core/logic'
+import { lanIp } from '../utils/network'
 
 /**
  * Prints the WLAN URLs on startup so the host immediately knows what to share —
  * the local IPv4 is detected automatically (see the README).
  */
 export default defineNitroPlugin(() => {
-  const ipv4: string[] = []
-  for (const nets of Object.values(networkInterfaces())) {
-    for (const net of nets ?? []) {
-      if (net.family === 'IPv4' && !net.internal) ipv4.push(net.address)
-    }
-  }
-
-  const ip = pickLanIp(ipv4)
+  const ip = lanIp()
   const host = ip ?? 'localhost'
   const port = process.env['NITRO_PORT'] || process.env['PORT'] || '3000'
   const base = `http://${host}:${port}`

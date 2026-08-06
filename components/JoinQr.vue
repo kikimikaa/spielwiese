@@ -6,8 +6,29 @@ import QRCode from 'qrcode'
 const qr = ref('')
 const url = ref('')
 
+const LOOPBACK_HOSTS = ['localhost', '127.0.0.1', '[::1]', '::1']
+
+/**
+ * The origin guests should reach. If the board is opened on the host machine via
+ * `localhost`, that address is useless on a phone — swap in the server's LAN IP
+ * (same protocol/port) so the QR is scannable from other devices.
+ */
+async function joinOrigin(): Promise<string> {
+  if (!LOOPBACK_HOSTS.includes(location.hostname)) return location.origin
+  try {
+    const { ip } = await $fetch<{ ip: string | null }>('/api/lan')
+    if (ip) {
+      const port = location.port ? `:${location.port}` : ''
+      return `${location.protocol}//${ip}${port}`
+    }
+  } catch {
+    // Fall back to the current origin; the banner already warns if no LAN IP.
+  }
+  return location.origin
+}
+
 onMounted(async () => {
-  url.value = `${location.origin}/join`
+  url.value = `${await joinOrigin()}/join`
   qr.value = await QRCode.toDataURL(url.value, { margin: 1, width: 240 })
 })
 </script>

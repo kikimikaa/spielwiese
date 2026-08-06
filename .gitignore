@@ -1,0 +1,27 @@
+# dependencies
+node_modules
+
+# nuxt build artefacts
+.nuxt
+.output
+.data
+dist
+
+# local runtime data — NEVER commit real guest names / live scores
+data/*.json
+!data/.gitkeep
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# logs / os / editor
+*.log
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# tests
+coverage

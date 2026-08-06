@@ -1,0 +1,10 @@
+{
+  "name": "Spielwiese",
+  "short_name": "Spielwiese",
+  "description": "Live-Board für euer Freunde-Turnier — offline im WLAN.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf8f2",
+  "theme_color": "#2f9e44",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

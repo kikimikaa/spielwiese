@@ -1,0 +1,4 @@
+# Native postinstall scripts we explicitly trust (pnpm blocks them by default).
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true

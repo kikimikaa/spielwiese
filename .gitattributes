@@ -1,0 +1,5 @@
+# Normalise line endings so the repo stays LF everywhere (cross-OS friendly).
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary

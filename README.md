@@ -16,6 +16,40 @@ for any point-based party tournament.
 > tallies, times) can be jotted in the game's note field for the host's
 > overview — it never touches the tournament score.
 
+## Screenshots
+
+The live **Board** — the shared big screen everyone watches, with the current
+game, the running score and the guests' prediction ranking:
+
+![The live board showing the score, the current game and the prediction ranking](docs/screenshots/board.png)
+
+The **Host** control panel — draw the teams, run the games and award the points,
+all from your own phone:
+
+![The host control panel with the scoreboard, drawn teams and game controls](docs/screenshots/host.png)
+
+Managing the games: reorder the lineup, mark past winners and pick the current
+game — one tap on the winning team scores it (and it's fully undoable):
+
+![The host game management with the active game and the win buttons](docs/screenshots/host-games.png)
+
+At the end, the **awards ceremony**: the host reveals each honorable mention one
+by one, then crowns the tournament winner with confetti:
+
+![The awards ceremony on the board with the winner and honorable mentions](docs/screenshots/awards.png)
+
+Everything is responsive: guests join, predict and follow along on their phones,
+and the board reflows to fit a small screen too.
+
+<table>
+  <tr>
+    <td align="center" width="25%"><img src="docs/screenshots/board-mobile.png" alt="The board on a phone" width="200"><br><sub><b>Board</b> on a phone</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/join-mobile.png" alt="A guest's join screen" width="200"><br><sub><b>Join</b> — your team</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/bets-mobile.png" alt="A guest's prediction screen" width="200"><br><sub><b>Bets</b> — predict winners</sub></td>
+    <td align="center" width="25%"><img src="docs/screenshots/invite-mobile.png" alt="The invite QR code" width="200"><br><sub><b>Invite</b> — scan to join</sub></td>
+  </tr>
+</table>
+
 ## Features
 
 - **Live scoreboard** pushed to every device over WebSocket — no reloads.

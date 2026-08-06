@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/social-preview.png" alt="Spielwiese — a self-hosted live scoreboard for a friends' game-night tournament" width="100%" />
+</p>
+
 # 🌱 Spielwiese
 
 **A self-hosted live scoreboard for a friends' game-night tournament.** Draw

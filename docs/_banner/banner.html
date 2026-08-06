@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      :root {
+        --bg: #faf8f2;
+        --surface: #ffffff;
+        --ink: #17140d;
+        --ink-soft: #5c5648;
+        --line: #e5e0d3;
+        --teal: #0ca678;
+        --orange: #f08c00;
+        --green: #2f9e44;
+        --font: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+      }
+      body {
+        font-family: var(--font);
+        color: var(--ink);
+        background:
+          radial-gradient(900px 600px at 88% -10%, rgba(12, 166, 120, 0.14), transparent 60%),
+          radial-gradient(760px 520px at 108% 120%, rgba(240, 140, 0, 0.16), transparent 55%),
+          var(--bg);
+        position: relative;
+      }
+      /* subtle dotted texture */
+      body::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(23, 20, 13, 0.05) 1.5px, transparent 1.6px);
+        background-size: 26px 26px;
+        mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.5), transparent 55%);
+      }
+      .wrap {
+        position: relative;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1.02fr 0.98fr;
+        align-items: center;
+        padding: 66px 72px;
+        gap: 24px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 22px;
+      }
+      .brand .dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 999px;
+        background: var(--green);
+        box-shadow: 0 0 0 6px rgba(47, 158, 68, 0.15);
+      }
+      .brand .name {
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+      }
+      h1 {
+        font-size: 60px;
+        line-height: 1.03;
+        letter-spacing: -0.03em;
+        font-weight: 850;
+        margin-bottom: 18px;
+      }
+      h1 .sprout {
+        font-weight: 400;
+      }
+      h1 .accent {
+        color: var(--teal);
+      }
+      .tagline {
+        font-size: 24px;
+        line-height: 1.35;
+        color: var(--ink-soft);
+        max-width: 30ch;
+        margin-bottom: 24px;
+      }
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 11px;
+        margin-bottom: 24px;
+        max-width: 26em;
+      }
+      .pill {
+        font-size: 19px;
+        font-weight: 700;
+        padding: 9px 16px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .pill.teal {
+        border-color: rgba(12, 166, 120, 0.4);
+      }
+      .pill.orange {
+        border-color: rgba(240, 140, 0, 0.45);
+      }
+      .tech {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        letter-spacing: 0.01em;
+      }
+
+      /* right-hand device montage */
+      .art {
+        position: relative;
+        height: 100%;
+      }
+      .board {
+        position: absolute;
+        top: 50%;
+        left: 46%;
+        width: 640px;
+        transform: translate(-42%, -50%) rotate(-3deg);
+        border-radius: 16px;
+        border: 1px solid var(--line);
+        box-shadow:
+          0 2px 6px rgba(20, 16, 8, 0.08),
+          0 34px 70px rgba(20, 16, 8, 0.2);
+        background: #fff;
+      }
+      .phone {
+        position: absolute;
+        bottom: 24px;
+        left: 8px;
+        width: 172px;
+        border-radius: 22px;
+        border: 6px solid #17140d;
+        box-shadow: 0 22px 48px rgba(20, 16, 8, 0.28);
+        transform: rotate(5deg);
+        background: #fff;
+      }
+      .confetti {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        opacity: 0.9;
+      }
+      .c1 {
+        top: 60px;
+        left: 62%;
+        background: var(--orange);
+        transform: rotate(20deg);
+      }
+      .c2 {
+        top: 130px;
+        left: 92%;
+        background: var(--teal);
+        transform: rotate(-15deg);
+      }
+      .c3 {
+        top: 470px;
+        left: 60%;
+        background: var(--green);
+        transform: rotate(35deg);
+      }
+      .c4 {
+        top: 40px;
+        left: 40%;
+        width: 12px;
+        height: 12px;
+        background: var(--teal);
+        transform: rotate(10deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="copy">
+        <div class="brand">
+          <span class="dot"></span>
+          <span class="name">Spielwiese</span>
+        </div>
+        <h1>Your game night,<br />on the <span class="accent">big screen</span>.</h1>
+        <p class="tagline">
+          A self-hosted live scoreboard for a friends' party tournament — over your own Wi-Fi.
+        </p>
+        <div class="pills">
+          <span class="pill teal">📊 Live scores</span>
+          <span class="pill">🎲 Team draw</span>
+          <span class="pill orange">🔮 Predictions</span>
+          <span class="pill">🏆 Awards</span>
+        </div>
+        <div class="tech">Nuxt 3 · TypeScript · No cloud · No accounts</div>
+      </div>
+
+      <div class="art">
+        <span class="confetti c1"></span>
+        <span class="confetti c2"></span>
+        <span class="confetti c3"></span>
+        <span class="confetti c4"></span>
+        <img class="board" src="../screenshots/board.png" alt="" />
+        <img class="phone" src="../screenshots/board-mobile.png" alt="" />
+      </div>
+    </div>
+  </body>
+</html>

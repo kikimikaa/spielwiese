@@ -1,0 +1,244 @@
+{
+  "app": {
+    "name": "Spielwiese"
+  },
+  "footer": {
+    "madeBy": "Open source with ♥ by kikimika GbR"
+  },
+  "common": {
+    "loading": "Loading …",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "remove": "Remove",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "close": "Close",
+    "confirm": "Confirm",
+    "points": "points",
+    "point": "point",
+    "team": "Team",
+    "teams": "Teams",
+    "game": "Game",
+    "games": "Games",
+    "guest": "Guest",
+    "vs": "vs",
+    "none": "—",
+    "optional": "optional"
+  },
+  "lang": {
+    "label": "Language",
+    "de": "Deutsch",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Home",
+    "board": "Board",
+    "host": "Host",
+    "join": "Join",
+    "bets": "Bets",
+    "invite": "Invite"
+  },
+  "home": {
+    "subtitle": "Choose a view",
+    "boardDesc": "Live scores & current game.",
+    "hostDesc": "Run the show: draw teams, control games, award points.",
+    "joinDesc": "Join as a guest and see your team.",
+    "betsDesc": "Predict who wins.",
+    "inviteDesc": "QR code to join.",
+    "connected": "Connected",
+    "offline": "Disconnected"
+  },
+  "invite": {
+    "title": "Invitation",
+    "hint": "Scan to join"
+  },
+  "bets": {
+    "needIdentity": "Log in under \"Join\" first.",
+    "tipGameWinner": "Who wins the next game: {game}",
+    "tipTournamentWinner": "Who wins the whole tournament?",
+    "untilStart": "Only until the games start.",
+    "locked": "Too late to predict"
+  },
+  "location": {
+    "outdoor": "Outdoors",
+    "indoor": "Indoors",
+    "both": "Indoors & outdoors"
+  },
+  "scoring": {
+    "points": "Free points",
+    "versus": "Duel",
+    "stations": "Stations",
+    "measure": "Measurement",
+    "betting": "Stake",
+    "pass-fail": "Pass/Fail",
+    "final-lives": "Final (lives)"
+  },
+  "scoringDesc": {
+    "points": "You freely decide which team wins.",
+    "versus": "Team vs team — more hits/rounds wins.",
+    "stations": "Several stations — best overall wins.",
+    "measure": "Best distance/accuracy wins.",
+    "betting": "Teams stake points from a pool.",
+    "pass-fail": "Per person: passed or not.",
+    "final-lives": "Final — wins count as lives."
+  },
+  "status": {
+    "setup": "Setup",
+    "draw": "Drawn",
+    "running": "Running",
+    "awards": "Awards",
+    "finished": "Finished"
+  },
+  "board": {
+    "currentGame": "Current game",
+    "noGame": "Starting soon",
+    "waiting": "Waiting for the host …",
+    "rules": "Rules",
+    "scoreboard": "Scoreboard",
+    "sunMode": "Sun mode",
+    "leaderboard": "Prediction ranking",
+    "live": "Live",
+    "paused": "Paused",
+    "pausedHint": "Back in a moment …",
+    "suspense": "Up next: the ceremony!",
+    "stats": {
+      "progress": "Progress",
+      "gamesProgress": "{done} of {total} games"
+    }
+  },
+  "host": {
+    "title": "Host",
+    "pinPrompt": "Enter host PIN",
+    "pinPlaceholder": "PIN",
+    "unlock": "Unlock",
+    "wrongPin": "Wrong PIN",
+    "sections": {
+      "teams": "Teams",
+      "draw": "Draw",
+      "games": "Games",
+      "control": "Control",
+      "awards": "Reveal awards",
+      "danger": "Reset"
+    },
+    "awards": {
+      "hint": "The categories are already on the board — reveal who won each one, one at a time.",
+      "reveal": "Reveal",
+      "hide": "Hide",
+      "revealAll": "Reveal all",
+      "hideAll": "Hide all",
+      "hidden": "still hidden",
+      "empty": "No awards yet — they appear once there's data (measured times, bets)."
+    },
+    "teamName": "Team name",
+    "namesLabel": "Names (one per line)",
+    "namesPlaceholder": "Anna\nBen\nCem\n…",
+    "draw": "Draw teams",
+    "redraw": "Draw again",
+    "drawing": "Drawing lots …",
+    "teamsReady": "Teams are set!",
+    "assignManually": "Assign manually",
+    "applyTeams": "Save teams",
+    "needTeams": "Draw or create teams first, then start a game.",
+    "included": "Included",
+    "pageOf": "Page {page} of {total}",
+    "library": "Game library",
+    "saveSelection": "Save",
+    "lineupEmpty": "No games selected yet. Open the library and tick some games.",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "setCurrent": "Set as current game",
+    "current": "Current",
+    "next": "Next game",
+    "teamWins": "{team} wins",
+    "gameNote": "Notes (host only)",
+    "undo": "Undo win",
+    "addGame": "Add game",
+    "editGame": "Edit game",
+    "loadExamples": "Load example games",
+    "clearGames": "Delete all games",
+    "deleteGameConfirm": "Really delete “{title}”?",
+    "clearGamesConfirm": "Really delete ALL games? This can't be undone.",
+    "reset": "Reset tournament",
+    "resetConfirm": "Reset the draw, points and predictions? Games and names are kept.",
+    "pause": "Pause",
+    "pauseCeremony": "Pause before ceremony",
+    "showAwards": "Show awards",
+    "startCeremony": "Start ceremony",
+    "metric": "Metric",
+    "gameForm": {
+      "title": "Title",
+      "short": "Short description",
+      "rules": "Rules",
+      "location": "Location",
+      "scoringType": "Scoring",
+      "tracksMetric": "Measure time/distance",
+      "metricLabel": "Metric label",
+      "metricUnit": "Unit",
+      "metricLowerIsBetter": "Lower is better",
+      "materials": "Materials / props",
+      "materialsPlaceholder": "e.g. folding rule, stopwatch",
+      "notes": "Notes / questions (host only)",
+      "notesPlaceholder": "Questions, terms, ideas …"
+    }
+  },
+  "join": {
+    "title": "Join",
+    "howto": "Enter your name to join in.",
+    "waitingDraw": "Waiting for the host to draw the teams …",
+    "pickPlayer": "Who are you?",
+    "realName": "Your real name",
+    "realNamePlaceholder": "as set by the host",
+    "displayName": "Display name",
+    "displayNameHint": "This is how others see you on the board.",
+    "namePlaceholder": "e.g. Teddy",
+    "join": "Let's go",
+    "youAre": "You are",
+    "shownAs": "shown as",
+    "notYou": "Not you?",
+    "yourTeam": "Your team",
+    "you": "you",
+    "toBoard": "Here we go",
+    "errors": {
+      "nameNotFound": "The host hasn't added this name.",
+      "displayEmpty": "Please enter a display name.",
+      "displayIsRealName": "That display name is a real name — please pick another.",
+      "displayTaken": "That display name is already taken.",
+      "generic": "Couldn't join. Please try again."
+    }
+  },
+  "awards": {
+    "title": "Awards",
+    "subtitle": "Before we crown the winner …",
+    "honorableMentions": "Honorable mentions",
+    "startCeremony": "And the tournament winner is …",
+    "winner": "Tournament winner",
+    "draw": "It's a draw!",
+    "hidden": "Not revealed yet",
+    "fastest": {
+      "label": "Fastest team",
+      "detail": "{team} — {value}s total"
+    },
+    "slowest": {
+      "label": "Most relaxed team",
+      "detail": "{team} — {value}s total"
+    },
+    "streak": {
+      "label": "Winning streak",
+      "detail": "{team} — {value} wins in a row"
+    },
+    "tipp-koenig": {
+      "label": "Prediction champion",
+      "detail": "{guest} — {value} points"
+    },
+    "draufgaenger": {
+      "label": "Daredevil",
+      "detail": "{guest} — {value} bets placed"
+    },
+    "pechvogel": {
+      "label": "Unlucky one",
+      "detail": "{guest} — {value} wrong bets"
+    }
+  }
+}

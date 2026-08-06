@@ -1,0 +1,244 @@
+{
+  "app": {
+    "name": "Spielwiese"
+  },
+  "footer": {
+    "madeBy": "Open Source mit ♥ von kikimika GbR"
+  },
+  "common": {
+    "loading": "Lädt …",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "remove": "Entfernen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "back": "Zurück",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "points": "Punkte",
+    "point": "Punkt",
+    "team": "Team",
+    "teams": "Teams",
+    "game": "Spiel",
+    "games": "Spiele",
+    "guest": "Gast",
+    "vs": "gegen",
+    "none": "—",
+    "optional": "optional"
+  },
+  "lang": {
+    "label": "Sprache",
+    "de": "Deutsch",
+    "en": "English"
+  },
+  "nav": {
+    "home": "Start",
+    "board": "Board",
+    "host": "Host",
+    "join": "Mitmachen",
+    "bets": "Wetten",
+    "invite": "Einladen"
+  },
+  "home": {
+    "subtitle": "Wähle eine Ansicht",
+    "boardDesc": "Live-Punktestand & aktuelles Spiel.",
+    "hostDesc": "Spielleitung: auslosen, Spiele steuern, Punkte vergeben.",
+    "joinDesc": "Als Gast beitreten und dein Team sehen.",
+    "betsDesc": "Tippe, wer gewinnt.",
+    "inviteDesc": "QR-Code zum Beitreten.",
+    "connected": "Verbunden",
+    "offline": "Nicht verbunden"
+  },
+  "invite": {
+    "title": "Einladung",
+    "hint": "Zum Mitmachen scannen"
+  },
+  "bets": {
+    "needIdentity": "Logge dich zuerst unter \"Mitmachen\" ein.",
+    "tipGameWinner": "Wer gewinnt das nächste Spiel: {game}",
+    "tipTournamentWinner": "Wer gewinnt das ganze Turnier?",
+    "untilStart": "Nur bis zum Spielstart möglich.",
+    "locked": "Zu spät zum Tippen"
+  },
+  "location": {
+    "outdoor": "Draußen",
+    "indoor": "Drinnen",
+    "both": "Drinnen & draußen"
+  },
+  "scoring": {
+    "points": "Freie Punkte",
+    "versus": "Duell",
+    "stations": "Stationen",
+    "measure": "Messung",
+    "betting": "Einsatz",
+    "pass-fail": "Bestanden/Nicht",
+    "final-lives": "Finale (Leben)"
+  },
+  "scoringDesc": {
+    "points": "Ihr entscheidet frei, welches Team gewinnt.",
+    "versus": "Team gegen Team — mehr Treffer/Runden gewinnt.",
+    "stations": "Mehrere Stationen — insgesamt besser gewinnt.",
+    "measure": "Beste Weite/Genauigkeit gewinnt.",
+    "betting": "Teams setzen Punkte aus einem Pool ein.",
+    "pass-fail": "Pro Person: bestanden oder nicht.",
+    "final-lives": "Finale — erspielte Siege zählen als Leben."
+  },
+  "status": {
+    "setup": "Vorbereitung",
+    "draw": "Ausgelost",
+    "running": "Läuft",
+    "awards": "Auszeichnungen",
+    "finished": "Beendet"
+  },
+  "board": {
+    "currentGame": "Aktuelles Spiel",
+    "noGame": "Gleich geht's los",
+    "waiting": "Warte auf die Spielleitung …",
+    "rules": "Regeln",
+    "scoreboard": "Punktestand",
+    "sunMode": "Sonnen-Modus",
+    "leaderboard": "Tipp-Rangliste",
+    "live": "Live",
+    "paused": "Pause",
+    "pausedHint": "Gleich geht's weiter …",
+    "suspense": "Gleich: die Siegerehrung!",
+    "stats": {
+      "progress": "Fortschritt",
+      "gamesProgress": "{done} von {total} Spielen"
+    }
+  },
+  "host": {
+    "title": "Spielleitung",
+    "pinPrompt": "Host-PIN eingeben",
+    "pinPlaceholder": "PIN",
+    "unlock": "Entsperren",
+    "wrongPin": "Falsche PIN",
+    "sections": {
+      "teams": "Teams",
+      "draw": "Auslosen",
+      "games": "Spiele",
+      "control": "Steuerung",
+      "awards": "Ehrungen aufdecken",
+      "danger": "Zurücksetzen"
+    },
+    "awards": {
+      "hint": "Die Kategorien stehen schon auf dem Board — hier deckst du nach und nach auf, wer sie gewonnen hat.",
+      "reveal": "Aufdecken",
+      "hide": "Verbergen",
+      "revealAll": "Alle aufdecken",
+      "hideAll": "Alle verbergen",
+      "hidden": "noch verborgen",
+      "empty": "Noch keine Ehrungen — sobald es Daten gibt (gemessene Zeiten, Tipps), erscheinen sie hier."
+    },
+    "teamName": "Teamname",
+    "namesLabel": "Namen (einer pro Zeile)",
+    "namesPlaceholder": "Anna\nBen\nCem\n…",
+    "draw": "Teams auslosen",
+    "redraw": "Neu auslosen",
+    "drawing": "Lose werden gezogen …",
+    "teamsReady": "Teams stehen!",
+    "assignManually": "Selbst zuordnen",
+    "applyTeams": "Teams übernehmen",
+    "needTeams": "Erst Teams auslosen oder selbst erstellen, dann ein Spiel starten.",
+    "included": "Dabei",
+    "pageOf": "Seite {page} von {total}",
+    "library": "Spiele-Bibliothek",
+    "saveSelection": "Speichern",
+    "lineupEmpty": "Noch keine Spiele ausgewählt. Öffne die Bibliothek und hake Spiele an.",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "setCurrent": "Als aktuelles Spiel setzen",
+    "current": "Aktuell",
+    "next": "Nächstes Spiel",
+    "teamWins": "{team} gewinnt",
+    "gameNote": "Notizen (nur für dich)",
+    "undo": "Sieg rückgängig",
+    "addGame": "Spiel hinzufügen",
+    "editGame": "Spiel bearbeiten",
+    "loadExamples": "Beispiel-Spiele laden",
+    "clearGames": "Alle Spiele löschen",
+    "deleteGameConfirm": "Spiel „{title}“ wirklich löschen?",
+    "clearGamesConfirm": "Wirklich ALLE Spiele löschen? Das lässt sich nicht rückgängig machen.",
+    "reset": "Turnier zurücksetzen",
+    "resetConfirm": "Auslosung, Punkte und Tipps zurücksetzen? Spiele und Namen bleiben erhalten.",
+    "pause": "Pause",
+    "pauseCeremony": "Pause vor Siegerehrung",
+    "showAwards": "Auszeichnungen zeigen",
+    "startCeremony": "Siegerehrung starten",
+    "metric": "Messwert",
+    "gameForm": {
+      "title": "Titel",
+      "short": "Kurzbeschreibung",
+      "rules": "Regeln",
+      "location": "Ort",
+      "scoringType": "Wertung",
+      "tracksMetric": "Zeit/Weite messen",
+      "metricLabel": "Bezeichnung Messwert",
+      "metricUnit": "Einheit",
+      "metricLowerIsBetter": "Kleiner ist besser",
+      "materials": "Material / Hilfsmittel",
+      "materialsPlaceholder": "z. B. Zollstock, Stoppuhr",
+      "notes": "Notizen / Fragen (nur Host)",
+      "notesPlaceholder": "Fragen, Begriffe, Ideen …"
+    }
+  },
+  "join": {
+    "title": "Mitmachen",
+    "howto": "Gib deinen Namen ein, um mitzumachen.",
+    "waitingDraw": "Warte, bis der Host die Teams auslost …",
+    "pickPlayer": "Wer bist du?",
+    "realName": "Dein echter Name",
+    "realNamePlaceholder": "wie beim Host angelegt",
+    "displayName": "Anzeigename",
+    "displayNameHint": "So sehen dich die anderen auf dem Board.",
+    "namePlaceholder": "z. B. Bärchen",
+    "join": "Los geht's",
+    "youAre": "Du bist",
+    "shownAs": "angezeigt als",
+    "notYou": "Nicht du?",
+    "yourTeam": "Dein Team",
+    "you": "du",
+    "toBoard": "Hier geht's zum Start",
+    "errors": {
+      "nameNotFound": "Diesen Namen hat der Host nicht angelegt.",
+      "displayEmpty": "Bitte einen Anzeigenamen eingeben.",
+      "displayIsRealName": "Dieser Anzeigename ist ein echter Name — bitte einen anderen.",
+      "displayTaken": "Dieser Anzeigename ist schon vergeben.",
+      "generic": "Beitreten hat nicht geklappt. Bitte nochmal versuchen."
+    }
+  },
+  "awards": {
+    "title": "Auszeichnungen",
+    "subtitle": "Bevor wir den Sieger küren …",
+    "honorableMentions": "Ehrenvolle Erwähnungen",
+    "startCeremony": "Und der Turniersieger ist …",
+    "winner": "Turniersieger",
+    "draw": "Unentschieden!",
+    "hidden": "Noch geheim",
+    "fastest": {
+      "label": "Schnellstes Team",
+      "detail": "{team} — {value}s gesamt"
+    },
+    "slowest": {
+      "label": "Gemütlichstes Team",
+      "detail": "{team} — {value}s gesamt"
+    },
+    "streak": {
+      "label": "Siegesserie",
+      "detail": "{team} — {value} Siege in Folge"
+    },
+    "tipp-koenig": {
+      "label": "Tipp-König*in",
+      "detail": "{guest} — {value} Punkte"
+    },
+    "draufgaenger": {
+      "label": "Draufgänger*in",
+      "detail": "{guest} — {value} Tipps abgegeben"
+    },
+    "pechvogel": {
+      "label": "Pechvogel",
+      "detail": "{guest} — {value} daneben"
+    }
+  }
+}

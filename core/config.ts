@@ -1,0 +1,132 @@
+// Shareable tournament configuration: the reusable setup (name, date and the
+// game library) with no live data. Deliberately excludes players, scores and
+// predictions so a config can be shared or handed on without leaking real guest
+// names or results. Pure and framework-free, so it runs on server and client
+// and is unit-testable. The versioned pack/parse pattern here is the foundation
+// the full save/resume snapshot (with live data) will build on.
+
+import { CONFIG_SCHEMA_VERSION, GAME_LOCATIONS, SCORING_TYPES } from './constants'
+import type { GameDef } from './types'
+
+export interface TournamentConfig {
+  schemaVersion: number
+  name: string
+  date: string
+  games: GameDef[]
+}
+
+export type ConfigError =
+  | 'not-object' // top-level isn't a JSON object
+  | 'bad-json' // string input wasn't valid JSON
+  | 'missing-version' // no schemaVersion field
+  | 'unsupported-version' // written by a newer/incompatible schema
+  | 'invalid-name' // name missing or not a string
+  | 'invalid-date' // date missing or not a string
+  | 'invalid-games' // games missing or not an array
+  | 'invalid-game' // a game entry is malformed
+
+export type ConfigParseResult =
+  { ok: true; config: TournamentConfig } | { ok: false; error: ConfigError }
+
+/** Packs the current setup into a shareable, versioned config object. */
+export function buildConfig(name: string, date: string, games: GameDef[]): TournamentConfig {
+  return {
+    schemaVersion: CONFIG_SCHEMA_VERSION,
+    name,
+    date,
+    games: games.map(sanitizeGame),
+  }
+}
+
+/** Serializes a config to pretty JSON suitable for a downloaded file. */
+export function serializeConfig(config: TournamentConfig): string {
+  return JSON.stringify(config, null, 2)
+}
+
+/**
+ * Parses and validates untrusted config input — either a raw string (from a
+ * chosen file) or an already-parsed object. Never throws: every failure mode
+ * returns a typed error so the caller can show a specific message.
+ */
+export function parseConfig(input: unknown): ConfigParseResult {
+  let value = input
+  if (typeof value === 'string') {
+    try {
+      value = JSON.parse(value)
+    } catch {
+      return fail('bad-json')
+    }
+  }
+
+  if (!isRecord(value)) return fail('not-object')
+  if (!('schemaVersion' in value)) return fail('missing-version')
+  if (value['schemaVersion'] !== CONFIG_SCHEMA_VERSION) return fail('unsupported-version')
+  if (typeof value['name'] !== 'string') return fail('invalid-name')
+  if (typeof value['date'] !== 'string') return fail('invalid-date')
+  if (!Array.isArray(value['games'])) return fail('invalid-games')
+
+  const games: GameDef[] = []
+  for (const raw of value['games']) {
+    if (!isValidGame(raw)) return fail('invalid-game')
+    games.push(sanitizeGame(raw))
+  }
+
+  return {
+    ok: true,
+    config: {
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: value['name'],
+      date: value['date'],
+      games,
+    },
+  }
+}
+
+function fail(error: ConfigError): ConfigParseResult {
+  return { ok: false, error }
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v)
+}
+
+function isNonEmptyString(v: unknown): v is string {
+  return typeof v === 'string' && v.length > 0
+}
+
+function isValidGame(v: unknown): v is GameDef {
+  if (!isRecord(v)) return false
+  return (
+    isNonEmptyString(v['id']) &&
+    typeof v['title'] === 'string' &&
+    typeof v['short'] === 'string' &&
+    typeof v['rules'] === 'string' &&
+    GAME_LOCATIONS.includes(v['location'] as GameDef['location']) &&
+    SCORING_TYPES.includes(v['scoringType'] as GameDef['scoringType'])
+  )
+}
+
+/**
+ * Rebuilds a clean GameDef, copying only known fields (so an imported file can't
+ * inject arbitrary properties) and dropping optional ones that are absent or the
+ * wrong type.
+ */
+function sanitizeGame(raw: GameDef): GameDef {
+  const game: GameDef = {
+    id: raw.id,
+    title: raw.title,
+    short: raw.short,
+    rules: raw.rules,
+    location: raw.location,
+    scoringType: raw.scoringType,
+  }
+  if (typeof raw.enabled === 'boolean') game.enabled = raw.enabled
+  if (typeof raw.tracksMetric === 'boolean') game.tracksMetric = raw.tracksMetric
+  if (typeof raw.metricLabel === 'string') game.metricLabel = raw.metricLabel
+  if (typeof raw.metricUnit === 'string') game.metricUnit = raw.metricUnit
+  if (typeof raw.metricLowerIsBetter === 'boolean')
+    game.metricLowerIsBetter = raw.metricLowerIsBetter
+  if (typeof raw.materials === 'string') game.materials = raw.materials
+  if (typeof raw.hostNote === 'string') game.hostNote = raw.hostNote
+  return game
+}

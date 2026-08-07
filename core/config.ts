@@ -46,6 +46,25 @@ export function serializeConfig(config: TournamentConfig): string {
   return JSON.stringify(config, null, 2)
 }
 
+/** Brand prefix and fallback slug for an exported config's file name. */
+const FILE_PREFIX = 'spielwiese'
+const FALLBACK_SLUG = 'config'
+
+/**
+ * Deterministic download file name for a config, derived from the tournament
+ * name: lowercased, non-alphanumerics collapsed to '-', trimmed. Falls back to a
+ * fixed slug when the name has no usable characters.
+ */
+export function configFileName(name: string): string {
+  const slug =
+    name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || FALLBACK_SLUG
+  return `${FILE_PREFIX}-${slug}.json`
+}
+
 /**
  * Parses and validates untrusted config input — either a raw string (from a
  * chosen file) or an already-parsed object. Never throws: every failure mode

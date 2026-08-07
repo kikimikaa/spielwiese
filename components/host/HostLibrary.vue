@@ -7,8 +7,32 @@ const GAMES_PER_PAGE = 8
 defineProps<{ open: boolean }>()
 const emit = defineEmits<{ 'update:open': [boolean] }>()
 
+const { t } = useI18n()
 const { command } = useHost()
 const { games } = useTournamentState()
+const { exportConfig, importFromFile, importError } = useConfigTransfer()
+
+const fileInput = ref<HTMLInputElement | null>(null)
+
+function pickFile() {
+  importError.value = null
+  fileInput.value?.click()
+}
+
+async function onFileChosen(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) await importFromFile(file)
+  input.value = '' // reset so choosing the same file again re-triggers change
+}
+
+const importErrorMsg = computed(() => {
+  const e = importError.value
+  if (!e) return null
+  if (e === 'unsupported-version') return t('host.importErrorVersion')
+  if (e === 'failed') return t('host.importFailed')
+  return t('host.importError')
+})
 
 const editing = ref<GameDef | null>(null)
 const adding = ref(false)
@@ -120,6 +144,12 @@ async function confirmDelete() {
           <button class="btn" data-testid="load-examples" @click="command('loadExampleGames')">
             {{ $t('host.loadExamples') }}
           </button>
+          <button class="btn" data-testid="export-config" @click="exportConfig">
+            ⬇ {{ $t('host.exportConfig') }}
+          </button>
+          <button class="btn" data-testid="import-config" @click="pickFile">
+            ⬆ {{ $t('host.importConfig') }}
+          </button>
           <button
             class="btn btn-danger"
             data-testid="clear-games"
@@ -127,7 +157,17 @@ async function confirmDelete() {
           >
             {{ $t('host.clearGames') }}
           </button>
+          <input
+            ref="fileInput"
+            type="file"
+            accept="application/json,.json"
+            class="visually-hidden"
+            data-testid="import-file"
+            @change="onFileChosen"
+          />
         </div>
+
+        <p v-if="importErrorMsg" class="err" data-testid="import-error">{{ importErrorMsg }}</p>
 
         <div class="save-row">
           <button

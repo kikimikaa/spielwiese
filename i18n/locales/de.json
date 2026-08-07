@@ -54,6 +54,18 @@
     "title": "Einladung",
     "hint": "Zum Mitmachen scannen"
   },
+  "error": {
+    "code": "Fehler {code}",
+    "backHome": "Zurück zum Start",
+    "reload": "Erneut versuchen",
+    "notFound": {
+      "title": "Seite nicht gefunden"
+    },
+    "generic": {
+      "title": "Da ist etwas schiefgelaufen",
+      "desc": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuch es gleich noch einmal."
+    }
+  },
   "bets": {
     "needIdentity": "Logge dich zuerst unter \"Mitmachen\" ein.",
     "tipGameWinner": "Wer gewinnt das nächste Spiel: {game}",
@@ -157,6 +169,11 @@
     "addGame": "Spiel hinzufügen",
     "editGame": "Spiel bearbeiten",
     "loadExamples": "Beispiel-Spiele laden",
+    "exportConfig": "Export",
+    "importConfig": "Import",
+    "importError": "Diese Datei ist keine gültige Spielwiese-Konfiguration.",
+    "importErrorVersion": "Diese Konfiguration stammt aus einer neueren Spielwiese-Version.",
+    "importFailed": "Import fehlgeschlagen. Bitte erneut versuchen.",
     "clearGames": "Alle Spiele löschen",
     "deleteGameConfirm": "Spiel „{title}“ wirklich löschen?",
     "clearGamesConfirm": "Wirklich ALLE Spiele löschen? Das lässt sich nicht rückgängig machen.",

@@ -148,12 +148,6 @@ async function confirmJoin() {
   font-size: 0.85rem;
 }
 
-.err {
-  color: var(--danger);
-  font-weight: 600;
-  margin: 0;
-}
-
 .team-card {
   border-top: 6px solid var(--team);
 }

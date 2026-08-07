@@ -13,22 +13,37 @@ Nothing here is a fixed schedule. Suggestions and PRs are welcome.
 **Awards / honorable mentions.** A reveal-at-your-own-pace ceremony with a few
 playful guest awards before the winner is crowned.
 
+**Per-game win celebration.** A small toast pops up on the board each time a team
+wins a game, so a scored point is felt right away — smaller than the finale.
+
+**Quiz game type.** Games can be a quiz: enter question/answer pairs, and the
+board shows the question to everyone and reveals the answer on the host's cue.
+
+**Config export & import.** Share a games setup as a versioned file so a
+tournament can be reused or handed to another host (no guest names or scores).
+
+**Friendly error page.** A branded 404 and a clear message for other errors,
+instead of Nuxt's raw error screen.
+
+**Bulk library selection.** Tick or untick every game for the tournament at once.
+
 ## Planned
 
 **Save / resume tournaments.** Snapshot a running tournament and reload it later,
 so an event can be paused across sessions (beyond the automatic `data/state.json`
 recovery that already survives a crash or restart).
 
-**Event templates.** Start from a preset (quiz night, sports day, office games)
-instead of building the game library from scratch every time.
+**Library filtering.** Filter the game library by source — only your own games,
+or by preset category (quiz, sports day, office games, …).
 
-**Import / export configs.** Share a games setup as a file so a tournament can be
-reused or handed to someone else.
+**Bilingual game presets.** Ready-made game libraries in both German and English,
+loaded by the current language.
 
-**Error handling.** A friendly 404 page, clear messages instead of raw errors
-across the host, board and guest views, and graceful recovery when the server or
-a device drops mid-event. Consistent handling project-wide rather than page by
-page.
+**More game types.** Further tailored types beyond quiz, each with its own add
+mask and board behaviour.
+
+**Reconnect handling.** Clearer recovery on the guest and board views when the
+host server or the Wi-Fi drops mid-event.
 
 ## Ideas
 

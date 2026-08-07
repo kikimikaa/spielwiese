@@ -18,6 +18,7 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 
 <template>
   <div class="page board">
+    <BoardWinToast />
     <header class="topbar">
       <div class="cluster">
         <AppBrand />

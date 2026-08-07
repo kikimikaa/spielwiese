@@ -59,8 +59,7 @@
     "backHome": "Zurück zum Start",
     "reload": "Erneut versuchen",
     "notFound": {
-      "title": "Seite nicht gefunden",
-      "desc": "Dieser Link führt ins Leere — vielleicht hat sich die Adresse vertippt."
+      "title": "Seite nicht gefunden"
     },
     "generic": {
       "title": "Da ist etwas schiefgelaufen",

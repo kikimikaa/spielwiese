@@ -9,7 +9,9 @@ const { t } = useI18n()
 // other status falls back to the generic message.
 const isNotFound = computed(() => props.error?.statusCode === 404)
 const kind = computed(() => (isNotFound.value ? 'notFound' : 'generic'))
-const emoji = computed(() => (isNotFound.value ? '🧭' : '🌱'))
+// 404 stays deliberately minimal (no emoji, no description); a generic error
+// keeps the mascot and an explanatory line.
+const emoji = computed(() => (isNotFound.value ? '' : '🌱'))
 
 useHead({ title: () => `${props.error?.statusCode ?? '?'} · ${t('app.name')}` })
 
@@ -33,12 +35,12 @@ function tryAgain() {
 
     <main class="app-main">
       <div class="error-page" data-testid="error-page">
-        <span class="emoji" aria-hidden="true">{{ emoji }}</span>
+        <span v-if="emoji" class="emoji" aria-hidden="true">{{ emoji }}</span>
         <p class="code" data-testid="error-code">
           {{ $t('error.code', { code: error?.statusCode ?? '?' }) }}
         </p>
         <h1>{{ $t(`error.${kind}.title`) }}</h1>
-        <p class="muted desc">{{ $t(`error.${kind}.desc`) }}</p>
+        <p v-if="!isNotFound" class="muted desc">{{ $t('error.generic.desc') }}</p>
 
         <div class="cluster actions">
           <button type="button" class="btn btn-primary" data-testid="error-home" @click="goHome">

@@ -59,8 +59,7 @@
     "backHome": "Back to start",
     "reload": "Try again",
     "notFound": {
-      "title": "Page not found",
-      "desc": "This link doesn't lead anywhere — maybe the address has a typo."
+      "title": "Page not found"
     },
     "generic": {
       "title": "Something went wrong",

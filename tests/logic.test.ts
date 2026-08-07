@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   awardWinners,
   clampIndex,
+  freshWinId,
   computeAwards,
   computeTotals,
   drawTeams,
@@ -45,6 +46,22 @@ describe('clampIndex', () => {
   })
   it('truncates a fractional index', () => {
     expect(clampIndex(2.9, 5)).toBe(2)
+  })
+})
+
+describe('freshWinId', () => {
+  it('returns the single newly-added win id', () => {
+    expect(freshWinId(new Set(['a']), ['a', 'b'])).toBe('b')
+  })
+  it('returns null when nothing is new (e.g. after an undo)', () => {
+    expect(freshWinId(new Set(['a', 'b']), ['a'])).toBeNull()
+    expect(freshWinId(new Set(['a']), ['a'])).toBeNull()
+  })
+  it('returns null when several are new at once (reconnect catch-up)', () => {
+    expect(freshWinId(new Set(['a']), ['a', 'b', 'c'])).toBeNull()
+  })
+  it('fires for a re-award (one removed, one added)', () => {
+    expect(freshWinId(new Set(['a', 'b', 'c']), ['a', 'b', 'd'])).toBe('d')
   })
 })
 

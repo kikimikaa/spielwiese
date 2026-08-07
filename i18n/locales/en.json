@@ -112,6 +112,7 @@
     "sunMode": "Sun mode",
     "leaderboard": "Prediction ranking",
     "live": "Live",
+    "gameWon": "{team} wins a game!",
     "paused": "Paused",
     "pausedHint": "Back in a moment …",
     "suspense": "Up next: the ceremony!",

@@ -112,6 +112,7 @@
     "sunMode": "Sonnen-Modus",
     "leaderboard": "Tipp-Rangliste",
     "live": "Live",
+    "gameWon": "{team} gewinnt ein Spiel!",
     "paused": "Pause",
     "pausedHint": "Gleich geht's weiter …",
     "suspense": "Gleich: die Siegerehrung!",

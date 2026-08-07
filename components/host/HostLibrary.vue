@@ -48,9 +48,15 @@ watch(pageCount, (count: number) => {
 })
 
 const isEnabled = (g: GameDef) => g.enabled !== false
+const enabledCount = computed(() => games.value.filter(isEnabled).length)
 
 function toggleEnabled(g: GameDef) {
   command('updateGame', { gameId: g.id, patch: { enabled: !isEnabled(g) } })
+}
+
+/** Ticks or unticks every game at once — spares the host clicking each one. */
+function setAll(enabled: boolean) {
+  command('setAllEnabled', { enabled })
 }
 
 function closeForm() {
@@ -82,6 +88,28 @@ async function confirmDelete() {
       @cancel="emit('update:open', false)"
     >
       <div class="stack" data-testid="library">
+        <div v-if="games.length" class="cluster select-row" data-testid="select-all-row">
+          <span class="muted grow">
+            {{ $t('host.selectedCount', { n: enabledCount, total: games.length }) }}
+          </span>
+          <button
+            class="btn"
+            :disabled="enabledCount === games.length"
+            data-testid="select-all"
+            @click="setAll(true)"
+          >
+            {{ $t('host.selectAll') }}
+          </button>
+          <button
+            class="btn"
+            :disabled="enabledCount === 0"
+            data-testid="select-none"
+            @click="setAll(false)"
+          >
+            {{ $t('host.selectNone') }}
+          </button>
+        </div>
+
         <ul class="lib-list">
           <li v-for="g in pagedGames" :key="g.id" class="lib-row" :class="{ off: !isEnabled(g) }">
             <label class="incl">
@@ -207,6 +235,14 @@ async function confirmDelete() {
 </template>
 
 <style scoped>
+.select-row {
+  align-items: center;
+}
+
+.select-row .grow {
+  flex: 1;
+}
+
 .lib-list {
   list-style: none;
   margin: 0;

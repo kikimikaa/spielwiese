@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildConfig, parseConfig, serializeConfig } from '../core/config'
+import { buildConfig, configFileName, parseConfig, serializeConfig } from '../core/config'
 import { CONFIG_SCHEMA_VERSION } from '../core/constants'
 import type { GameDef } from '../core/types'
 
@@ -153,5 +153,24 @@ describe('parseConfig rejects bad input', () => {
       games: [game({ short: '', rules: '' })],
     })
     expect(result.ok).toBe(true)
+  })
+})
+
+describe('configFileName', () => {
+  it.each([
+    ['Sommer-Turnier', 'spielwiese-sommer-turnier.json'],
+    ['  Garten Cup 2026!  ', 'spielwiese-garten-cup-2026.json'],
+    ['Über Ecken & Kanten', 'spielwiese-ber-ecken-kanten.json'],
+  ])('slugifies %o', (name, expected) => {
+    expect(configFileName(name)).toBe(expected)
+  })
+
+  it.each([
+    ['', 'spielwiese-config.json'],
+    ['   ', 'spielwiese-config.json'],
+    ['!!!', 'spielwiese-config.json'],
+    ['💥', 'spielwiese-config.json'],
+  ])('falls back for a name with no usable characters (%o)', (name, expected) => {
+    expect(configFileName(name)).toBe(expected)
   })
 })

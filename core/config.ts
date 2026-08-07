@@ -8,7 +8,7 @@
 // snapshot (with live data) will build on.
 
 import { CONFIG_SCHEMA_VERSION, GAME_LOCATIONS, SCORING_TYPES } from './constants'
-import type { GameDef } from './types'
+import type { GameDef, QuizQuestion } from './types'
 
 export interface TournamentConfig {
   schemaVersion: number
@@ -155,5 +155,18 @@ function sanitizeGame(raw: GameDef): GameDef {
     game.metricLowerIsBetter = raw.metricLowerIsBetter
   if (typeof raw.materials === 'string') game.materials = raw.materials
   if (typeof raw.hostNote === 'string') game.hostNote = raw.hostNote
+  if (raw.kind === 'quiz' || raw.kind === 'freeform') game.kind = raw.kind
+  if (Array.isArray(raw.questions)) game.questions = sanitizeQuestions(raw.questions)
   return game
+}
+
+/** Keeps only well-formed {question, answer} string pairs from imported input. */
+function sanitizeQuestions(raw: unknown[]): QuizQuestion[] {
+  const out: QuizQuestion[] = []
+  for (const q of raw) {
+    if (isRecord(q) && typeof q['question'] === 'string' && typeof q['answer'] === 'string') {
+      out.push({ question: q['question'], answer: q['answer'] })
+    }
+  }
+  return out
 }

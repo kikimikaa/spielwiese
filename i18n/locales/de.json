@@ -107,6 +107,7 @@
     "currentGame": "Aktuelles Spiel",
     "noGame": "Gleich geht's los",
     "waiting": "Warte auf die Spielleitung …",
+    "answerHidden": "Antwort noch verborgen — warte auf die Spielleitung …",
     "rules": "Regeln",
     "scoreboard": "Punktestand",
     "sunMode": "Sonnen-Modus",
@@ -184,8 +185,25 @@
     "showAwards": "Auszeichnungen zeigen",
     "startCeremony": "Siegerehrung starten",
     "metric": "Messwert",
+    "quiz": {
+      "progress": "Frage {n}/{total}",
+      "prev": "Zurück",
+      "next": "Weiter",
+      "reveal": "Antwort zeigen",
+      "hide": "Antwort verbergen"
+    },
     "gameForm": {
       "title": "Titel",
+      "kind": "Typ",
+      "kindOption": {
+        "freeform": "Freies Spiel",
+        "quiz": "Quiz"
+      },
+      "questions": "Fragen",
+      "question": "Frage",
+      "answer": "Antwort",
+      "addQuestion": "Frage hinzufügen",
+      "removeQuestion": "Frage entfernen",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

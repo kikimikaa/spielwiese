@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { GameDef, GameLocation, ScoringType } from '../../core/types'
+import type { GameDef, GameKind, GameLocation, QuizQuestion, ScoringType } from '../../core/types'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
 
+const KINDS: GameKind[] = ['freeform', 'quiz']
 const LOCATIONS: GameLocation[] = ['both', 'outdoor', 'indoor']
 const SCORING_TYPES: ScoringType[] = [
   'points',
@@ -28,13 +29,33 @@ const form = reactive<GameDef>({
   metricLowerIsBetter: props.game?.metricLowerIsBetter ?? false,
   materials: props.game?.materials ?? '',
   hostNote: props.game?.hostNote ?? '',
+  kind: props.game?.kind ?? 'freeform',
 })
+
+// Separate reactive list so adding/removing rows stays simple; folded back in on save.
+const questions = ref<QuizQuestion[]>(props.game?.questions?.map((q) => ({ ...q })) ?? [])
+
+function addQuestion() {
+  questions.value.push({ question: '', answer: '' })
+}
+function removeQuestion(i: number) {
+  questions.value.splice(i, 1)
+}
 
 const canSave = computed(() => form.title.trim().length > 0)
 
 function submit() {
   if (!canSave.value) return
-  emit('save', { ...form, title: form.title.trim() })
+  const game: GameDef = { ...form, title: form.title.trim() }
+  if (form.kind === 'quiz') {
+    // Trim and drop rows the host left entirely blank.
+    game.questions = questions.value
+      .map((q: QuizQuestion) => ({ question: q.question.trim(), answer: q.answer.trim() }))
+      .filter((q: QuizQuestion) => q.question || q.answer)
+  } else {
+    game.questions = []
+  }
+  emit('save', game)
 }
 </script>
 
@@ -50,6 +71,45 @@ function submit() {
         {{ $t('host.gameForm.short') }} <span class="opt">({{ $t('common.optional') }})</span>
       </label>
       <input id="g-short" v-model="form.short" class="input" />
+    </div>
+
+    <div>
+      <label class="label" for="g-kind">{{ $t('host.gameForm.kind') }}</label>
+      <select id="g-kind" v-model="form.kind" class="select" data-testid="game-kind">
+        <option v-for="k in KINDS" :key="k" :value="k">
+          {{ $t(`host.gameForm.kindOption.${k}`) }}
+        </option>
+      </select>
+    </div>
+
+    <div v-if="form.kind === 'quiz'" class="stack quiz-editor" data-testid="quiz-editor">
+      <span class="label">{{ $t('host.gameForm.questions') }}</span>
+      <div v-for="(q, i) in questions" :key="i" class="qrow">
+        <input
+          v-model="q.question"
+          class="input"
+          :placeholder="$t('host.gameForm.question')"
+          :data-testid="`quiz-question-${i}`"
+        />
+        <input
+          v-model="q.answer"
+          class="input"
+          :placeholder="$t('host.gameForm.answer')"
+          :data-testid="`quiz-answer-${i}`"
+        />
+        <button
+          type="button"
+          class="btn btn-danger qdel"
+          :aria-label="$t('host.gameForm.removeQuestion')"
+          data-testid="quiz-remove"
+          @click="removeQuestion(i)"
+        >
+          ✕
+        </button>
+      </div>
+      <button type="button" class="btn" data-testid="quiz-add" @click="addQuestion">
+        ＋ {{ $t('host.gameForm.addQuestion') }}
+      </button>
     </div>
 
     <div>
@@ -166,5 +226,27 @@ function submit() {
   font-weight: 400;
   color: var(--ink-soft);
   font-size: 0.85em;
+}
+
+.quiz-editor {
+  gap: 0.5rem;
+  border-left: 3px solid var(--line);
+  padding-left: 0.7rem;
+}
+
+.qrow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.qrow .input {
+  flex: 1;
+}
+
+.qdel {
+  min-height: 0;
+  padding: 0.4rem 0.6rem;
+  flex: none;
 }
 </style>

@@ -21,7 +21,7 @@ import {
   TOURNAMENT_DATE,
   TOURNAMENT_DEFAULT_NAME,
 } from '../../core/constants'
-import { drawTeams } from '../../core/logic'
+import { clampIndex, drawTeams } from '../../core/logic'
 
 const STATE_PATH = resolve(process.cwd(), STATE_FILE)
 
@@ -50,6 +50,7 @@ function createInitialState(): TournamentState {
     scoreEvents: [],
     predictions: [],
     revealedAwards: [],
+    quiz: { index: 0, revealed: false },
   }
 }
 
@@ -76,6 +77,7 @@ function load(): TournamentState {
         parsed.pause ??= 'none'
         parsed.status ??= 'setup'
         parsed.revealedAwards ??= []
+        parsed.quiz ??= { index: 0, revealed: false }
         return parsed
       }
     } catch {
@@ -196,6 +198,8 @@ export function addGame(def: Partial<GameDef>): TournamentState {
     metricLowerIsBetter: def.metricLowerIsBetter,
     materials: def.materials,
     hostNote: def.hostNote,
+    kind: def.kind,
+    questions: def.questions,
     order: state.games.length,
     status: 'todo',
   }
@@ -298,6 +302,8 @@ export function setCurrentGame(gameId: string | null): TournamentState {
     if (g.status === 'active') g.status = 'done'
   }
   state.currentGameId = gameId
+  // A new current game starts its quiz (if any) at the first, hidden question.
+  state.quiz = { index: 0, revealed: false }
   if (gameId) {
     const g = findGame(gameId)
     if (g) {
@@ -308,6 +314,24 @@ export function setCurrentGame(gameId: string | null): TournamentState {
     }
     state.status = 'running'
   }
+  return commit()
+}
+
+/** Count of questions in the current quiz game (0 if it isn't a quiz). */
+function currentQuizLength(): number {
+  const g = state.currentGameId ? findGame(state.currentGameId) : undefined
+  return g?.kind === 'quiz' ? (g.questions?.length ?? 0) : 0
+}
+
+/** Jumps the board to a quiz question (clamped), hiding the answer again. */
+export function setQuizQuestion(index: number): TournamentState {
+  state.quiz = { index: clampIndex(index, currentQuizLength()), revealed: false }
+  return commit()
+}
+
+/** Shows or hides the current quiz question's answer on the board. */
+export function setQuizRevealed(revealed: boolean): TournamentState {
+  state.quiz = { ...state.quiz, revealed }
   return commit()
 }
 

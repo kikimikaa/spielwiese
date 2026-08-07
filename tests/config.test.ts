@@ -45,6 +45,30 @@ describe('parseConfig round-trip', () => {
     expect(result.ok).toBe(true)
   })
 
+  it('round-trips quiz kind and questions, dropping malformed rows', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        {
+          ...game(),
+          kind: 'quiz',
+          questions: [
+            { question: 'Q1', answer: 'A1' },
+            { question: 'Q2', answer: 5 }, // wrong type -> dropped
+            'nope', // not an object -> dropped
+          ],
+        },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.config.games[0]?.kind).toBe('quiz')
+      expect(result.config.games[0]?.questions).toEqual([{ question: 'Q1', answer: 'A1' }])
+    }
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

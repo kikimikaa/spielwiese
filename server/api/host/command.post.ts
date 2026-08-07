@@ -1,11 +1,13 @@
 import type { AwardId, PauseMode, TournamentStatus } from '../../../core/types'
 import { AWARD_IDS } from '../../../core/constants'
 import { parseConfig } from '../../../core/config'
+import { GAME_TEMPLATES } from '../../../core/templates'
 import { assertHostPin } from '../../utils/auth'
 import * as store from '../../utils/state'
 
 const STATUSES: TournamentStatus[] = ['setup', 'draw', 'running', 'awards', 'finished']
 const PAUSE_MODES: PauseMode[] = ['none', 'break', 'suspense']
+const TEMPLATE_IDS = GAME_TEMPLATES.map((t) => t.id)
 
 /**
  * Single PIN-gated command endpoint for all host mutations. A command bus keeps
@@ -64,6 +66,8 @@ export default defineEventHandler(async (event) => {
       return store.reorderGames(p.orderedIds ?? [])
     case 'loadExampleGames':
       return store.loadExampleGames()
+    case 'applyTemplate':
+      return store.applyTemplate(oneOf(p.id, TEMPLATE_IDS))
     case 'clearGames':
       return store.clearGames()
     case 'importConfig': {

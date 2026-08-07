@@ -25,6 +25,11 @@ instead of building the game library from scratch every time.
 **Import / export configs.** Share a games setup as a file so a tournament can be
 reused or handed to someone else.
 
+**Error handling.** A friendly 404 page, clear messages instead of raw errors
+across the host, board and guest views, and graceful recovery when the server or
+a device drops mid-event. Consistent handling project-wide rather than page by
+page.
+
 ## Ideas
 
 Further out, not committed yet.

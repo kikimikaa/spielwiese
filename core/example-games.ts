@@ -75,17 +75,18 @@ export const EXAMPLE_GAMES: GameDef[] = [
   {
     id: 'quiz',
     title: 'Quiz',
-    short: 'Buzzer-Quiz — wer zuerst auf die Glocke haut, darf antworten.',
+    short: 'Fragerunde — die Frage steht auf dem Board, die Antwort deckt der Host auf.',
     rules:
-      'Fragerunde mit Buzzer: Wer zuerst auf die Glocke haut, darf antworten. ' +
-      'Das Team mit den meisten richtigen Antworten gewinnt.',
+      'Der Host blättert durch die Fragen; wer zuerst richtig antwortet, punktet ' +
+      'fürs Team. Das Team mit den meisten richtigen Antworten gewinnt.',
     location: 'both',
     scoringType: 'points',
-    materials: 'Glocken/Buzzer zum Draufschlagen, Fragenkarten',
-    hostNote:
-      'Fragen: 1) Hauptstadt von Australien? (Canberra)  ' +
-      '2) Wie viele Beine hat eine Spinne? (8)  ' +
-      '3) Wann fiel die Berliner Mauer? (1989)',
+    kind: 'quiz',
+    questions: [
+      { question: 'Hauptstadt von Australien?', answer: 'Canberra' },
+      { question: 'Wie viele Beine hat eine Spinne?', answer: '8' },
+      { question: 'In welchem Jahr fiel die Berliner Mauer?', answer: '1989' },
+    ],
   },
   {
     id: 'geruche',

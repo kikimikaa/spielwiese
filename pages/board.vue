@@ -2,7 +2,8 @@
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
-const { state, connected, teams, totals, leader, currentGame, upcoming } = useTournamentState()
+const { state, connected, teams, totals, leader, currentGame, upcoming, quiz, currentQuestion } =
+  useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 
 const showAwards = computed(
@@ -79,7 +80,22 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
           <template v-if="currentGame">
             <h1 class="game-title">{{ currentGame.title }}</h1>
             <GameTags :game="currentGame" />
-            <p class="rules">{{ currentGame.rules }}</p>
+            <p v-if="currentGame.rules" class="rules">{{ currentGame.rules }}</p>
+
+            <div
+              v-if="currentGame.kind === 'quiz' && currentQuestion"
+              class="quiz"
+              data-testid="board-quiz"
+            >
+              <p class="quiz-q">{{ currentQuestion.question }}</p>
+              <p v-if="quiz.revealed" class="quiz-a" data-testid="board-quiz-answer">
+                {{ currentQuestion.answer }}
+              </p>
+              <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
+            </div>
+            <p v-else-if="currentGame.kind === 'quiz' && !currentGame.rules" class="muted rules">
+              {{ $t('board.waiting') }}
+            </p>
           </template>
           <template v-else>
             <h1 class="game-title">{{ $t('board.noGame') }}</h1>
@@ -155,5 +171,30 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 .rules {
   font-size: clamp(1rem, 2.5vw, 1.25rem);
   margin: 0.75rem 0 0;
+}
+
+.quiz {
+  margin-top: clamp(1rem, 3vw, 1.75rem);
+  border-top: 1px solid var(--line);
+  padding-top: clamp(1rem, 3vw, 1.75rem);
+}
+
+.quiz-q {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: 800;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.quiz-a {
+  font-size: clamp(1.25rem, 4vw, 2rem);
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0.75rem 0 0;
+  text-wrap: balance;
+}
+
+.quiz-hidden {
+  color: var(--ink-soft);
 }
 </style>

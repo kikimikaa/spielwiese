@@ -1,11 +1,14 @@
 // Central constants — no magic values in the logic.
-import type { AwardId, AwardTarget, GameLocation, ScoringType } from './types'
+import type { AwardId, AwardTarget, GameKind, GameLocation, ScoringType } from './types'
 
 /**
  * Bumped whenever the exported config/state shape changes incompatibly, so an
  * import can reject or migrate files written by a different version.
  */
 export const CONFIG_SCHEMA_VERSION = 1
+
+/** Every valid game type — the runtime source for validation and the form. */
+export const GAME_KINDS: GameKind[] = ['freeform', 'quiz']
 
 /** Every valid game location — the runtime source for import validation. */
 export const GAME_LOCATIONS: GameLocation[] = ['outdoor', 'indoor', 'both']

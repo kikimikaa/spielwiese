@@ -7,8 +7,8 @@
 // The versioned pack/parse pattern here is the foundation the full save/resume
 // snapshot (with live data) will build on.
 
-import { CONFIG_SCHEMA_VERSION, GAME_LOCATIONS, SCORING_TYPES } from './constants'
-import type { GameDef } from './types'
+import { CONFIG_SCHEMA_VERSION, GAME_KINDS, GAME_LOCATIONS, SCORING_TYPES } from './constants'
+import type { GameDef, GameKind, QuizQuestion } from './types'
 
 export interface TournamentConfig {
   schemaVersion: number
@@ -155,5 +155,21 @@ function sanitizeGame(raw: GameDef): GameDef {
     game.metricLowerIsBetter = raw.metricLowerIsBetter
   if (typeof raw.materials === 'string') game.materials = raw.materials
   if (typeof raw.hostNote === 'string') game.hostNote = raw.hostNote
+  if (GAME_KINDS.includes(raw.kind as GameKind)) game.kind = raw.kind
+  // Questions only belong to a quiz — never carry them on a freeform game.
+  if (game.kind === 'quiz' && Array.isArray(raw.questions)) {
+    game.questions = sanitizeQuestions(raw.questions)
+  }
   return game
+}
+
+/** Keeps only well-formed {question, answer} string pairs from imported input. */
+function sanitizeQuestions(raw: unknown[]): QuizQuestion[] {
+  const out: QuizQuestion[] = []
+  for (const q of raw) {
+    if (isRecord(q) && typeof q['question'] === 'string' && typeof q['answer'] === 'string') {
+      out.push({ question: q['question'], answer: q['answer'] })
+    }
+  }
+  return out
 }

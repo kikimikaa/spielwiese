@@ -2,7 +2,15 @@
 import type { Game } from '../../core/types'
 
 const { command } = useHost()
-const { state, playableGames, teams, teamById, players } = useTournamentState()
+const { state, playableGames, teams, teamById, players, quiz, currentQuestion } =
+  useTournamentState()
+
+function quizGoto(index: number) {
+  command('quizGoto', { index })
+}
+function quizReveal(revealed: boolean) {
+  command('quizReveal', { revealed })
+}
 
 // A game can only be started once teams exist (drawn or created manually).
 const hasTeams = computed(() => players.value.length > 0)
@@ -84,6 +92,47 @@ function setNote(gameId: string, event: Event) {
           <p v-if="g.materials" class="materials-line" data-testid="materials-view">
             📦 {{ g.materials }}
           </p>
+
+          <div
+            v-if="g.kind === 'quiz' && g.questions?.length"
+            class="quiz-control stack"
+            data-testid="quiz-control"
+          >
+            <div class="muted quiz-progress">
+              {{ $t('host.quiz.progress', { n: quiz.index + 1, total: g.questions.length }) }}
+            </div>
+            <p class="quiz-q">{{ currentQuestion?.question }}</p>
+            <p v-if="quiz.revealed" class="quiz-a" data-testid="quiz-answer">
+              {{ currentQuestion?.answer }}
+            </p>
+            <div class="cluster">
+              <button
+                class="btn"
+                :disabled="quiz.index === 0"
+                data-testid="quiz-prev"
+                @click="quizGoto(quiz.index - 1)"
+              >
+                ‹ {{ $t('host.quiz.prev') }}
+              </button>
+              <button
+                class="btn"
+                :class="{ 'btn-primary': quiz.revealed }"
+                :aria-pressed="quiz.revealed"
+                data-testid="quiz-reveal"
+                @click="quizReveal(!quiz.revealed)"
+              >
+                {{ quiz.revealed ? $t('host.quiz.hide') : $t('host.quiz.reveal') }}
+              </button>
+              <button
+                class="btn"
+                :disabled="quiz.index >= g.questions.length - 1"
+                data-testid="quiz-next"
+                @click="quizGoto(quiz.index + 1)"
+              >
+                {{ $t('host.quiz.next') }} ›
+              </button>
+            </div>
+          </div>
 
           <div class="cluster">
             <button
@@ -209,6 +258,31 @@ function setNote(gameId: string, event: Event) {
 .game-desc {
   font-weight: 700;
   margin: 0;
+}
+
+.quiz-control {
+  gap: 0.4rem;
+  border-left: 3px solid var(--accent);
+  padding-left: 0.7rem;
+}
+
+.quiz-progress {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quiz-q {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.quiz-a {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .game-rules {

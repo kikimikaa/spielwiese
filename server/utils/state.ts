@@ -13,7 +13,6 @@ import type {
   TournamentStatus,
 } from '../../core/types'
 import { EXAMPLE_GAMES } from '../../core/example-games'
-import { GAME_TEMPLATES } from '../../core/templates'
 import type { TournamentConfig } from '../../core/config'
 import {
   DEFAULT_TEAMS,
@@ -237,34 +236,21 @@ export function loadExampleGames(): TournamentState {
 }
 
 /**
- * Swaps the whole game library. Any play tied to the old games (scores,
+ * Replaces the tournament name, date and game library from a shared config.
+ * Because the games are swapped wholesale, any play tied to the old ones (scores,
  * predictions, revealed awards, the current game) would dangle, so it is cleared;
  * teams and drawn players are kept. Drops back out of a running/finished flow.
- * Shared by config import and template loading; the caller commits.
  */
-function swapGames(games: Game[]): void {
-  state.games = games
+export function importConfig(config: TournamentConfig): TournamentState {
+  state.name = config.name
+  state.date = config.date
+  state.games = config.games.map(toGame)
   state.currentGameId = null
   state.scoreEvents = []
   state.predictions = []
   state.revealedAwards = []
   state.pause = 'none'
   state.status = state.players.length > 0 ? 'draw' : 'setup'
-}
-
-/** Replaces the tournament name, date and game library from a shared config. */
-export function importConfig(config: TournamentConfig): TournamentState {
-  state.name = config.name
-  state.date = config.date
-  swapGames(config.games.map(toGame))
-  return commit()
-}
-
-/** Loads a built-in game template as the library. Unknown id is a no-op. */
-export function applyTemplate(id: string): TournamentState {
-  const template = GAME_TEMPLATES.find((t) => t.id === id)
-  if (!template) return state
-  swapGames(template.games.map(toGame))
   return commit()
 }
 

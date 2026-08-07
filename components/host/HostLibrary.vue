@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { GameDef } from '../../core/types'
-import { GAME_TEMPLATES } from '../../core/templates'
 
 // Keep the library scannable — paginate once it grows past this.
 const GAMES_PER_PAGE = 8
-
-const templateIds = GAME_TEMPLATES.map((tpl) => tpl.id)
 
 defineProps<{ open: boolean }>()
 const emit = defineEmits<{ 'update:open': [boolean] }>()
@@ -131,19 +128,6 @@ async function confirmDelete() {
             @click="page = Math.min(pageCount - 1, page + 1)"
           >
             ›
-          </button>
-        </div>
-
-        <div class="cluster templates" data-testid="templates">
-          <span class="muted templates-label">{{ $t('host.templates') }}</span>
-          <button
-            v-for="id in templateIds"
-            :key="id"
-            class="btn"
-            :data-testid="`template-${id}`"
-            @click="command('applyTemplate', { id })"
-          >
-            {{ $t(`host.template.${id}`) }}
           </button>
         </div>
 
@@ -275,10 +259,6 @@ async function confirmDelete() {
   justify-content: center;
   gap: 1rem;
   font-weight: 700;
-}
-
-.templates-label {
-  font-weight: 600;
 }
 
 .save-row {

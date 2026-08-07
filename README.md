@@ -87,6 +87,10 @@ and the board reflows to fit a small screen too.
 | **Bets**   | `/bets`   | Guests — predict winners                               |
 | **Invite** | `/invite` | A QR code that sends guests to `/join`                 |
 
+## Roadmap
+
+What's here, planned and on the idea list lives in [ROADMAP.md](ROADMAP.md).
+
 ## Requirements
 
 - Node.js `>= 20`

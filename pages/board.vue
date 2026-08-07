@@ -91,7 +91,7 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
               <p v-if="quiz.revealed" class="quiz-a" data-testid="board-quiz-answer">
                 {{ currentQuestion.answer }}
               </p>
-              <p v-else class="muted quiz-hint">{{ $t('board.answerHidden') }}</p>
+              <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
             </div>
           </template>
           <template v-else>
@@ -191,8 +191,7 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
   text-wrap: balance;
 }
 
-.quiz-hint {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  margin: 0.75rem 0 0;
+.quiz-hidden {
+  color: var(--ink-soft);
 }
 </style>

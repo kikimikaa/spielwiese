@@ -169,12 +169,6 @@
     "addGame": "Add game",
     "editGame": "Edit game",
     "loadExamples": "Load example games",
-    "templates": "Templates:",
-    "template": {
-      "quiz": "Quiz night",
-      "sports": "Sports day",
-      "office": "Office games"
-    },
     "exportConfig": "Export",
     "importConfig": "Import",
     "importError": "This file isn't a valid Spielwiese config.",

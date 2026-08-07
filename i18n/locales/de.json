@@ -169,12 +169,6 @@
     "addGame": "Spiel hinzufügen",
     "editGame": "Spiel bearbeiten",
     "loadExamples": "Beispiel-Spiele laden",
-    "templates": "Vorlagen:",
-    "template": {
-      "quiz": "Quiz-Abend",
-      "sports": "Sporttag",
-      "office": "Büro-Spiele"
-    },
     "exportConfig": "Export",
     "importConfig": "Import",
     "importError": "Diese Datei ist keine gültige Spielwiese-Konfiguration.",

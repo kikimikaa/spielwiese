@@ -199,7 +199,8 @@ export function addGame(def: Partial<GameDef>): TournamentState {
     materials: def.materials,
     hostNote: def.hostNote,
     kind: def.kind,
-    questions: def.questions,
+    // Questions only belong to a quiz game.
+    questions: def.kind === 'quiz' ? def.questions : undefined,
     order: state.games.length,
     status: 'todo',
   }
@@ -213,6 +214,13 @@ export function updateGame(gameId: string, patch: Partial<GameDef>): TournamentS
   if (!game) return state
   const { id: _id, ...rest } = patch
   Object.assign(game, rest)
+  // A game that is no longer a quiz must not keep stale questions.
+  if (game.kind !== 'quiz') delete game.questions
+  // Editing the live game (e.g. shortening a quiz) must keep the board pointer
+  // valid and re-hide the answer.
+  if (gameId === state.currentGameId) {
+    state.quiz = { index: clampIndex(state.quiz.index, currentQuizLength()), revealed: false }
+  }
   return commit()
 }
 
@@ -253,6 +261,7 @@ export function importConfig(config: TournamentConfig): TournamentState {
   state.scoreEvents = []
   state.predictions = []
   state.revealedAwards = []
+  state.quiz = { index: 0, revealed: false }
   state.pause = 'none'
   state.status = state.players.length > 0 ? 'draw' : 'setup'
   return commit()
@@ -329,9 +338,9 @@ export function setQuizQuestion(index: number): TournamentState {
   return commit()
 }
 
-/** Shows or hides the current quiz question's answer on the board. */
+/** Shows or hides the current quiz question's answer — only a real quiz reveals. */
 export function setQuizRevealed(revealed: boolean): TournamentState {
-  state.quiz = { ...state.quiz, revealed }
+  state.quiz = { ...state.quiz, revealed: revealed && currentQuizLength() > 0 }
   return commit()
 }
 

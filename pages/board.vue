@@ -93,6 +93,9 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
               </p>
               <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
             </div>
+            <p v-else-if="currentGame.kind === 'quiz' && !currentGame.rules" class="muted rules">
+              {{ $t('board.waiting') }}
+            </p>
           </template>
           <template v-else>
             <h1 class="game-title">{{ $t('board.noGame') }}</h1>

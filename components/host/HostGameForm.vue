@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { GameDef, GameKind, GameLocation, QuizQuestion, ScoringType } from '../../core/types'
+import type { GameDef, GameLocation, QuizQuestion, ScoringType } from '../../core/types'
+import { GAME_KINDS } from '../../core/constants'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
 
-const KINDS: GameKind[] = ['freeform', 'quiz']
 const LOCATIONS: GameLocation[] = ['both', 'outdoor', 'indoor']
 const SCORING_TYPES: ScoringType[] = [
   'points',
@@ -42,19 +42,24 @@ function removeQuestion(i: number) {
   questions.value.splice(i, 1)
 }
 
-const canSave = computed(() => form.title.trim().length > 0)
+// Trimmed, non-empty Q&A pairs — a quiz needs at least one to be saveable.
+const cleanQuestions = computed<QuizQuestion[]>(() =>
+  questions.value
+    .map((q: QuizQuestion) => ({ question: q.question.trim(), answer: q.answer.trim() }))
+    .filter((q: QuizQuestion) => q.question && q.answer),
+)
+
+const canSave = computed(() => {
+  if (form.title.trim().length === 0) return false
+  if (form.kind === 'quiz') return cleanQuestions.value.length > 0
+  return true
+})
 
 function submit() {
   if (!canSave.value) return
   const game: GameDef = { ...form, title: form.title.trim() }
-  if (form.kind === 'quiz') {
-    // Trim and drop rows the host left entirely blank.
-    game.questions = questions.value
-      .map((q: QuizQuestion) => ({ question: q.question.trim(), answer: q.answer.trim() }))
-      .filter((q: QuizQuestion) => q.question || q.answer)
-  } else {
-    game.questions = []
-  }
+  // Only a quiz carries questions; the store clears them when kind changes away.
+  if (form.kind === 'quiz') game.questions = cleanQuestions.value
   emit('save', game)
 }
 </script>
@@ -76,7 +81,7 @@ function submit() {
     <div>
       <label class="label" for="g-kind">{{ $t('host.gameForm.kind') }}</label>
       <select id="g-kind" v-model="form.kind" class="select" data-testid="game-kind">
-        <option v-for="k in KINDS" :key="k" :value="k">
+        <option v-for="k in GAME_KINDS" :key="k" :value="k">
           {{ $t(`host.gameForm.kindOption.${k}`) }}
         </option>
       </select>

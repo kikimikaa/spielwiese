@@ -69,6 +69,17 @@ describe('parseConfig round-trip', () => {
     }
   })
 
+  it('drops questions on a non-quiz game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [{ ...game(), kind: 'freeform', questions: [{ question: 'q', answer: 'a' }] }],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('questions')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

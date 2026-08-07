@@ -1,5 +1,11 @@
 import type { Award, AwardId, Game, Player, ScoreEvent, Team, TournamentState } from '../core/types'
-import { computeAwards, computeTotals, leadingTeam, scorePredictions } from '../core/logic'
+import {
+  clampIndex,
+  computeAwards,
+  computeTotals,
+  leadingTeam,
+  scorePredictions,
+} from '../core/logic'
 
 /**
  * Reactive access to the shared tournament state plus derived getters. The
@@ -73,7 +79,7 @@ export function useTournamentState() {
   const currentQuestion = computed(() => {
     const g = currentGame.value
     if (g?.kind !== 'quiz' || !g.questions?.length) return null
-    return g.questions[Math.min(quiz.value.index, g.questions.length - 1)] ?? null
+    return g.questions[clampIndex(quiz.value.index, g.questions.length)] ?? null
   })
 
   // Which honorable mentions the host has revealed on the board.

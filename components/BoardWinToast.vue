@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ScoreEvent } from '../core/types'
+import { freshWinId } from '../core/logic'
 
 // A small, self-clearing celebration on the board each time a game is won —
 // smaller than the final ceremony, just a quick "team X scored a point".
@@ -7,37 +8,53 @@ const CELEBRATION_MS = 4500
 
 const { state, teamById } = useTournamentState()
 
-// Wins are the positive, game-tied score events (one point per game won).
-const wins = computed<ScoreEvent[]>(() =>
-  (state.value?.scoreEvents ?? []).filter((e) => e.gameId && e.delta > 0),
-)
-const lastWin = computed<ScoreEvent | null>(() => wins.value[wins.value.length - 1] ?? null)
+// Wins that count: positive score events tied to an enabled game — the same
+// events the standings use, so the toast never celebrates a point the scoreboard
+// doesn't award.
+const wins = computed<ScoreEvent[]>(() => {
+  const enabled = new Set(
+    (state.value?.games ?? []).filter((g) => g.enabled !== false).map((g) => g.id),
+  )
+  return (state.value?.scoreEvents ?? []).filter(
+    (e) => e.gameId && enabled.has(e.gameId) && e.delta > 0,
+  )
+})
 
 const celebrating = ref<{ name: string; color: string; points: number } | null>(null)
-// Baseline the win count once the first real state has loaded, so we celebrate
-// only *new* wins (never a pre-existing one on page load, and never an undo).
-let baseline: number | undefined
+// Win ids already accounted for. Seeded from the first loaded state (so a
+// pre-existing win never celebrates on page load); freshWinId then fires only
+// on a genuinely new, single win.
+const seen = new Set<string>()
+let initialized = false
 let timer: ReturnType<typeof setTimeout> | null = null
 
-function celebrate() {
-  const w = lastWin.value
-  const team = w ? teamById(w.teamId) : null
-  if (!w || !team) return
-  celebrating.value = { name: team.name, color: team.color, points: w.delta }
+function celebrate(event: ScoreEvent) {
+  const team = teamById(event.teamId)
+  if (!team) return
+  celebrating.value = { name: team.name, color: team.color, points: event.delta }
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => (celebrating.value = null), CELEBRATION_MS)
 }
 
-watch([() => state.value, () => wins.value.length], () => {
-  if (!state.value) return
-  const count = wins.value.length
-  if (baseline === undefined) {
-    baseline = count
-    return
-  }
-  if (count > baseline) celebrate()
-  baseline = count
-})
+watch(
+  wins,
+  (current: ScoreEvent[]) => {
+    if (!state.value) return
+    const ids = current.map((e) => e.id)
+    if (!initialized) {
+      initialized = true
+      for (const id of ids) seen.add(id)
+      return
+    }
+    const fresh = freshWinId(seen, ids)
+    for (const id of ids) seen.add(id)
+    if (fresh) {
+      const event = current.find((e) => e.id === fresh)
+      if (event) celebrate(event)
+    }
+  },
+  { immediate: true },
+)
 
 onBeforeUnmount(() => {
   if (timer) clearTimeout(timer)
@@ -55,10 +72,7 @@ onBeforeUnmount(() => {
     >
       <span class="emoji" aria-hidden="true">🎉</span>
       <span class="msg">{{ $t('board.gameWon', { team: celebrating.name }) }}</span>
-      <span class="pts">
-        +{{ celebrating.points }}
-        {{ celebrating.points === 1 ? $t('common.point') : $t('common.points') }}
-      </span>
+      <span class="pts">+{{ celebrating.points }} {{ $t('common.point') }}</span>
     </div>
   </Transition>
 </template>

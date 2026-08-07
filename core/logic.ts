@@ -21,6 +21,17 @@ export function clampIndex(index: number, length: number): number {
   return Math.min(Math.max(0, Math.trunc(index)), length - 1)
 }
 
+/**
+ * The single newly-appeared win id worth celebrating, or null. Returns an id only
+ * when exactly one current id is unseen — so an undo (nothing new), a reconnect
+ * catch-up (several new at once) and the initial load (caller seeds `seen` first)
+ * stay silent, while a live win or a re-award (one fresh id) fires once.
+ */
+export function freshWinId(seen: Set<string>, currentIds: string[]): string | null {
+  const fresh = currentIds.filter((id) => !seen.has(id))
+  return fresh.length === 1 ? (fresh[0] ?? null) : null
+}
+
 /** Finds a host-created player by real name, ignoring case and surrounding space. */
 export function findPlayerByName(players: Player[], name: string): Player | null {
   const key = normalizeName(name)

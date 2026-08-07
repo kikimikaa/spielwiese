@@ -73,11 +73,13 @@ describe('parseConfig rejects bad input', () => {
     expect(result).toEqual({ ok: false, error })
   })
 
-  it('rejects a missing schema version', () => {
-    expect(parseConfig({ name: 'T', date: 'x', games: [] })).toEqual({
-      ok: false,
-      error: 'missing-version',
-    })
+  it.each([
+    ['absent', { name: 'T', date: 'x', games: [] }],
+    ['undefined', { schemaVersion: undefined, name: 'T', date: 'x', games: [] }],
+    ['null', { schemaVersion: null, name: 'T', date: 'x', games: [] }],
+    ['a non-number', { schemaVersion: '1', name: 'T', date: 'x', games: [] }],
+  ])('reports a %s schema version as missing, not unsupported', (_label, input) => {
+    expect(parseConfig(input)).toEqual({ ok: false, error: 'missing-version' })
   })
 
   it('rejects a newer/incompatible schema version', () => {
@@ -86,10 +88,22 @@ describe('parseConfig rejects bad input', () => {
     ).toEqual({ ok: false, error: 'unsupported-version' })
   })
 
-  it('rejects a non-string name and date', () => {
+  it('rejects a missing, non-string or empty name and date', () => {
     const base = { schemaVersion: CONFIG_SCHEMA_VERSION, games: [] }
     expect(parseConfig({ ...base, date: 'x' })).toEqual({ ok: false, error: 'invalid-name' })
+    expect(parseConfig({ ...base, name: 42, date: 'x' })).toEqual({
+      ok: false,
+      error: 'invalid-name',
+    })
+    expect(parseConfig({ ...base, name: '', date: 'x' })).toEqual({
+      ok: false,
+      error: 'invalid-name',
+    })
     expect(parseConfig({ ...base, name: 'T' })).toEqual({ ok: false, error: 'invalid-date' })
+    expect(parseConfig({ ...base, name: 'T', date: '' })).toEqual({
+      ok: false,
+      error: 'invalid-date',
+    })
   })
 
   it('rejects games that are not an array', () => {
@@ -100,6 +114,7 @@ describe('parseConfig rejects bad input', () => {
 
   it.each([
     ['a missing id', { ...game(), id: '' }],
+    ['an empty title', { ...game(), title: '' }],
     ['an unknown location', { ...game(), location: 'space' }],
     ['an unknown scoring type', { ...game(), scoringType: 'vibes' }],
     ['a non-string title', { ...game(), title: 7 }],
@@ -114,9 +129,29 @@ describe('parseConfig rejects bad input', () => {
     expect(result).toEqual({ ok: false, error: 'invalid-game' })
   })
 
+  it('rejects two games that share the same id', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [game({ id: 'dup' }), game({ id: 'dup', title: 'Anders' })],
+    })
+    expect(result).toEqual({ ok: false, error: 'duplicate-id' })
+  })
+
   it('accepts an empty game library', () => {
     expect(
       parseConfig({ schemaVersion: CONFIG_SCHEMA_VERSION, name: 'T', date: 'x', games: [] }).ok,
     ).toBe(true)
+  })
+
+  it('accepts games with empty short and rules (matches addGame defaults)', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [game({ short: '', rules: '' })],
+    })
+    expect(result.ok).toBe(true)
   })
 })

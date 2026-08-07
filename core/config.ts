@@ -1,9 +1,11 @@
 // Shareable tournament configuration: the reusable setup (name, date and the
-// game library) with no live data. Deliberately excludes players, scores and
-// predictions so a config can be shared or handed on without leaking real guest
-// names or results. Pure and framework-free, so it runs on server and client
-// and is unit-testable. The versioned pack/parse pattern here is the foundation
-// the full save/resume snapshot (with live data) will build on.
+// game library). Deliberately excludes the live/guest data — players, scores and
+// predictions — so a config can be shared or handed to another host without
+// leaking real guest names or results. Host prep (materials, hostNote) is kept
+// on purpose: the recipient is another host who needs it to run the same games.
+// Pure and framework-free, so it runs on server and client and is unit-testable.
+// The versioned pack/parse pattern here is the foundation the full save/resume
+// snapshot (with live data) will build on.
 
 import { CONFIG_SCHEMA_VERSION, GAME_LOCATIONS, SCORING_TYPES } from './constants'
 import type { GameDef } from './types'
@@ -18,12 +20,13 @@ export interface TournamentConfig {
 export type ConfigError =
   | 'not-object' // top-level isn't a JSON object
   | 'bad-json' // string input wasn't valid JSON
-  | 'missing-version' // no schemaVersion field
+  | 'missing-version' // schemaVersion absent or not a number
   | 'unsupported-version' // written by a newer/incompatible schema
-  | 'invalid-name' // name missing or not a string
-  | 'invalid-date' // date missing or not a string
+  | 'invalid-name' // name missing, not a string, or empty
+  | 'invalid-date' // date missing, not a string, or empty
   | 'invalid-games' // games missing or not an array
   | 'invalid-game' // a game entry is malformed
+  | 'duplicate-id' // two games share the same id
 
 export type ConfigParseResult =
   { ok: true; config: TournamentConfig } | { ok: false; error: ConfigError }
@@ -59,15 +62,18 @@ export function parseConfig(input: unknown): ConfigParseResult {
   }
 
   if (!isRecord(value)) return fail('not-object')
-  if (!('schemaVersion' in value)) return fail('missing-version')
+  if (typeof value['schemaVersion'] !== 'number') return fail('missing-version')
   if (value['schemaVersion'] !== CONFIG_SCHEMA_VERSION) return fail('unsupported-version')
-  if (typeof value['name'] !== 'string') return fail('invalid-name')
-  if (typeof value['date'] !== 'string') return fail('invalid-date')
+  if (!isNonEmptyString(value['name'])) return fail('invalid-name')
+  if (!isNonEmptyString(value['date'])) return fail('invalid-date')
   if (!Array.isArray(value['games'])) return fail('invalid-games')
 
   const games: GameDef[] = []
+  const seenIds = new Set<string>()
   for (const raw of value['games']) {
     if (!isValidGame(raw)) return fail('invalid-game')
+    if (seenIds.has(raw.id)) return fail('duplicate-id')
+    seenIds.add(raw.id)
     games.push(sanitizeGame(raw))
   }
 
@@ -96,9 +102,11 @@ function isNonEmptyString(v: unknown): v is string {
 
 function isValidGame(v: unknown): v is GameDef {
   if (!isRecord(v)) return false
+  // id and title must be present; short/rules may be empty (addGame defaults them
+  // to '' too, so a valid game must survive an export/import round-trip).
   return (
     isNonEmptyString(v['id']) &&
-    typeof v['title'] === 'string' &&
+    isNonEmptyString(v['title']) &&
     typeof v['short'] === 'string' &&
     typeof v['rules'] === 'string' &&
     GAME_LOCATIONS.includes(v['location'] as GameDef['location']) &&

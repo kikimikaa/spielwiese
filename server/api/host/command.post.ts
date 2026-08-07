@@ -82,6 +82,10 @@ export default defineEventHandler(async (event) => {
       return store.setTeams(p.assignment ?? [])
     case 'setCurrentGame':
       return store.setCurrentGame(p.gameId ?? null)
+    case 'quizGoto':
+      return store.setQuizQuestion(num(p.index))
+    case 'quizReveal':
+      return store.setQuizRevealed(Boolean(p.revealed))
     case 'undoScore':
       return store.undoLastScore(p.gameId)
     case 'awardWin':

@@ -76,6 +76,22 @@ export interface GameDef {
   materials?: string
   /** Host-only notes / questions / content for the game. Host-only. */
   hostNote?: string
+  /**
+   * Game type. `freeform` (default, missing = freeform) is the plain game the
+   * host runs manually. `quiz` carries `questions` that are shown one at a time
+   * on the board and revealed by the host — scoring is unchanged either way.
+   */
+  kind?: GameKind
+  /** Quiz question/answer pairs; only meaningful for `kind === 'quiz'`. */
+  questions?: QuizQuestion[]
+}
+
+export type GameKind = 'freeform' | 'quiz'
+
+/** A single quiz question and its answer (host-authored plain text). */
+export interface QuizQuestion {
+  question: string
+  answer: string
 }
 
 export interface Player {
@@ -144,4 +160,11 @@ export interface TournamentState {
   predictions: Prediction[]
   /** Honorable mentions the host has already revealed on the board, in order. */
   revealedAwards: AwardId[]
+  /** Board pointer for the current quiz game: which question, and whether the answer is shown. */
+  quiz: QuizPointer
+}
+
+export interface QuizPointer {
+  index: number
+  revealed: boolean
 }

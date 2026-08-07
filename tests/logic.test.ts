@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   awardWinners,
+  clampIndex,
   computeAwards,
   computeTotals,
   drawTeams,
@@ -28,6 +29,23 @@ const game = (id: string, over: Partial<Game> = {}): Game => ({
   order: 0,
   status: 'done',
   ...over,
+})
+
+describe('clampIndex', () => {
+  it('keeps an in-range index', () => {
+    expect(clampIndex(2, 5)).toBe(2)
+  })
+  it('clamps below 0 and above the last index', () => {
+    expect(clampIndex(-3, 5)).toBe(0)
+    expect(clampIndex(9, 5)).toBe(4)
+  })
+  it('returns 0 for an empty list', () => {
+    expect(clampIndex(0, 0)).toBe(0)
+    expect(clampIndex(3, 0)).toBe(0)
+  })
+  it('truncates a fractional index', () => {
+    expect(clampIndex(2.9, 5)).toBe(2)
+  })
 })
 
 describe('computeTotals', () => {

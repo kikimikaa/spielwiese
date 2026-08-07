@@ -12,6 +12,15 @@ export function normalizeName(name: string): string {
   return name.trim().toLowerCase()
 }
 
+/**
+ * Clamps an index into `[0, length - 1]`, or 0 when the list is empty. Keeps the
+ * quiz question pointer valid however the host navigates or edits the questions.
+ */
+export function clampIndex(index: number, length: number): number {
+  if (length <= 0) return 0
+  return Math.min(Math.max(0, Math.trunc(index)), length - 1)
+}
+
 /** Finds a host-created player by real name, ignoring case and surrounding space. */
 export function findPlayerByName(players: Player[], name: string): Player | null {
   const key = normalizeName(name)

@@ -187,8 +187,25 @@
     "showAwards": "Show awards",
     "startCeremony": "Start ceremony",
     "metric": "Metric",
+    "quiz": {
+      "progress": "Question {n}/{total}",
+      "prev": "Back",
+      "next": "Next",
+      "reveal": "Reveal answer",
+      "hide": "Hide answer"
+    },
     "gameForm": {
       "title": "Title",
+      "kind": "Type",
+      "kindOption": {
+        "freeform": "Free game",
+        "quiz": "Quiz"
+      },
+      "questions": "Questions",
+      "question": "Question",
+      "answer": "Answer",
+      "addQuestion": "Add question",
+      "removeQuestion": "Remove question",
       "short": "Short description",
       "rules": "Rules",
       "location": "Location",

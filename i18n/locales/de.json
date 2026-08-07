@@ -54,6 +54,18 @@
     "title": "Einladung",
     "hint": "Zum Mitmachen scannen"
   },
+  "error": {
+    "code": "Fehler {code}",
+    "backHome": "Zurück zum Start",
+    "reload": "Erneut versuchen",
+    "notFound": {
+      "title": "Seite nicht gefunden"
+    },
+    "generic": {
+      "title": "Da ist etwas schiefgelaufen",
+      "desc": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuch es gleich noch einmal."
+    }
+  },
   "bets": {
     "needIdentity": "Logge dich zuerst unter \"Mitmachen\" ein.",
     "tipGameWinner": "Wer gewinnt das nächste Spiel: {game}",

@@ -54,6 +54,18 @@
     "title": "Invitation",
     "hint": "Scan to join"
   },
+  "error": {
+    "code": "Error {code}",
+    "backHome": "Back to start",
+    "reload": "Try again",
+    "notFound": {
+      "title": "Page not found"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "desc": "An unexpected error occurred. Please try again in a moment."
+    }
+  },
   "bets": {
     "needIdentity": "Log in under \"Join\" first.",
     "tipGameWinner": "Who wins the next game: {game}",

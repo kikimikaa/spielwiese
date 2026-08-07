@@ -54,6 +54,18 @@
     "title": "Invitation",
     "hint": "Scan to join"
   },
+  "error": {
+    "code": "Error {code}",
+    "backHome": "Back to start",
+    "reload": "Try again",
+    "notFound": {
+      "title": "Page not found"
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "desc": "An unexpected error occurred. Please try again in a moment."
+    }
+  },
   "bets": {
     "needIdentity": "Log in under \"Join\" first.",
     "tipGameWinner": "Who wins the next game: {game}",
@@ -157,6 +169,11 @@
     "addGame": "Add game",
     "editGame": "Edit game",
     "loadExamples": "Load example games",
+    "exportConfig": "Export",
+    "importConfig": "Import",
+    "importError": "This file isn't a valid Spielwiese config.",
+    "importErrorVersion": "This config is from a newer version of Spielwiese.",
+    "importFailed": "Import failed. Please try again.",
     "clearGames": "Delete all games",
     "deleteGameConfirm": "Really delete “{title}”?",
     "clearGamesConfirm": "Really delete ALL games? This can't be undone.",

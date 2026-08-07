@@ -89,6 +89,25 @@ a {
   color: var(--ink-soft);
 }
 
+.err {
+  color: var(--danger);
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Screen-reader-only: visually hidden but reachable by assistive tech. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .btn {
   font: inherit;
   font-weight: 600;

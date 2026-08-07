@@ -1,5 +1,6 @@
 import type { AwardId, PauseMode, TournamentStatus } from '../../../core/types'
 import { AWARD_IDS } from '../../../core/constants'
+import { parseConfig } from '../../../core/config'
 import { assertHostPin } from '../../utils/auth'
 import * as store from '../../utils/state'
 
@@ -65,6 +66,14 @@ export default defineEventHandler(async (event) => {
       return store.loadExampleGames()
     case 'clearGames':
       return store.clearGames()
+    case 'importConfig': {
+      // Re-validate on the server — never trust the client's parse result.
+      const result = parseConfig(p.config)
+      if (!result.ok) {
+        throw createError({ statusCode: 400, statusMessage: `invalid config: ${result.error}` })
+      }
+      return store.importConfig(result.config)
+    }
     case 'draw':
       return store.drawTournamentTeams(p.names ?? [])
     case 'setTeams':

@@ -235,6 +235,12 @@ export function loadExampleGames(): TournamentState {
   return commit()
 }
 
+/** Ticks or unticks every game for the tournament in one go. */
+export function setAllGamesEnabled(enabled: boolean): TournamentState {
+  for (const g of state.games) g.enabled = enabled
+  return commit()
+}
+
 /**
  * Replaces the tournament name, date and game library from a shared config.
  * Because the games are swapped wholesale, any play tied to the old ones (scores,

@@ -62,6 +62,8 @@ export default defineEventHandler(async (event) => {
       return store.removeGame(p.gameId)
     case 'reorderGames':
       return store.reorderGames(p.orderedIds ?? [])
+    case 'setAllEnabled':
+      return store.setAllGamesEnabled(Boolean(p.enabled))
     case 'loadExampleGames':
       return store.loadExampleGames()
     case 'clearGames':

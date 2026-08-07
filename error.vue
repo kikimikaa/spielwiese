@@ -9,9 +9,6 @@ const { t } = useI18n()
 // other status falls back to the generic message.
 const isNotFound = computed(() => props.error?.statusCode === 404)
 const kind = computed(() => (isNotFound.value ? 'notFound' : 'generic'))
-// 404 stays deliberately minimal (no emoji, no description); a generic error
-// keeps the mascot and an explanatory line.
-const emoji = computed(() => (isNotFound.value ? '' : '🌱'))
 
 useHead({ title: () => `${props.error?.statusCode ?? '?'} · ${t('app.name')}` })
 
@@ -34,8 +31,7 @@ function tryAgain() {
     </header>
 
     <main class="app-main">
-      <div class="error-page" data-testid="error-page">
-        <span v-if="emoji" class="emoji" aria-hidden="true">{{ emoji }}</span>
+      <div class="error-page" :class="{ 'error-card card': !isNotFound }" data-testid="error-page">
         <p class="code" data-testid="error-code">
           {{ $t('error.code', { code: error?.statusCode ?? '?' }) }}
         </p>
@@ -101,9 +97,11 @@ function tryAgain() {
   max-width: 32rem;
 }
 
-.emoji {
-  font-size: clamp(3rem, 12vw, 4.5rem);
-  line-height: 1;
+/* The generic error gets a card panel; the 404 stays plain and minimal. */
+.error-card {
+  gap: 0.6rem;
+  width: 100%;
+  padding: clamp(1.75rem, 5vw, 3rem);
 }
 
 .code {

@@ -13,6 +13,7 @@ import type {
   TournamentStatus,
 } from '../../core/types'
 import { EXAMPLE_GAMES } from '../../core/example-games'
+import type { TournamentConfig } from '../../core/config'
 import {
   DEFAULT_TEAMS,
   POINTS_PER_WIN,
@@ -231,6 +232,25 @@ export function reorderGames(orderedIds: string[]): TournamentState {
 export function loadExampleGames(): TournamentState {
   state.games = EXAMPLE_GAMES.map(toGame)
   state.currentGameId = null
+  return commit()
+}
+
+/**
+ * Replaces the tournament name, date and game library from a shared config.
+ * Because the games are swapped wholesale, any play tied to the old ones (scores,
+ * predictions, revealed awards, the current game) would dangle, so it is cleared;
+ * teams and drawn players are kept. Drops back out of a running/finished flow.
+ */
+export function importConfig(config: TournamentConfig): TournamentState {
+  state.name = config.name
+  state.date = config.date
+  state.games = config.games.map(toGame)
+  state.currentGameId = null
+  state.scoreEvents = []
+  state.predictions = []
+  state.revealedAwards = []
+  state.pause = 'none'
+  state.status = state.players.length > 0 ? 'draw' : 'setup'
   return commit()
 }
 

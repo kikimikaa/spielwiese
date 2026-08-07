@@ -152,12 +152,6 @@ async function doReset() {
 </template>
 
 <style scoped>
-.err {
-  color: var(--danger);
-  font-weight: 600;
-  margin: 0;
-}
-
 .sections {
   gap: 2rem;
 }

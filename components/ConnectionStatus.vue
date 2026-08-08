@@ -50,6 +50,7 @@ const messageKey = computed(() =>
 .conn-banner {
   position: sticky;
   top: 0;
+  /* Above page content, but below modals (100) so a dialog still wins. */
   z-index: 50;
   display: flex;
   align-items: center;
@@ -84,10 +85,11 @@ const messageKey = computed(() =>
   flex: 1;
 }
 
-/* Readable on the red bar in both light and sun mode. */
+/* White button, readable on the red bar in both light and sun mode. Keeps the
+   global 44px touch target — this is tapped in a hurry on a phone. */
 .conn-retry {
-  min-height: 0;
-  padding: 0.35rem 0.8rem;
+  flex: none;
+  padding: 0.35rem 0.9rem;
   background: #fff;
   color: var(--danger);
   border-color: #fff;

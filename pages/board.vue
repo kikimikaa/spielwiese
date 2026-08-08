@@ -71,7 +71,9 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
     <header class="topbar">
       <div class="cluster">
         <AppBrand />
-        <span class="pill pill-dot conn" :class="{ on: connected }">{{ $t('board.live') }}</span>
+        <span class="pill pill-dot conn" :class="{ on: connected }" data-testid="board-conn">
+          {{ connected ? $t('board.live') : $t('home.offline') }}
+        </span>
       </div>
       <div class="cluster">
         <button

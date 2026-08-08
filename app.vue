@@ -1,6 +1,7 @@
 <template>
   <div class="app-root">
     <NuxtRouteAnnouncer />
+    <ConnectionStatus />
     <main class="app-main">
       <NuxtPage />
     </main>

@@ -30,6 +30,16 @@ export const WS_ROUTE = '/_ws'
 /** Channel name that board updates are published on. */
 export const WS_TOPIC_STATE = 'state'
 
+/** Live-connection reconnect backoff: delay grows per attempt up to the ceiling. */
+export const RECONNECT_BASE_MS = 1000
+export const RECONNECT_MAX_MS = 10000
+
+/**
+ * How long a fresh page may spend on its first connect before the UI shows a
+ * "connecting …" banner — long enough that a normal handshake never flashes it.
+ */
+export const CONNECTION_GRACE_MS = 4000
+
 /** 5 vs 5 — team size per the tournament plan. */
 export const TEAM_SIZE = 5
 

@@ -27,6 +27,10 @@ Closest guess wins — the host still taps the winner.
 correct; the board shows the lettered options and highlights the right one on
 the host's cue while fading the rest.
 
+**Ordering game type.** Several items the teams put in the right order; the board
+shows them in a neutral order and reveals the correct sequence, numbered, on the
+host's cue.
+
 **Config export & import.** Share a games setup as a versioned file so a
 tournament can be reused or handed to another host (no guest names or scores).
 
@@ -58,8 +62,8 @@ server blip.
 loaded by the current language. Filtering by preset category can build on the
 type/location filters already in the library.
 
-**More game types.** Further tailored types beyond quiz, estimate and multiple
-choice, each with its own add mask and board behaviour.
+**More game types.** Further tailored types beyond quiz, estimate, multiple
+choice and ordering, each with its own add mask and board behaviour.
 
 ## Ideas
 

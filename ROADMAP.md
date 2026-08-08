@@ -19,6 +19,10 @@ wins a game, so a scored point is felt right away — smaller than the finale.
 **Quiz game type.** Games can be a quiz: enter question/answer pairs, and the
 board shows the question to everyone and reveals the answer on the host's cue.
 
+**Estimate game type.** A single estimate question with a solution and an
+optional unit; the board shows the question and reveals the solution on cue.
+Closest guess wins — the host still taps the winner.
+
 **Config export & import.** Share a games setup as a versioned file so a
 tournament can be reused or handed to another host (no guest names or scores).
 
@@ -44,8 +48,8 @@ recovery that already survives a crash or restart).
 loaded by the current language. Filtering by preset category can build on the
 type/location filters already in the library.
 
-**More game types.** Further tailored types beyond quiz, each with its own add
-mask and board behaviour.
+**More game types.** Further tailored types beyond quiz and estimate, each with
+its own add mask and board behaviour.
 
 **Reconnect handling.** Clearer recovery on the guest and board views when the
 host server or the Wi-Fi drops mid-event.

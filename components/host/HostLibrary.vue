@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { GameDef } from '../../core/types'
+import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
+import { EMPTY_GAME_FILTER, filterGames, isFilterActive } from '../../core/library'
+import type { GameFilter } from '../../core/library'
 
 // Keep the library scannable — paginate once it grows past this.
 const GAMES_PER_PAGE = 8
@@ -38,14 +41,25 @@ const editing = ref<GameDef | null>(null)
 const adding = ref(false)
 const pendingDelete = ref<{ kind: 'game' | 'all'; id?: string; title?: string } | null>(null)
 
+const filter = ref<GameFilter>({ ...EMPTY_GAME_FILTER })
+const filteredGames = computed(() => filterGames(games.value, filter.value))
+const filterActive = computed(() => isFilterActive(filter.value))
+function clearFilter() {
+  filter.value = { ...EMPTY_GAME_FILTER }
+}
+
 const page = ref(0)
-const pageCount = computed(() => Math.max(1, Math.ceil(games.value.length / GAMES_PER_PAGE)))
+const pageCount = computed(() =>
+  Math.max(1, Math.ceil(filteredGames.value.length / GAMES_PER_PAGE)),
+)
 const pagedGames = computed(() =>
-  games.value.slice(page.value * GAMES_PER_PAGE, (page.value + 1) * GAMES_PER_PAGE),
+  filteredGames.value.slice(page.value * GAMES_PER_PAGE, (page.value + 1) * GAMES_PER_PAGE),
 )
 watch(pageCount, (count: number) => {
   if (page.value > count - 1) page.value = count - 1
 })
+// A narrower filter can leave you on a now-nonexistent page — jump back to the first.
+watch(filter, () => (page.value = 0), { deep: true })
 
 const isEnabled = (g: GameDef) => g.enabled !== false
 const enabledCount = computed(() => games.value.filter(isEnabled).length)
@@ -110,7 +124,59 @@ async function confirmDelete() {
           </button>
         </div>
 
-        <ul class="lib-list">
+        <div v-if="games.length" class="filter-row" data-testid="library-filter">
+          <input
+            v-model="filter.query"
+            type="search"
+            class="input grow"
+            :placeholder="$t('host.searchPlaceholder')"
+            :aria-label="$t('host.searchPlaceholder')"
+            data-testid="library-search"
+          />
+          <select
+            v-model="filter.kind"
+            class="input"
+            :aria-label="$t('host.gameForm.kind')"
+            data-testid="filter-kind"
+          >
+            <option value="all">{{ $t('host.filterAll') }}</option>
+            <option v-for="k in GAME_KINDS" :key="k" :value="k">
+              {{ $t(`host.gameForm.kindOption.${k}`) }}
+            </option>
+          </select>
+          <select
+            v-model="filter.location"
+            class="input"
+            :aria-label="$t('host.gameForm.location')"
+            data-testid="filter-location"
+          >
+            <option value="all">{{ $t('host.filterAll') }}</option>
+            <option v-for="loc in GAME_LOCATIONS" :key="loc" :value="loc">
+              {{ $t(`location.${loc}`) }}
+            </option>
+          </select>
+          <button v-if="filterActive" class="btn" data-testid="filter-clear" @click="clearFilter">
+            {{ $t('host.clearFilter') }}
+          </button>
+        </div>
+
+        <p
+          v-if="filterActive && games.length"
+          class="muted result-hint"
+          data-testid="filter-results"
+        >
+          {{ $t('host.filterResults', { n: filteredGames.length, total: games.length }) }}
+        </p>
+
+        <p
+          v-if="games.length && !filteredGames.length"
+          class="muted no-matches"
+          data-testid="no-matches"
+        >
+          {{ $t('host.noMatches') }}
+        </p>
+
+        <ul v-else class="lib-list">
           <li v-for="g in pagedGames" :key="g.id" class="lib-row" :class="{ off: !isEnabled(g) }">
             <label class="incl">
               <input
@@ -241,6 +307,33 @@ async function confirmDelete() {
 
 .select-row .grow {
   flex: 1;
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filter-row .grow {
+  flex: 1 1 12rem;
+}
+
+/* Selects size to their content instead of the global full-width input. */
+.filter-row select.input {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+.result-hint {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.no-matches {
+  text-align: center;
+  padding: 1.25rem 0;
 }
 
 .lib-list {

@@ -89,6 +89,25 @@ export const EXAMPLE_GAMES: GameDef[] = [
     ],
   },
   {
+    id: 'multiple-choice',
+    title: 'Multiple Choice',
+    short: 'Eine Frage, mehrere Antworten — nur eine ist richtig.',
+    rules:
+      'Der Host zeigt die Frage und die Antwortoptionen auf dem Board. Wer zuerst ' +
+      'die richtige Option nennt, punktet fürs Team. Der Host deckt die Lösung auf.',
+    location: 'both',
+    scoringType: 'points',
+    kind: 'choice',
+    choice: {
+      prompt: 'Welcher Planet ist der größte in unserem Sonnensystem?',
+      options: ['Mars', 'Jupiter', 'Saturn', 'Erde'],
+      correct: 1,
+    },
+    hostNote:
+      'Weitere Ideen: Größtes Land der Welt (Russland) · Chemisches Symbol für Gold (Au) · ' +
+      'Höchster Berg der Erde (Mount Everest)',
+  },
+  {
     id: 'geruche',
     title: 'Gerüche erraten',
     short: 'Boxen mit verschiedenen Gerüchen erschnüffeln und erraten.',

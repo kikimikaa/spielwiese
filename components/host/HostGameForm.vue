@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {
+  ChoiceSpec,
   EstimateSpec,
   GameDef,
   GameLocation,
@@ -7,6 +8,7 @@ import type {
   ScoringType,
 } from '../../core/types'
 import { GAME_KINDS } from '../../core/constants'
+import { isChoiceComplete, MIN_CHOICE_OPTIONS, optionLetter } from '../../core/choice'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
@@ -69,11 +71,43 @@ const cleanEstimate = computed<EstimateSpec>(() => {
   return spec
 })
 
+// Multiple choice: a prompt, its options, and which one is correct. A new choice
+// starts with the minimum number of empty option rows.
+const choicePrompt = ref(props.game?.choice?.prompt ?? '')
+const choiceOptions = ref<string[]>(
+  props.game?.choice?.options.slice() ?? Array.from({ length: MIN_CHOICE_OPTIONS }, () => ''),
+)
+const choiceCorrect = ref(props.game?.choice?.correct ?? 0)
+
+function addOption() {
+  choiceOptions.value.push('')
+}
+function removeOption(i: number) {
+  choiceOptions.value.splice(i, 1)
+  // Keep the correct pointer on the same option after a row is removed.
+  if (choiceCorrect.value === i) choiceCorrect.value = 0
+  else if (choiceCorrect.value > i) choiceCorrect.value -= 1
+}
+
+// Trimmed choice with empty options dropped; `correct` re-mapped to survive the drop.
+const cleanChoice = computed<ChoiceSpec>(() => {
+  const options: string[] = []
+  let correct = 0
+  choiceOptions.value.forEach((option: string, i: number) => {
+    const text = option.trim()
+    if (!text) return
+    if (i === choiceCorrect.value) correct = options.length
+    options.push(text)
+  })
+  return { prompt: choicePrompt.value.trim(), options, correct }
+})
+
 const canSave = computed(() => {
   if (form.title.trim().length === 0) return false
   if (form.kind === 'quiz') return cleanQuestions.value.length > 0
   if (form.kind === 'estimate')
     return Boolean(cleanEstimate.value.prompt && cleanEstimate.value.solution)
+  if (form.kind === 'choice') return isChoiceComplete(cleanChoice.value)
   return true
 })
 
@@ -83,6 +117,7 @@ function submit() {
   // Only the matching type carries its content; the store clears it on a type change.
   if (form.kind === 'quiz') game.questions = cleanQuestions.value
   if (form.kind === 'estimate') game.estimate = cleanEstimate.value
+  if (form.kind === 'choice') game.choice = cleanChoice.value
   emit('save', game)
 }
 </script>
@@ -176,6 +211,48 @@ function submit() {
           />
         </div>
       </div>
+    </div>
+
+    <div v-if="form.kind === 'choice'" class="stack quiz-editor" data-testid="choice-editor">
+      <div>
+        <label class="label" for="g-choice-prompt">{{ $t('host.gameForm.choicePrompt') }}</label>
+        <input
+          id="g-choice-prompt"
+          v-model="choicePrompt"
+          class="input"
+          data-testid="choice-prompt"
+        />
+      </div>
+      <span class="label">{{ $t('host.gameForm.choiceOptions') }}</span>
+      <div v-for="(_, i) in choiceOptions" :key="i" class="orow">
+        <input
+          v-model="choiceCorrect"
+          type="radio"
+          :value="i"
+          :aria-label="$t('host.gameForm.markCorrect')"
+          :data-testid="`choice-correct-${i}`"
+        />
+        <span class="okey" aria-hidden="true">{{ optionLetter(i) }}</span>
+        <input
+          v-model="choiceOptions[i]"
+          class="input"
+          :placeholder="$t('host.gameForm.choiceOption')"
+          :data-testid="`choice-option-${i}`"
+        />
+        <button
+          type="button"
+          class="btn btn-danger qdel"
+          :disabled="choiceOptions.length <= MIN_CHOICE_OPTIONS"
+          :aria-label="$t('host.gameForm.removeOption')"
+          data-testid="choice-remove"
+          @click="removeOption(i)"
+        >
+          ✕
+        </button>
+      </div>
+      <button type="button" class="btn" data-testid="choice-add" @click="addOption">
+        ＋ {{ $t('host.gameForm.addOption') }}
+      </button>
     </div>
 
     <div>
@@ -308,6 +385,23 @@ function submit() {
 
 .qrow .input {
   flex: 1;
+}
+
+.orow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.orow .input {
+  flex: 1;
+}
+
+.okey {
+  font-weight: 700;
+  color: var(--ink-soft);
+  min-width: 1.2rem;
+  text-align: center;
 }
 
 .qdel {

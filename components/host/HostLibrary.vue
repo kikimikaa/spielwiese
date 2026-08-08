@@ -196,8 +196,8 @@ async function confirmDelete() {
               </label>
             </fieldset>
             <button
-              v-if="filterActive"
               class="btn clear-filter"
+              :disabled="!filterActive"
               data-testid="filter-clear"
               @click="clearFilter"
             >

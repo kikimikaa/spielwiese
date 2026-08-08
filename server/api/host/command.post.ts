@@ -1,11 +1,13 @@
 import type { AwardId, PauseMode, TournamentStatus } from '../../../core/types'
 import { AWARD_IDS } from '../../../core/constants'
 import { parseConfig } from '../../../core/config'
+import { PRESET_PACK_IDS, type PresetLocale } from '../../../core/presets'
 import { assertHostPin } from '../../utils/auth'
 import * as store from '../../utils/state'
 
 const STATUSES: TournamentStatus[] = ['setup', 'draw', 'running', 'awards', 'finished']
 const PAUSE_MODES: PauseMode[] = ['none', 'break', 'suspense']
+const PRESET_LOCALES: PresetLocale[] = ['de', 'en']
 
 /**
  * Single PIN-gated command endpoint for all host mutations. A command bus keeps
@@ -66,6 +68,8 @@ export default defineEventHandler(async (event) => {
       return store.setAllGamesEnabled(Boolean(p.enabled))
     case 'loadExampleGames':
       return store.loadExampleGames()
+    case 'loadPreset':
+      return store.loadPreset(oneOf(p.packId, PRESET_PACK_IDS), oneOf(p.locale, PRESET_LOCALES))
     case 'clearGames':
       return store.clearGames()
     case 'importConfig': {

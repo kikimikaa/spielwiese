@@ -3,12 +3,17 @@ import type { GameDef } from '../../core/types'
 import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
 import { activeFacetCount, emptyGameFilter, filterGames, isFilterActive } from '../../core/library'
 import type { GameFilter } from '../../core/library'
+import { PRESET_PACKS, presetLocaleOf } from '../../core/presets'
 
 // Keep the library scannable — paginate once it grows past this.
 const GAMES_PER_PAGE = 8
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { command } = useHost()
+
+function loadPreset(packId: string) {
+  command('loadPreset', { packId, locale: presetLocaleOf(locale.value) })
+}
 const { games } = useTournamentState()
 const { exportConfig, importFromFile, importError } = useConfigTransfer()
 
@@ -272,6 +277,22 @@ async function confirmDelete() {
       </button>
     </div>
 
+    <div class="presets stack" data-testid="presets">
+      <span class="label">{{ $t('host.presets.label') }}</span>
+      <p class="muted hint">{{ $t('host.presets.hint') }}</p>
+      <div class="cluster preset-packs">
+        <button
+          v-for="pack in PRESET_PACKS"
+          :key="pack.id"
+          class="btn"
+          :data-testid="`preset-${pack.id}`"
+          @click="loadPreset(pack.id)"
+        >
+          ＋ {{ $t(`host.presets.pack.${pack.id}`) }}
+        </button>
+      </div>
+    </div>
+
     <div class="cluster lib-actions">
       <button class="btn" data-testid="load-examples" @click="command('loadExampleGames')">
         {{ $t('host.loadExamples') }}
@@ -453,6 +474,23 @@ async function confirmDelete() {
 
 .add-game {
   flex: 0 0 auto;
+}
+
+.presets {
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.presets .hint {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.preset-packs > .btn {
+  flex: 1 1 auto;
 }
 
 /* Spread the maintenance actions evenly across the row instead of clumping left. */

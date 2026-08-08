@@ -164,7 +164,7 @@ function submit() {
         </div>
         <div>
           <label class="label" for="g-est-unit">
-            {{ $t('host.gameForm.estimateUnit') }}
+            {{ $t('host.gameForm.metricUnit') }}
             <span class="opt">({{ $t('common.optional') }})</span>
           </label>
           <input

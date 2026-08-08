@@ -80,7 +80,7 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('questions')
   })
 
-  it('round-trips an estimate, keeping the unit and coercing missing fields', () => {
+  it('round-trips an estimate, keeping the unit and coercing a numeric solution', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,
       name: 'T',
@@ -102,8 +102,8 @@ describe('parseConfig round-trip', () => {
         solution: '330',
         unit: 'm',
       })
-      // Non-string solution is coerced to '' rather than carried through.
-      expect(result.config.games[1]?.estimate).toEqual({ prompt: 'How many?', solution: '' })
+      // A numeric solution is coerced to text, not dropped.
+      expect(result.config.games[1]?.estimate).toEqual({ prompt: 'How many?', solution: '42' })
     }
   })
 

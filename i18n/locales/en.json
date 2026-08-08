@@ -222,7 +222,6 @@
       "removeQuestion": "Remove question",
       "estimatePrompt": "Estimate question",
       "estimateSolution": "Solution",
-      "estimateUnit": "Unit",
       "estimateUnitPlaceholder": "e.g. cm, kg, years",
       "short": "Short description",
       "rules": "Rules",

@@ -177,12 +177,17 @@ function sanitizeQuestions(raw: unknown[]): QuizQuestion[] {
   return out
 }
 
-/** Rebuilds an estimate from imported input, keeping only string fields. */
+/** A number solution (e.g. `330`) is valid content, so coerce it to text rather than drop it. */
+function toText(v: unknown): string {
+  if (typeof v === 'string') return v
+  if (typeof v === 'number' && Number.isFinite(v)) return String(v)
+  return ''
+}
+
+/** Rebuilds an estimate from imported input as text fields (numbers coerced, not lost). */
 function sanitizeEstimate(raw: Record<string, unknown>): EstimateSpec {
-  const spec: EstimateSpec = {
-    prompt: typeof raw['prompt'] === 'string' ? raw['prompt'] : '',
-    solution: typeof raw['solution'] === 'string' ? raw['solution'] : '',
-  }
-  if (typeof raw['unit'] === 'string' && raw['unit']) spec.unit = raw['unit']
+  const spec: EstimateSpec = { prompt: toText(raw['prompt']), solution: toText(raw['solution']) }
+  const unit = toText(raw['unit'])
+  if (unit) spec.unit = unit
   return spec
 }

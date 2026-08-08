@@ -185,6 +185,16 @@
     "addGame": "Add game",
     "editGame": "Edit game",
     "loadExamples": "Load example games",
+    "presets": {
+      "label": "Ready-made presets",
+      "hint": "Add a themed pack of games in the current language. Existing games are kept — nothing is replaced.",
+      "pack": {
+        "quiz-night": "Quiz night",
+        "party": "Getting to know / party",
+        "sport": "Sports / outdoor",
+        "classic": "Classics"
+      }
+    },
     "exportConfig": "Export",
     "importConfig": "Import",
     "importError": "This file isn't a valid Spielwiese config.",

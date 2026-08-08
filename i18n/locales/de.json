@@ -185,6 +185,16 @@
     "addGame": "Spiel hinzufügen",
     "editGame": "Spiel bearbeiten",
     "loadExamples": "Beispiel-Spiele laden",
+    "presets": {
+      "label": "Fertige Vorlagen",
+      "hint": "Ein thematisches Spiele-Paket in der aktuellen Sprache hinzufügen. Vorhandene Spiele bleiben erhalten – nichts wird ersetzt.",
+      "pack": {
+        "quiz-night": "Quiz-Abend",
+        "party": "Kennenlernen / Party",
+        "sport": "Sport / Outdoor",
+        "classic": "Klassiker"
+      }
+    },
     "exportConfig": "Export",
     "importConfig": "Import",
     "importError": "Diese Datei ist keine gültige Spielwiese-Konfiguration.",

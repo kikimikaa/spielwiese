@@ -22,6 +22,7 @@ import {
 } from '../../core/constants'
 import { clampIndex, drawTeams } from '../../core/logic'
 import { missingGames } from '../../core/library'
+import { presetGames, type PresetLocale } from '../../core/presets'
 import { createJsonWriter } from './persist'
 
 const STATE_PATH = resolve(process.cwd(), STATE_FILE)
@@ -240,6 +241,19 @@ export function reorderGames(orderedIds: string[]): TournamentState {
 export function loadExampleGames(): TournamentState {
   // Append each missing seed at the end; its order is its position, like addGame.
   for (const def of missingGames(state.games, EXAMPLE_GAMES)) {
+    state.games.push(toGame(def, state.games.length))
+  }
+  return commit()
+}
+
+/**
+ * Adds the games of a bilingual preset pack the library is still missing (matched
+ * by id), materialised in the given language and appended at the end. Like
+ * loadExampleGames it's a non-destructive top-up — safe to press repeatedly and
+ * it never swaps the library or clears play data.
+ */
+export function loadPreset(packId: string, locale: PresetLocale): TournamentState {
+  for (const def of missingGames(state.games, presetGames(packId, locale))) {
     state.games.push(toGame(def, state.games.length))
   }
   return commit()

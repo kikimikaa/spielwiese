@@ -112,6 +112,7 @@ a {
   font: inherit;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);

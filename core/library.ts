@@ -47,3 +47,13 @@ export function isFilterActive(filter: GameFilter): boolean {
 export function activeFacetCount(filter: GameFilter): number {
   return filter.kinds.length + filter.locations.length
 }
+
+/**
+ * Candidate games not yet present by id. Used to top up the library with the
+ * example seeds the host is missing — re-adding ones they deleted — without
+ * duplicating or disturbing the games they already have. Candidate order is kept.
+ */
+export function missingGames(existing: GameDef[], candidates: GameDef[]): GameDef[] {
+  const present = new Set(existing.map((g) => g.id))
+  return candidates.filter((g) => !present.has(g.id))
+}

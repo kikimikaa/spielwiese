@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { activeFacetCount, EMPTY_GAME_FILTER, filterGames, isFilterActive } from '../core/library'
+import {
+  activeFacetCount,
+  EMPTY_GAME_FILTER,
+  filterGames,
+  isFilterActive,
+  missingGames,
+} from '../core/library'
 import type { GameDef } from '../core/types'
 
 const game = (over: Partial<GameDef> = {}): GameDef => ({
@@ -99,6 +105,28 @@ describe('isFilterActive', () => {
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, query: 'a' })).toBe(true)
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, kinds: ['quiz'] })).toBe(true)
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, locations: ['indoor'] })).toBe(true)
+  })
+})
+
+describe('missingGames', () => {
+  const seeds = [game({ id: 'a' }), game({ id: 'b' }), game({ id: 'c' })]
+
+  it('returns all candidates when the library is empty', () => {
+    expect(missingGames([], seeds).map((g) => g.id)).toEqual(['a', 'b', 'c'])
+  })
+
+  it('returns nothing when every candidate is already present', () => {
+    expect(missingGames(seeds, seeds)).toEqual([])
+  })
+
+  it('returns only the deleted seeds, in candidate order', () => {
+    const kept = [game({ id: 'b' })]
+    expect(missingGames(kept, seeds).map((g) => g.id)).toEqual(['a', 'c'])
+  })
+
+  it('ignores unrelated games the host added themselves', () => {
+    const existing = [game({ id: 'a' }), game({ id: 'mine' })]
+    expect(missingGames(existing, seeds).map((g) => g.id)).toEqual(['b', 'c'])
   })
 })
 

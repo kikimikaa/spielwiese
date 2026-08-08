@@ -22,6 +22,7 @@ import {
   TOURNAMENT_DEFAULT_NAME,
 } from '../../core/constants'
 import { clampIndex, drawTeams } from '../../core/logic'
+import { missingGames } from '../../core/library'
 
 const STATE_PATH = resolve(process.cwd(), STATE_FILE)
 
@@ -45,7 +46,8 @@ function createInitialState(): TournamentState {
     roster: [],
     teams,
     players: [],
-    games: EXAMPLE_GAMES.map(toGame),
+    // Start with an empty library; the host loads the example games on demand.
+    games: [],
     currentGameId: null,
     scoreEvents: [],
     predictions: [],
@@ -241,9 +243,16 @@ export function reorderGames(orderedIds: string[]): TournamentState {
   return commit()
 }
 
+/**
+ * Adds the example games the library is still missing (matched by id), appended
+ * at the end. Re-adds any the host has deleted while leaving the ones they kept
+ * (and any edits) untouched — so it's safe to press more than once.
+ */
 export function loadExampleGames(): TournamentState {
-  state.games = EXAMPLE_GAMES.map(toGame)
-  state.currentGameId = null
+  for (const def of missingGames(state.games, EXAMPLE_GAMES)) {
+    state.games.push(toGame(def, state.games.length))
+  }
+  reindexGames()
   return commit()
 }
 
@@ -458,7 +467,7 @@ export function softReset(): TournamentState {
   return commit()
 }
 
-/** Full reset back to factory state (fresh example games, empty roster). */
+/** Full reset back to factory state (empty library, empty roster). */
 export function resetTournament(): TournamentState {
   state = createInitialState()
   return commit()

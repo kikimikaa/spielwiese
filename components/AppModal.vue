@@ -43,10 +43,7 @@ onUnmounted(() => {
     <Transition name="modal">
       <div v-if="open" class="overlay" data-testid="modal" @click.self="emit('cancel')">
         <div class="modal card" :class="{ wide }" role="dialog" aria-modal="true">
-          <div v-if="title || $slots['headerActions']" class="modal-header">
-            <h2 v-if="title">{{ title }}</h2>
-            <slot name="headerActions" />
-          </div>
+          <h2 v-if="title">{{ title }}</h2>
           <p v-if="message" class="muted msg">{{ message }}</p>
           <slot />
           <div v-if="!hideActions" class="cluster actions">
@@ -89,18 +86,6 @@ onUnmounted(() => {
 
 .modal.wide {
   max-width: 34rem;
-}
-
-.modal-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.4em;
-}
-
-.modal-header h2 {
-  margin: 0;
 }
 
 .msg {

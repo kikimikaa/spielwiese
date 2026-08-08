@@ -167,7 +167,6 @@
     "noMatches": "No games match the filter.",
     "pageOf": "Page {page} of {total}",
     "library": "Game library",
-    "saveSelection": "Save",
     "lineupEmpty": "No games selected yet. Open the library and tick some games.",
     "moveUp": "Move up",
     "moveDown": "Move down",

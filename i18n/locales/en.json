@@ -189,6 +189,8 @@
     "clearGamesConfirm": "Really delete ALL games? This can't be undone.",
     "reset": "Reset tournament",
     "resetConfirm": "Reset the draw, points and predictions? Games and names are kept.",
+    "endTournament": "End tournament",
+    "endTournamentConfirm": "Points, the draw and the entered names are cleared and all games are removed from the tournament. Your game library is kept. Really end it?",
     "pause": "Pause",
     "pauseCeremony": "Pause before ceremony",
     "showAwards": "Show awards",

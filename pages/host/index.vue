@@ -38,10 +38,16 @@ function toggleStatus(target: 'awards' | 'finished') {
 }
 
 const confirmReset = ref(false)
+const confirmEnd = ref(false)
 
 async function doReset() {
   await command('softReset')
   confirmReset.value = false
+}
+
+async function doEnd() {
+  await command('endTournament')
+  confirmEnd.value = false
 }
 </script>
 
@@ -133,9 +139,14 @@ async function doReset() {
 
       <section>
         <h2>{{ $t('host.sections.danger') }}</h2>
-        <button class="btn btn-danger" data-testid="reset" @click="confirmReset = true">
-          {{ $t('host.reset') }}
-        </button>
+        <div class="cluster">
+          <button class="btn btn-danger" data-testid="reset" @click="confirmReset = true">
+            {{ $t('host.reset') }}
+          </button>
+          <button class="btn btn-danger" data-testid="end-tournament" @click="confirmEnd = true">
+            {{ $t('host.endTournament') }}
+          </button>
+        </div>
       </section>
     </div>
 
@@ -147,6 +158,16 @@ async function doReset() {
       danger
       @confirm="doReset"
       @cancel="confirmReset = false"
+    />
+
+    <AppModal
+      :open="confirmEnd"
+      :title="$t('host.endTournament')"
+      :message="$t('host.endTournamentConfirm')"
+      :confirm-label="$t('host.endTournament')"
+      danger
+      @confirm="doEnd"
+      @cancel="confirmEnd = false"
     />
   </div>
 </template>

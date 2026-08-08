@@ -94,6 +94,8 @@ export default defineEventHandler(async (event) => {
       return store.setGameMetric(p.gameId, p.teamId, num(p.value))
     case 'softReset':
       return store.softReset()
+    case 'endTournament':
+      return store.endTournament()
     case 'reset':
       return store.resetTournament()
     default:

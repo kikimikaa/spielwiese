@@ -189,6 +189,8 @@
     "clearGamesConfirm": "Wirklich ALLE Spiele löschen? Das lässt sich nicht rückgängig machen.",
     "reset": "Turnier zurücksetzen",
     "resetConfirm": "Auslosung, Punkte und Tipps zurücksetzen? Spiele und Namen bleiben erhalten.",
+    "endTournament": "Turnier beenden",
+    "endTournamentConfirm": "Punkte, Auslosung und die eingegebenen Namen werden gelöscht und alle Spiele aus dem Turnier genommen. Deine Spiele-Bibliothek bleibt erhalten. Wirklich beenden?",
     "pause": "Pause",
     "pauseCeremony": "Pause vor Siegerehrung",
     "showAwards": "Auszeichnungen zeigen",

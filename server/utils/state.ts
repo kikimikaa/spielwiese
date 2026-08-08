@@ -1,6 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { mkdir, writeFile } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import type {
   AwardId,
@@ -23,6 +22,7 @@ import {
 } from '../../core/constants'
 import { clampIndex, drawTeams } from '../../core/logic'
 import { missingGames } from '../../core/library'
+import { createJsonWriter } from './persist'
 
 const STATE_PATH = resolve(process.cwd(), STATE_FILE)
 
@@ -57,7 +57,7 @@ function createInitialState(): TournamentState {
 }
 
 /** Minimal shape check so a schema-drifted/partial file can't crash the app. */
-function isValidState(x: unknown): x is TournamentState {
+export function isValidState(x: unknown): x is TournamentState {
   const s = x as Partial<TournamentState> | null
   return Boolean(
     s &&
@@ -69,19 +69,21 @@ function isValidState(x: unknown): x is TournamentState {
   )
 }
 
+/** Backfills fields added in later versions so older files/snapshots still work. */
+function backfill(s: TournamentState): TournamentState {
+  s.roster ??= []
+  s.pause ??= 'none'
+  s.status ??= 'setup'
+  s.revealedAwards ??= []
+  s.quiz ??= { index: 0, revealed: false }
+  return s
+}
+
 function load(): TournamentState {
   if (existsSync(STATE_PATH)) {
     try {
       const parsed = JSON.parse(readFileSync(STATE_PATH, 'utf8')) as unknown
-      if (isValidState(parsed)) {
-        // Backfill fields added in later versions so older files still work.
-        parsed.roster ??= []
-        parsed.pause ??= 'none'
-        parsed.status ??= 'setup'
-        parsed.revealedAwards ??= []
-        parsed.quiz ??= { index: 0, revealed: false }
-        return parsed
-      }
+      if (isValidState(parsed)) return backfill(parsed)
     } catch {
       // Don't let a corrupt file block the event — start fresh instead.
     }
@@ -102,32 +104,13 @@ export function getState(): TournamentState {
   return state
 }
 
-let dirEnsured = false
-let writing = false
-let writeAgain = false
-
-/**
- * Async, coalesced persistence: bursts of mutations collapse into a single
- * pending write instead of blocking the event loop with a sync write each time.
- * The directory is created only once.
- */
-async function persist(): Promise<void> {
-  writeAgain = true
-  if (writing) return
-  writing = true
-  try {
-    if (!dirEnsured) {
-      await mkdir(dirname(STATE_PATH), { recursive: true })
-      dirEnsured = true
-    }
-    while (writeAgain) {
-      writeAgain = false
-      await writeFile(STATE_PATH, JSON.stringify(state, null, 2), 'utf8')
-    }
-  } finally {
-    writing = false
-  }
+/** Replaces the whole live state (loading a saved snapshot) and broadcasts it. */
+export function replaceState(next: TournamentState): TournamentState {
+  state = backfill(next)
+  return commit()
 }
+
+const persist = createJsonWriter(STATE_PATH, () => state)
 
 /** Persists the state (async) and notifies every connected board immediately. */
 function commit(): TournamentState {

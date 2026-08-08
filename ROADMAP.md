@@ -38,11 +38,12 @@ Only adding a game stays a popup.
 **End tournament.** A one-tap reset that clears the run and the entered names and
 takes every game out of the lineup, while keeping the game library for next time.
 
-## Planned
+**Save / resume tournaments.** Snapshot a running tournament under a name and
+reload it later, so an event can be paused across sessions (beyond the automatic
+`data/state.json` recovery that already survives a crash or restart). Snapshots
+are host-only and never leave the machine.
 
-**Save / resume tournaments.** Snapshot a running tournament and reload it later,
-so an event can be paused across sessions (beyond the automatic `data/state.json`
-recovery that already survives a crash or restart).
+## Planned
 
 **Bilingual game presets.** Ready-made game libraries in both German and English,
 loaded by the current language. Filtering by preset category can build on the

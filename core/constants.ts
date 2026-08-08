@@ -82,3 +82,6 @@ export const AWARD_BETS: { awardId: AwardId; target: AwardTarget }[] = [
 
 /** File the live state is persisted to (excluded via .gitignore). */
 export const STATE_FILE = 'data/state.json'
+
+/** File the saved tournament snapshots are persisted to (excluded via .gitignore). */
+export const SNAPSHOT_FILE = 'data/snapshots.json'

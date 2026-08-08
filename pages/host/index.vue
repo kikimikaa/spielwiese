@@ -130,6 +130,12 @@ async function doEnd() {
       </section>
 
       <section>
+        <h2>{{ $t('host.sections.saveResume') }}</h2>
+        <p class="muted hint">{{ $t('host.snapshots.hint') }}</p>
+        <HostSnapshots />
+      </section>
+
+      <section>
         <h2>{{ $t('host.sections.danger') }}</h2>
         <div class="cluster">
           <button class="btn btn-danger" data-testid="reset" @click="confirmReset = true">

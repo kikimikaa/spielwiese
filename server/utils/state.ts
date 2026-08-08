@@ -69,19 +69,21 @@ function isValidState(x: unknown): x is TournamentState {
   )
 }
 
+/** Backfills fields added in later versions so older files/snapshots still work. */
+function backfill(s: TournamentState): TournamentState {
+  s.roster ??= []
+  s.pause ??= 'none'
+  s.status ??= 'setup'
+  s.revealedAwards ??= []
+  s.quiz ??= { index: 0, revealed: false }
+  return s
+}
+
 function load(): TournamentState {
   if (existsSync(STATE_PATH)) {
     try {
       const parsed = JSON.parse(readFileSync(STATE_PATH, 'utf8')) as unknown
-      if (isValidState(parsed)) {
-        // Backfill fields added in later versions so older files still work.
-        parsed.roster ??= []
-        parsed.pause ??= 'none'
-        parsed.status ??= 'setup'
-        parsed.revealedAwards ??= []
-        parsed.quiz ??= { index: 0, revealed: false }
-        return parsed
-      }
+      if (isValidState(parsed)) return backfill(parsed)
     } catch {
       // Don't let a corrupt file block the event — start fresh instead.
     }
@@ -100,6 +102,12 @@ export function subscribe(fn: (s: TournamentState) => void): () => void {
 
 export function getState(): TournamentState {
   return state
+}
+
+/** Replaces the whole live state (loading a saved snapshot) and broadcasts it. */
+export function replaceState(next: TournamentState): TournamentState {
+  state = backfill(next)
+  return commit()
 }
 
 let dirEnsured = false

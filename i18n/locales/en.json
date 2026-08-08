@@ -133,6 +133,7 @@
       "games": "Games",
       "control": "Control",
       "awards": "Reveal awards",
+      "saveResume": "Save & resume",
       "danger": "Reset"
     },
     "awards": {
@@ -191,6 +192,16 @@
     "resetConfirm": "Reset the draw, points and predictions? Games and names are kept.",
     "endTournament": "End tournament",
     "endTournamentConfirm": "Points, the draw and the entered names are cleared and all games are removed from the tournament. Your game library is kept. Really end it?",
+    "snapshots": {
+      "hint": "Save the whole state (games, teams, points, tips) and reload it later — e.g. to pause an event across several evenings.",
+      "namePlaceholder": "Snapshot name",
+      "save": "Save snapshot",
+      "load": "Load",
+      "empty": "No saved snapshots yet.",
+      "summary": "{games} games · {teams} teams · {players} names",
+      "loadConfirm": "Load snapshot “{name}”? The current tournament (points, draw, tips) will be replaced.",
+      "deleteConfirm": "Delete saved snapshot “{name}”?"
+    },
     "pause": "Pause",
     "pauseCeremony": "Pause before ceremony",
     "showAwards": "Show awards",

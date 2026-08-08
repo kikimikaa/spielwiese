@@ -133,6 +133,7 @@
       "games": "Spiele",
       "control": "Steuerung",
       "awards": "Ehrungen aufdecken",
+      "saveResume": "Speichern & Laden",
       "danger": "Zurücksetzen"
     },
     "awards": {
@@ -191,6 +192,16 @@
     "resetConfirm": "Auslosung, Punkte und Tipps zurücksetzen? Spiele und Namen bleiben erhalten.",
     "endTournament": "Turnier beenden",
     "endTournamentConfirm": "Punkte, Auslosung und die eingegebenen Namen werden gelöscht und alle Spiele aus dem Turnier genommen. Deine Spiele-Bibliothek bleibt erhalten. Wirklich beenden?",
+    "snapshots": {
+      "hint": "Speichere den kompletten Stand (Spiele, Teams, Punkte, Tipps) und lade ihn später wieder — z. B. um über mehrere Abende zu pausieren.",
+      "namePlaceholder": "Name des Standes",
+      "save": "Stand speichern",
+      "load": "Laden",
+      "empty": "Noch keine gespeicherten Stände.",
+      "summary": "{games} Spiele · {teams} Teams · {players} Namen",
+      "loadConfirm": "Stand „{name}“ laden? Der aktuelle Turnierverlauf (Punkte, Auslosung, Tipps) wird ersetzt.",
+      "deleteConfirm": "Gespeicherten Stand „{name}“ löschen?"
+    },
     "pause": "Pause",
     "pauseCeremony": "Pause vor Siegerehrung",
     "showAwards": "Auszeichnungen zeigen",

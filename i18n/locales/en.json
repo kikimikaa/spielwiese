@@ -257,7 +257,7 @@
       "markCorrect": "Mark as correct",
       "rankingPrompt": "Ordering question",
       "rankingItems": "Items in the correct order",
-      "rankingHint": "Enter the items top to bottom in their correct order — the board shuffles them.",
+      "rankingHint": "Enter the items top to bottom in their correct order — the board shows them in a neutral order until you reveal it.",
       "rankingItem": "Item",
       "addItem": "Add item",
       "removeItem": "Remove item",

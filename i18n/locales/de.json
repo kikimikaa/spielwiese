@@ -257,7 +257,7 @@
       "markCorrect": "Als richtig markieren",
       "rankingPrompt": "Reihenfolge-Frage",
       "rankingItems": "Begriffe in der richtigen Reihenfolge",
-      "rankingHint": "Begriffe von oben nach unten in der richtigen Reihenfolge eingeben – das Board mischt sie.",
+      "rankingHint": "Begriffe von oben nach unten in der richtigen Reihenfolge eingeben – das Board zeigt sie in neutraler Reihenfolge, bis du sie aufdeckst.",
       "rankingItem": "Begriff",
       "addItem": "Begriff hinzufügen",
       "removeItem": "Begriff entfernen",

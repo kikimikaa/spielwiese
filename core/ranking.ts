@@ -11,10 +11,15 @@ export function isRankingComplete(spec: RankingSpec): boolean {
 }
 
 /**
- * A neutral display order for the items before the answer is revealed: a stable
- * code-point sort, deterministic on every client and independent of the stored
- * (correct) order, so it never gives the ranking away.
+ * A neutral display order for the items before the answer is revealed:
+ * deterministic on every client (a stable UTF-16 code-unit sort) and never the
+ * stored correct order. If the sort happens to coincide with the correct order
+ * (e.g. the answer is itself alphabetical), it's rotated by one so the board
+ * still can't show the exact ranking.
  */
 export function neutralOrder(items: string[]): string[] {
-  return [...items].sort()
+  const sorted = [...items].sort()
+  const matchesAnswer = sorted.every((item, i) => item === items[i])
+  if (matchesAnswer && sorted.length > 1) sorted.push(sorted.shift() as string)
+  return sorted
 }

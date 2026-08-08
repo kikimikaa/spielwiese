@@ -35,6 +35,14 @@ describe('neutralOrder', () => {
     expect(sorted).toEqual(['a', 'b', 'c'])
   })
 
+  it('never returns the correct order — rotates when the sort coincides with it', () => {
+    // Correct order is already alphabetical, so a plain sort would leak the answer.
+    const correct = ['Alpha', 'Beta', 'Gamma']
+    const shown = neutralOrder(correct)
+    expect(shown).not.toEqual(correct)
+    expect([...shown].sort()).toEqual(correct) // same items, just reordered
+  })
+
   it('handles an empty list', () => {
     expect(neutralOrder([])).toEqual([])
   })

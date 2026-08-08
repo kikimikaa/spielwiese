@@ -123,7 +123,8 @@ export interface ChoiceSpec {
 
 /**
  * An ordering question: the prompt and the items stored in their correct order.
- * The board shows them neutrally (alphabetical) until the host reveals the order.
+ * The board shows them in a neutral order (never the answer) until the host
+ * reveals the correct one.
  */
 export interface RankingSpec {
   prompt: string

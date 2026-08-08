@@ -27,17 +27,22 @@ instead of Nuxt's raw error screen.
 
 **Bulk library selection.** Tick or untick every game for the tournament at once.
 
+**Library as its own page.** The game library moved out of a cramped modal onto
+its own page with room to breathe, with search and filters by type and location.
+Only adding a game stays a popup.
+
+**End tournament.** A one-tap reset that clears the run and the entered names and
+takes every game out of the lineup, while keeping the game library for next time.
+
 ## Planned
 
 **Save / resume tournaments.** Snapshot a running tournament and reload it later,
 so an event can be paused across sessions (beyond the automatic `data/state.json`
 recovery that already survives a crash or restart).
 
-**Library filtering.** Filter the game library by source — only your own games,
-or by preset category (quiz, sports day, office games, …).
-
 **Bilingual game presets.** Ready-made game libraries in both German and English,
-loaded by the current language.
+loaded by the current language. Filtering by preset category can build on the
+type/location filters already in the library.
 
 **More game types.** Further tailored types beyond quiz, each with its own add
 mask and board behaviour.

@@ -1,6 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { mkdir, writeFile } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import type {
   AwardId,
@@ -23,6 +22,7 @@ import {
 } from '../../core/constants'
 import { clampIndex, drawTeams } from '../../core/logic'
 import { missingGames } from '../../core/library'
+import { createJsonWriter } from './persist'
 
 const STATE_PATH = resolve(process.cwd(), STATE_FILE)
 
@@ -57,7 +57,7 @@ function createInitialState(): TournamentState {
 }
 
 /** Minimal shape check so a schema-drifted/partial file can't crash the app. */
-function isValidState(x: unknown): x is TournamentState {
+export function isValidState(x: unknown): x is TournamentState {
   const s = x as Partial<TournamentState> | null
   return Boolean(
     s &&
@@ -110,32 +110,7 @@ export function replaceState(next: TournamentState): TournamentState {
   return commit()
 }
 
-let dirEnsured = false
-let writing = false
-let writeAgain = false
-
-/**
- * Async, coalesced persistence: bursts of mutations collapse into a single
- * pending write instead of blocking the event loop with a sync write each time.
- * The directory is created only once.
- */
-async function persist(): Promise<void> {
-  writeAgain = true
-  if (writing) return
-  writing = true
-  try {
-    if (!dirEnsured) {
-      await mkdir(dirname(STATE_PATH), { recursive: true })
-      dirEnsured = true
-    }
-    while (writeAgain) {
-      writeAgain = false
-      await writeFile(STATE_PATH, JSON.stringify(state, null, 2), 'utf8')
-    }
-  } finally {
-    writing = false
-  }
-}
+const persist = createJsonWriter(STATE_PATH, () => state)
 
 /** Persists the state (async) and notifies every connected board immediately. */
 function commit(): TournamentState {

@@ -1,11 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { mkdir, writeFile } from 'node:fs/promises'
-import { dirname, resolve } from 'node:path'
+import { resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
 import type { TournamentState } from '../../core/types'
 import type { SnapshotMeta } from '../../core/snapshots'
 import { snapshotName, summarizeState } from '../../core/snapshots'
 import { SNAPSHOT_FILE } from '../../core/constants'
+import { isValidState } from './state'
+import { createJsonWriter } from './persist'
 
 /** A saved snapshot keeps the full state; only its metadata is ever sent to the client. */
 interface StoredSnapshot {
@@ -17,11 +18,24 @@ interface StoredSnapshot {
 
 const SNAPSHOT_PATH = resolve(process.cwd(), SNAPSHOT_FILE)
 
+/** A record is only usable if its state is well-formed — else summarizing it later throws. */
+function isStored(x: unknown): x is StoredSnapshot {
+  const s = x as Partial<StoredSnapshot> | null
+  return Boolean(
+    s &&
+    typeof s.id === 'string' &&
+    typeof s.name === 'string' &&
+    typeof s.savedAt === 'number' &&
+    isValidState(s.state),
+  )
+}
+
 function load(): StoredSnapshot[] {
   if (existsSync(SNAPSHOT_PATH)) {
     try {
       const parsed = JSON.parse(readFileSync(SNAPSHOT_PATH, 'utf8')) as unknown
-      if (Array.isArray(parsed)) return parsed as StoredSnapshot[]
+      // Drop any malformed record so one bad entry can't crash the whole panel.
+      if (Array.isArray(parsed)) return parsed.filter(isStored)
     } catch {
       // Corrupt file — start with no snapshots rather than crash the app.
     }
@@ -31,14 +45,7 @@ function load(): StoredSnapshot[] {
 
 let snapshots: StoredSnapshot[] = load()
 
-let dirEnsured = false
-async function persist(): Promise<void> {
-  if (!dirEnsured) {
-    await mkdir(dirname(SNAPSHOT_PATH), { recursive: true })
-    dirEnsured = true
-  }
-  await writeFile(SNAPSHOT_PATH, JSON.stringify(snapshots, null, 2), 'utf8')
-}
+const persist = createJsonWriter(SNAPSHOT_PATH, () => snapshots)
 
 function toMeta(s: StoredSnapshot): SnapshotMeta {
   return { id: s.id, name: s.name, savedAt: s.savedAt, summary: summarizeState(s.state) }
@@ -49,21 +56,29 @@ export function listSnapshots(): SnapshotMeta[] {
   return [...snapshots].sort((a, b) => b.savedAt - a.savedAt).map(toMeta)
 }
 
-/** Stores a deep copy of the current state so later play can't mutate the snapshot. */
-export function saveSnapshot(name: string, state: TournamentState, now: number): SnapshotMeta[] {
+/**
+ * Stores a deep copy of the current state so later play can't mutate the
+ * snapshot. Awaits the write so a failed save surfaces as an error, not a silent
+ * 200 with lost data.
+ */
+export async function saveSnapshot(
+  name: string,
+  state: TournamentState,
+  now: number,
+): Promise<SnapshotMeta[]> {
   snapshots.push({
     id: randomUUID(),
     name: snapshotName(name, state.name),
     savedAt: now,
     state: structuredClone(state),
   })
-  void persist()
+  await persist()
   return listSnapshots()
 }
 
-export function deleteSnapshot(id: string): SnapshotMeta[] {
+export async function deleteSnapshot(id: string): Promise<SnapshotMeta[]> {
   snapshots = snapshots.filter((s) => s.id !== id)
-  void persist()
+  await persist()
   return listSnapshots()
 }
 

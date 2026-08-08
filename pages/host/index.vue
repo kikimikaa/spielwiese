@@ -3,7 +3,7 @@ const { t } = useI18n()
 useHead({ title: () => `${t('host.title')} — ${t('app.name')}` })
 
 const { state, teams, totals, leader } = useTournamentState()
-const { pin, unlocked, error, unlock, command } = useHost()
+const { unlocked, error, unlock, command, ensureUnlocked } = useHost()
 
 const pinInput = ref('')
 
@@ -15,16 +15,8 @@ async function doUnlock() {
   }
 }
 
-// Re-validate a stored PIN on load so a returning host skips the prompt.
-onMounted(async () => {
-  if (pin.value && !unlocked.value) {
-    try {
-      await unlock(pin.value)
-    } catch {
-      // Stored PIN no longer valid — fall back to the prompt.
-    }
-  }
-})
+// Re-validate a stored PIN on load; the prompt below shows if it isn't valid.
+onMounted(ensureUnlocked)
 
 const pause = computed(() => state.value?.pause ?? 'none')
 const status = computed(() => state.value?.status ?? 'setup')
@@ -38,10 +30,16 @@ function toggleStatus(target: 'awards' | 'finished') {
 }
 
 const confirmReset = ref(false)
+const confirmEnd = ref(false)
 
 async function doReset() {
   await command('softReset')
   confirmReset.value = false
+}
+
+async function doEnd() {
+  await command('endTournament')
+  confirmEnd.value = false
 }
 </script>
 
@@ -133,9 +131,14 @@ async function doReset() {
 
       <section>
         <h2>{{ $t('host.sections.danger') }}</h2>
-        <button class="btn btn-danger" data-testid="reset" @click="confirmReset = true">
-          {{ $t('host.reset') }}
-        </button>
+        <div class="cluster">
+          <button class="btn btn-danger" data-testid="reset" @click="confirmReset = true">
+            {{ $t('host.reset') }}
+          </button>
+          <button class="btn btn-danger" data-testid="end-tournament" @click="confirmEnd = true">
+            {{ $t('host.endTournament') }}
+          </button>
+        </div>
       </section>
     </div>
 
@@ -147,6 +150,16 @@ async function doReset() {
       danger
       @confirm="doReset"
       @cancel="confirmReset = false"
+    />
+
+    <AppModal
+      :open="confirmEnd"
+      :title="$t('host.endTournament')"
+      :message="$t('host.endTournamentConfirm')"
+      :confirm-label="$t('host.endTournament')"
+      danger
+      @confirm="doEnd"
+      @cancel="confirmEnd = false"
     />
   </div>
 </template>

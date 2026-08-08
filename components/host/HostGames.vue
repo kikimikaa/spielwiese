@@ -14,7 +14,6 @@ function quizReveal(revealed: boolean) {
 
 // A game can only be started once teams exist (drawn or created manually).
 const hasTeams = computed(() => players.value.length > 0)
-const libraryOpen = ref(false)
 
 const isCurrent = (id: string) => state.value?.currentGameId === id
 
@@ -200,11 +199,9 @@ function setNote(gameId: string, event: Event) {
       </li>
     </ul>
 
-    <button class="btn" data-testid="open-library" @click="libraryOpen = true">
+    <NuxtLink class="btn" to="/host/library" data-testid="open-library">
       📚 {{ $t('host.library') }}
-    </button>
-
-    <HostLibrary v-model:open="libraryOpen" />
+    </NuxtLink>
   </section>
 </template>
 

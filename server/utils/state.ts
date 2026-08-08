@@ -22,6 +22,7 @@ import {
   TOURNAMENT_DEFAULT_NAME,
 } from '../../core/constants'
 import { clampIndex, drawTeams } from '../../core/logic'
+import { missingGames } from '../../core/library'
 
 const STATE_PATH = resolve(process.cwd(), STATE_FILE)
 
@@ -45,7 +46,8 @@ function createInitialState(): TournamentState {
     roster: [],
     teams,
     players: [],
-    games: EXAMPLE_GAMES.map(toGame),
+    // Start with an empty library; the host loads the example games on demand.
+    games: [],
     currentGameId: null,
     scoreEvents: [],
     predictions: [],
@@ -241,9 +243,16 @@ export function reorderGames(orderedIds: string[]): TournamentState {
   return commit()
 }
 
+/**
+ * Adds the example games the library is still missing (matched by id), appended
+ * at the end. Re-adds any the host has deleted while leaving the ones they kept
+ * (and any edits) untouched — so it's safe to press more than once.
+ */
 export function loadExampleGames(): TournamentState {
-  state.games = EXAMPLE_GAMES.map(toGame)
-  state.currentGameId = null
+  // Append each missing seed at the end; its order is its position, like addGame.
+  for (const def of missingGames(state.games, EXAMPLE_GAMES)) {
+    state.games.push(toGame(def, state.games.length))
+  }
   return commit()
 }
 
@@ -438,10 +447,11 @@ export function claimPlayer(playerId: string, displayName: string): TournamentSt
 }
 
 /**
- * Soft reset for a rerun: keeps the games (library + selection) and the entered
- * roster, but undoes the draw, points, predictions and every game result.
+ * Clears everything about a single run — the draw, points, predictions, game
+ * results and board state — but never touches the game library itself. The
+ * entered roster is kept, so the same people can be re-drawn.
  */
-export function softReset(): TournamentState {
+function clearRun(): void {
   state.players = []
   for (const team of state.teams) team.playerIds = []
   state.scoreEvents = []
@@ -455,10 +465,32 @@ export function softReset(): TournamentState {
   state.status = 'setup'
   state.pause = 'none'
   state.revealedAwards = []
+  state.quiz = { index: 0, revealed: false }
+}
+
+/**
+ * Soft reset for a rerun: keeps the games (library + selection) and the entered
+ * roster, but undoes the draw, points, predictions and every game result.
+ */
+export function softReset(): TournamentState {
+  clearRun()
   return commit()
 }
 
-/** Full reset back to factory state (fresh example games, empty roster). */
+/**
+ * Ends the tournament: clears the run like a soft reset, and additionally
+ * forgets the entered names and takes every game out of the active lineup
+ * (enabled = false). The games themselves stay in the library, ready to be
+ * re-picked for the next event.
+ */
+export function endTournament(): TournamentState {
+  clearRun()
+  state.roster = []
+  for (const g of state.games) g.enabled = false
+  return commit()
+}
+
+/** Full reset back to factory state (empty library, empty roster). */
 export function resetTournament(): TournamentState {
   state = createInitialState()
   return commit()

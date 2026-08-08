@@ -8,7 +8,7 @@
 // snapshot (with live data) will build on.
 
 import { CONFIG_SCHEMA_VERSION, GAME_KINDS, GAME_LOCATIONS, SCORING_TYPES } from './constants'
-import type { GameDef, GameKind, QuizQuestion } from './types'
+import type { EstimateSpec, GameDef, GameKind, QuizQuestion } from './types'
 
 export interface TournamentConfig {
   schemaVersion: number
@@ -156,9 +156,12 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (typeof raw.materials === 'string') game.materials = raw.materials
   if (typeof raw.hostNote === 'string') game.hostNote = raw.hostNote
   if (GAME_KINDS.includes(raw.kind as GameKind)) game.kind = raw.kind
-  // Questions only belong to a quiz — never carry them on a freeform game.
+  // Type-specific content only rides along on its own game type.
   if (game.kind === 'quiz' && Array.isArray(raw.questions)) {
     game.questions = sanitizeQuestions(raw.questions)
+  }
+  if (game.kind === 'estimate' && isRecord(raw.estimate)) {
+    game.estimate = sanitizeEstimate(raw.estimate)
   }
   return game
 }
@@ -172,4 +175,14 @@ function sanitizeQuestions(raw: unknown[]): QuizQuestion[] {
     }
   }
   return out
+}
+
+/** Rebuilds an estimate from imported input, keeping only string fields. */
+function sanitizeEstimate(raw: Record<string, unknown>): EstimateSpec {
+  const spec: EstimateSpec = {
+    prompt: typeof raw['prompt'] === 'string' ? raw['prompt'] : '',
+    solution: typeof raw['solution'] === 'string' ? raw['solution'] : '',
+  }
+  if (typeof raw['unit'] === 'string' && raw['unit']) spec.unit = raw['unit']
+  return spec
 }

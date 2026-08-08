@@ -78,20 +78,30 @@ export interface GameDef {
   hostNote?: string
   /**
    * Game type. `freeform` (default, missing = freeform) is the plain game the
-   * host runs manually. `quiz` carries `questions` that are shown one at a time
-   * on the board and revealed by the host — scoring is unchanged either way.
+   * host runs manually. `quiz` carries `questions` shown one at a time and
+   * revealed by the host; `estimate` carries a single `estimate` prompt whose
+   * solution the host reveals on cue. Scoring is unchanged for every type.
    */
   kind?: GameKind
   /** Quiz question/answer pairs; only meaningful for `kind === 'quiz'`. */
   questions?: QuizQuestion[]
+  /** Estimate prompt and its solution; only meaningful for `kind === 'estimate'`. */
+  estimate?: EstimateSpec
 }
 
-export type GameKind = 'freeform' | 'quiz'
+export type GameKind = 'freeform' | 'quiz' | 'estimate'
 
 /** A single quiz question and its answer (host-authored plain text). */
 export interface QuizQuestion {
   question: string
   answer: string
+}
+
+/** A single estimate: the question, the exact solution, and an optional unit. */
+export interface EstimateSpec {
+  prompt: string
+  solution: string
+  unit?: string
 }
 
 export interface Player {

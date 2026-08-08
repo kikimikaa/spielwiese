@@ -81,6 +81,10 @@ export function useTournamentState() {
     if (g?.kind !== 'quiz' || !g.questions?.length) return null
     return g.questions[clampIndex(quiz.value.index, g.questions.length)] ?? null
   })
+  const currentEstimate = computed(() => {
+    const g = currentGame.value
+    return g?.kind === 'estimate' ? (g.estimate ?? null) : null
+  })
 
   // Which honorable mentions the host has revealed on the board.
   const revealedAwards = computed<AwardId[]>(() => state.value?.revealedAwards ?? [])
@@ -127,5 +131,6 @@ export function useTournamentState() {
     awardDetailArgs,
     quiz,
     currentQuestion,
+    currentEstimate,
   }
 }

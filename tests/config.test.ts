@@ -80,6 +80,44 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('questions')
   })
 
+  it('round-trips an estimate, keeping the unit and coercing missing fields', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        {
+          ...game(),
+          id: 'e1',
+          kind: 'estimate',
+          estimate: { prompt: 'How tall?', solution: '330', unit: 'm' },
+        },
+        { ...game(), id: 'e2', kind: 'estimate', estimate: { prompt: 'How many?', solution: 42 } },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.config.games[0]?.estimate).toEqual({
+        prompt: 'How tall?',
+        solution: '330',
+        unit: 'm',
+      })
+      // Non-string solution is coerced to '' rather than carried through.
+      expect(result.config.games[1]?.estimate).toEqual({ prompt: 'How many?', solution: '' })
+    }
+  })
+
+  it('drops the estimate on a non-estimate game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [{ ...game(), kind: 'quiz', estimate: { prompt: 'p', solution: 's' } }],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('estimate')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

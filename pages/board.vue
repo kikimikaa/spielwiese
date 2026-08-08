@@ -2,8 +2,18 @@
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
-const { state, connected, teams, totals, leader, currentGame, upcoming, quiz, currentQuestion } =
-  useTournamentState()
+const {
+  state,
+  connected,
+  teams,
+  totals,
+  leader,
+  currentGame,
+  upcoming,
+  quiz,
+  currentQuestion,
+  currentEstimate,
+} = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 
 const showAwards = computed(
@@ -94,7 +104,25 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
               </p>
               <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
             </div>
-            <p v-else-if="currentGame.kind === 'quiz' && !currentGame.rules" class="muted rules">
+            <div
+              v-else-if="currentGame.kind === 'estimate' && currentEstimate"
+              class="quiz"
+              data-testid="board-estimate"
+            >
+              <p class="quiz-q">{{ currentEstimate.prompt }}</p>
+              <p v-if="quiz.revealed" class="quiz-a" data-testid="board-estimate-solution">
+                {{ currentEstimate.solution
+                }}<template v-if="currentEstimate.unit"> {{ currentEstimate.unit }}</template>
+              </p>
+              <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
+            </div>
+            <p
+              v-else-if="
+                (currentGame.kind === 'quiz' || currentGame.kind === 'estimate') &&
+                !currentGame.rules
+              "
+              class="muted rules"
+            >
               {{ $t('board.waiting') }}
             </p>
           </template>

@@ -203,18 +203,27 @@
       "reveal": "Antwort zeigen",
       "hide": "Antwort verbergen"
     },
+    "estimate": {
+      "reveal": "Lösung zeigen",
+      "hide": "Lösung verbergen"
+    },
     "gameForm": {
       "title": "Titel",
       "kind": "Typ",
       "kindOption": {
         "freeform": "Freies Spiel",
-        "quiz": "Quiz"
+        "quiz": "Quiz",
+        "estimate": "Schätzen"
       },
       "questions": "Fragen",
       "question": "Frage",
       "answer": "Antwort",
       "addQuestion": "Frage hinzufügen",
       "removeQuestion": "Frage entfernen",
+      "estimatePrompt": "Schätzfrage",
+      "estimateSolution": "Lösung",
+      "estimateUnit": "Einheit",
+      "estimateUnitPlaceholder": "z. B. cm, kg, Jahre",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

@@ -3,7 +3,7 @@ import type { GameDef } from '../../core/types'
 import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
 import { activeFacetCount, emptyGameFilter, filterGames, isFilterActive } from '../../core/library'
 import type { GameFilter } from '../../core/library'
-import { PRESET_PACKS } from '../../core/presets'
+import { PRESET_PACKS, presetLocaleOf } from '../../core/presets'
 
 // Keep the library scannable — paginate once it grows past this.
 const GAMES_PER_PAGE = 8
@@ -11,11 +11,8 @@ const GAMES_PER_PAGE = 8
 const { t, locale } = useI18n()
 const { command } = useHost()
 
-// Only German and English content ship; anything else falls back to German.
-const presetLocale = computed(() => (locale.value === 'en' ? 'en' : 'de'))
-
 function loadPreset(packId: string) {
-  command('loadPreset', { packId, locale: presetLocale.value })
+  command('loadPreset', { packId, locale: presetLocaleOf(locale.value) })
 }
 const { games } = useTournamentState()
 const { exportConfig, importFromFile, importError } = useConfigTransfer()

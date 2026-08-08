@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { PRESET_PACKS, PRESET_PACK_IDS, presetGames, type PresetLocale } from '../core/presets'
+import {
+  PRESET_PACKS,
+  PRESET_PACK_IDS,
+  presetGames,
+  presetLocaleOf,
+  type PresetLocale,
+} from '../core/presets'
 import { buildConfig, parseConfig } from '../core/config'
+import { EXAMPLE_GAME_IDS } from '../core/example-games'
 
 const LOCALES: PresetLocale[] = ['de', 'en']
 
@@ -31,6 +38,22 @@ describe('presetGames', () => {
       const ids = pack.games.map((g) => g.id)
       expect(new Set(ids).size).toBe(ids.length)
     }
+  })
+
+  it('keeps preset ids disjoint from the example seeds — no silent shadowing', () => {
+    const seeds = new Set(EXAMPLE_GAME_IDS)
+    for (const pack of PRESET_PACKS) {
+      for (const g of pack.games) expect(seeds.has(g.id)).toBe(false)
+    }
+  })
+})
+
+describe('presetLocaleOf', () => {
+  it('keeps English and falls back to German for anything else', () => {
+    expect(presetLocaleOf('en')).toBe('en')
+    expect(presetLocaleOf('de')).toBe('de')
+    expect(presetLocaleOf('fr')).toBe('de')
+    expect(presetLocaleOf('')).toBe('de')
   })
 })
 

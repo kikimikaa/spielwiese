@@ -19,6 +19,11 @@ import type {
 
 export type PresetLocale = 'de' | 'en'
 
+/** Presets ship in German and English only; any other UI locale falls back to German. */
+export function presetLocaleOf(uiLocale: string): PresetLocale {
+  return uiLocale === 'en' ? 'en' : 'de'
+}
+
 /** The language-specific text of a preset game; everything a host actually reads. */
 interface LocalizedText {
   title: string
@@ -360,7 +365,7 @@ const PACKS: PresetPack[] = [
     id: 'classic',
     games: [
       {
-        id: 'filme-zollstock',
+        id: 'classic-filme-zollstock',
         location: 'both',
         scoringType: 'versus',
         de: {
@@ -381,7 +386,7 @@ const PACKS: PresetPack[] = [
         },
       },
       {
-        id: 'aushalten',
+        id: 'classic-aushalten',
         location: 'both',
         scoringType: 'stations',
         de: {
@@ -402,7 +407,7 @@ const PACKS: PresetPack[] = [
         },
       },
       {
-        id: 'geruche',
+        id: 'classic-geruche',
         location: 'both',
         scoringType: 'points',
         de: {
@@ -422,7 +427,7 @@ const PACKS: PresetPack[] = [
         },
       },
       {
-        id: 'reaktionsduell',
+        id: 'classic-reaktionsduell',
         location: 'both',
         scoringType: 'versus',
         de: {

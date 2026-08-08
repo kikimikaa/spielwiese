@@ -50,6 +50,11 @@
     "connected": "Connected",
     "offline": "Disconnected"
   },
+  "connection": {
+    "lost": "Connection lost — reconnecting …",
+    "connecting": "Connecting to the server …",
+    "retry": "Retry now"
+  },
   "invite": {
     "title": "Invitation",
     "hint": "Scan to join"

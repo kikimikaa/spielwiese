@@ -50,6 +50,11 @@
     "connected": "Verbunden",
     "offline": "Nicht verbunden"
   },
+  "connection": {
+    "lost": "Verbindung unterbrochen – Neuverbindung läuft …",
+    "connecting": "Verbinde mit dem Server …",
+    "retry": "Jetzt erneut versuchen"
+  },
   "invite": {
     "title": "Einladung",
     "hint": "Zum Mitmachen scannen"

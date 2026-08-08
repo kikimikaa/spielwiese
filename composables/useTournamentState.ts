@@ -89,6 +89,10 @@ export function useTournamentState() {
     const g = currentGame.value
     return g?.kind === 'choice' && g.choice?.options.length ? g.choice : null
   })
+  const currentRanking = computed(() => {
+    const g = currentGame.value
+    return g?.kind === 'ranking' && g.ranking?.items.length ? g.ranking : null
+  })
 
   // Which honorable mentions the host has revealed on the board.
   const revealedAwards = computed<AwardId[]>(() => state.value?.revealedAwards ?? [])
@@ -137,5 +141,6 @@ export function useTournamentState() {
     currentQuestion,
     currentEstimate,
     currentChoice,
+    currentRanking,
   }
 }

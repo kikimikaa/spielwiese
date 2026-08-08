@@ -188,6 +188,7 @@ export function addGame(def: Partial<GameDef>): TournamentState {
     questions: def.kind === 'quiz' ? def.questions : undefined,
     estimate: def.kind === 'estimate' ? def.estimate : undefined,
     choice: def.kind === 'choice' ? def.choice : undefined,
+    ranking: def.kind === 'ranking' ? def.ranking : undefined,
     order: state.games.length,
     status: 'todo',
   }
@@ -205,6 +206,7 @@ export function updateGame(gameId: string, patch: Partial<GameDef>): TournamentS
   if (game.kind !== 'quiz') delete game.questions
   if (game.kind !== 'estimate') delete game.estimate
   if (game.kind !== 'choice') delete game.choice
+  if (game.kind !== 'ranking') delete game.ranking
   // Editing the live game (e.g. shortening a quiz) must keep the board pointer
   // valid and re-hide the answer.
   if (gameId === state.currentGameId) {
@@ -334,12 +336,13 @@ function currentQuizLength(): number {
   return g?.kind === 'quiz' ? (g.questions?.length ?? 0) : 0
 }
 
-/** Whether the current game has something to reveal (a quiz question, an estimate or a choice). */
+/** Whether the current game has something to reveal (quiz, estimate, choice or ranking). */
 function currentGameReveals(): boolean {
   const g = state.currentGameId ? findGame(state.currentGameId) : undefined
   if (g?.kind === 'quiz') return (g.questions?.length ?? 0) > 0
   if (g?.kind === 'estimate') return Boolean(g.estimate?.solution)
   if (g?.kind === 'choice') return (g.choice?.options?.length ?? 0) > 0
+  if (g?.kind === 'ranking') return (g.ranking?.items?.length ?? 0) > 0
   return false
 }
 

@@ -227,6 +227,10 @@
       "reveal": "Lösung zeigen",
       "hide": "Lösung verbergen"
     },
+    "ranking": {
+      "reveal": "Reihenfolge zeigen",
+      "hide": "Reihenfolge verbergen"
+    },
     "gameForm": {
       "title": "Titel",
       "kind": "Typ",
@@ -234,7 +238,8 @@
         "freeform": "Freies Spiel",
         "quiz": "Quiz",
         "estimate": "Schätzen",
-        "choice": "Multiple Choice"
+        "choice": "Multiple Choice",
+        "ranking": "Reihenfolge"
       },
       "questions": "Fragen",
       "question": "Frage",
@@ -250,6 +255,12 @@
       "addOption": "Option hinzufügen",
       "removeOption": "Option entfernen",
       "markCorrect": "Als richtig markieren",
+      "rankingPrompt": "Reihenfolge-Frage",
+      "rankingItems": "Begriffe in der richtigen Reihenfolge",
+      "rankingHint": "Begriffe von oben nach unten in der richtigen Reihenfolge eingeben – das Board zeigt sie in neutraler Reihenfolge, bis du sie aufdeckst.",
+      "rankingItem": "Begriff",
+      "addItem": "Begriff hinzufügen",
+      "removeItem": "Begriff entfernen",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

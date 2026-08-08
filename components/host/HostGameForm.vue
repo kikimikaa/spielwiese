@@ -5,10 +5,12 @@ import type {
   GameDef,
   GameLocation,
   QuizQuestion,
+  RankingSpec,
   ScoringType,
 } from '../../core/types'
 import { GAME_KINDS } from '../../core/constants'
 import { isChoiceComplete, MIN_CHOICE_OPTIONS, optionLetter } from '../../core/choice'
+import { isRankingComplete, MIN_RANKING_ITEMS } from '../../core/ranking'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
@@ -102,12 +104,32 @@ const cleanChoice = computed<ChoiceSpec>(() => {
   return { prompt: choicePrompt.value.trim(), options, correct }
 })
 
+// Ordering: a prompt and the items in their correct order. Rows start empty.
+const rankingPrompt = ref(props.game?.ranking?.prompt ?? '')
+const rankingItems = ref<string[]>(
+  props.game?.ranking?.items.slice() ?? Array.from({ length: MIN_RANKING_ITEMS }, () => ''),
+)
+
+function addItem() {
+  rankingItems.value.push('')
+}
+function removeItem(i: number) {
+  rankingItems.value.splice(i, 1)
+}
+
+// Trimmed ranking with empty rows dropped; the surviving order is the answer.
+const cleanRanking = computed<RankingSpec>(() => ({
+  prompt: rankingPrompt.value.trim(),
+  items: rankingItems.value.map((item: string) => item.trim()).filter((item: string) => item),
+}))
+
 const canSave = computed(() => {
   if (form.title.trim().length === 0) return false
   if (form.kind === 'quiz') return cleanQuestions.value.length > 0
   if (form.kind === 'estimate')
     return Boolean(cleanEstimate.value.prompt && cleanEstimate.value.solution)
   if (form.kind === 'choice') return isChoiceComplete(cleanChoice.value)
+  if (form.kind === 'ranking') return isRankingComplete(cleanRanking.value)
   return true
 })
 
@@ -118,6 +140,7 @@ function submit() {
   if (form.kind === 'quiz') game.questions = cleanQuestions.value
   if (form.kind === 'estimate') game.estimate = cleanEstimate.value
   if (form.kind === 'choice') game.choice = cleanChoice.value
+  if (form.kind === 'ranking') game.ranking = cleanRanking.value
   emit('save', game)
 }
 </script>
@@ -252,6 +275,42 @@ function submit() {
       </div>
       <button type="button" class="btn" data-testid="choice-add" @click="addOption">
         ＋ {{ $t('host.gameForm.addOption') }}
+      </button>
+    </div>
+
+    <div v-if="form.kind === 'ranking'" class="stack quiz-editor" data-testid="ranking-editor">
+      <div>
+        <label class="label" for="g-rank-prompt">{{ $t('host.gameForm.rankingPrompt') }}</label>
+        <input
+          id="g-rank-prompt"
+          v-model="rankingPrompt"
+          class="input"
+          data-testid="ranking-prompt"
+        />
+      </div>
+      <span class="label">{{ $t('host.gameForm.rankingItems') }}</span>
+      <p class="muted hint">{{ $t('host.gameForm.rankingHint') }}</p>
+      <div v-for="(_, i) in rankingItems" :key="i" class="orow">
+        <span class="okey" aria-hidden="true">{{ i + 1 }}</span>
+        <input
+          v-model="rankingItems[i]"
+          class="input"
+          :placeholder="$t('host.gameForm.rankingItem')"
+          :data-testid="`ranking-item-${i}`"
+        />
+        <button
+          type="button"
+          class="btn btn-danger qdel"
+          :disabled="rankingItems.length <= MIN_RANKING_ITEMS"
+          :aria-label="$t('host.gameForm.removeItem')"
+          data-testid="ranking-remove"
+          @click="removeItem(i)"
+        >
+          ✕
+        </button>
+      </div>
+      <button type="button" class="btn" data-testid="ranking-add" @click="addItem">
+        ＋ {{ $t('host.gameForm.addItem') }}
       </button>
     </div>
 

@@ -184,6 +184,26 @@ function setNote(gameId: string, event: Event) {
             </button>
           </div>
 
+          <div
+            v-if="g.kind === 'ranking' && g.ranking"
+            class="quiz-control stack"
+            data-testid="ranking-control"
+          >
+            <p class="quiz-q">{{ g.ranking.prompt }}</p>
+            <ol class="ranking-list">
+              <li v-for="(item, idx) in g.ranking.items" :key="idx">{{ item }}</li>
+            </ol>
+            <button
+              class="btn"
+              :class="{ 'btn-primary': quiz.revealed }"
+              :aria-pressed="quiz.revealed"
+              data-testid="ranking-reveal"
+              @click="reveal(!quiz.revealed)"
+            >
+              {{ quiz.revealed ? $t('host.ranking.hide') : $t('host.ranking.reveal') }}
+            </button>
+          </div>
+
           <div class="cluster">
             <button
               v-for="team in teams"
@@ -360,6 +380,17 @@ function setNote(gameId: string, event: Event) {
 
 .choice.correct .okey {
   color: var(--accent);
+}
+
+.ranking-list {
+  margin: 0;
+  padding-left: 1.4rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.ranking-list li {
+  font-weight: 600;
 }
 
 .game-rules {

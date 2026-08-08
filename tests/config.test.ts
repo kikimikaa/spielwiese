@@ -168,6 +168,40 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('choice')
   })
 
+  it('round-trips a ranking, coercing numeric items and dropping empties in order', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        {
+          ...game(),
+          kind: 'ranking',
+          ranking: { prompt: 'By year', items: ['1990', 2000, '', '  ', 2010] },
+        },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      // Numbers coerced to text, empty/blank rows dropped, order preserved.
+      expect(result.config.games[0]?.ranking).toEqual({
+        prompt: 'By year',
+        items: ['1990', '2000', '2010'],
+      })
+    }
+  })
+
+  it('drops the ranking on a non-ranking game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [{ ...game(), kind: 'quiz', ranking: { prompt: 'p', items: ['a', 'b', 'c'] } }],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('ranking')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

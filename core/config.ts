@@ -8,7 +8,14 @@
 // snapshot (with live data) will build on.
 
 import { CONFIG_SCHEMA_VERSION, GAME_KINDS, GAME_LOCATIONS, SCORING_TYPES } from './constants'
-import type { ChoiceSpec, EstimateSpec, GameDef, GameKind, QuizQuestion } from './types'
+import type {
+  ChoiceSpec,
+  EstimateSpec,
+  GameDef,
+  GameKind,
+  QuizQuestion,
+  RankingSpec,
+} from './types'
 
 export interface TournamentConfig {
   schemaVersion: number
@@ -166,6 +173,9 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (game.kind === 'choice' && isRecord(raw.choice)) {
     game.choice = sanitizeChoice(raw.choice)
   }
+  if (game.kind === 'ranking' && isRecord(raw.ranking)) {
+    game.ranking = sanitizeRanking(raw.ranking)
+  }
   return game
 }
 
@@ -214,4 +224,11 @@ function sanitizeChoice(raw: Record<string, unknown>): ChoiceSpec {
     options.push(text)
   })
   return { prompt: toText(raw['prompt']).trim(), options, correct }
+}
+
+/** Rebuilds an ordering from imported input: prompt plus non-empty items in their stored order. */
+function sanitizeRanking(raw: Record<string, unknown>): RankingSpec {
+  const rawItems = Array.isArray(raw['items']) ? raw['items'] : []
+  const items = rawItems.map((item) => toText(item).trim()).filter((item) => item.length > 0)
+  return { prompt: toText(raw['prompt']).trim(), items }
 }

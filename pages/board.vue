@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { optionLetter } from '../core/choice'
+import { neutralOrder } from '../core/ranking'
 
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
@@ -16,6 +17,7 @@ const {
   currentQuestion,
   currentEstimate,
   currentChoice,
+  currentRanking,
 } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 
@@ -48,11 +50,19 @@ const reveal = computed(() => {
 // its own block rather than sharing the reveal shape above.
 const choice = computed(() => (currentGame.value?.kind === 'choice' ? currentChoice.value : null))
 
+// Ordering: show the items neutrally (alphabetical) until revealed, then in the
+// stored correct order. The neutral order never leaks the answer.
+const ranking = computed(() => {
+  const r = currentGame.value?.kind === 'ranking' ? currentRanking.value : null
+  if (!r) return null
+  return { prompt: r.prompt, items: quiz.value.revealed ? r.items : neutralOrder(r.items) }
+})
+
 // Whether the active game is a content type that shows a prompt but has nothing
 // authored yet — then the board shows a "waiting" line instead of an empty gap.
 const contentKind = computed(() => {
   const k = currentGame.value?.kind
-  return k === 'quiz' || k === 'estimate' || k === 'choice'
+  return k === 'quiz' || k === 'estimate' || k === 'choice' || k === 'ranking'
 })
 
 const showAwards = computed(
@@ -160,6 +170,19 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
                   <span class="choice-text">{{ opt }}</span>
                 </li>
               </ul>
+            </div>
+            <div v-else-if="ranking" class="quiz" data-testid="board-ranking">
+              <p class="quiz-q">{{ ranking.prompt }}</p>
+              <component
+                :is="quiz.revealed ? 'ol' : 'ul'"
+                class="ranking"
+                :class="{ revealed: quiz.revealed }"
+                :data-testid="quiz.revealed ? 'board-ranking-ordered' : 'board-ranking-neutral'"
+              >
+                <li v-for="(item, i) in ranking.items" :key="i" class="rank-item">
+                  {{ item }}
+                </li>
+              </component>
             </div>
             <p v-else-if="contentKind && !currentGame.rules" class="muted rules">
               {{ $t('board.waiting') }}
@@ -301,5 +324,27 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 /* Once revealed, fade the wrong options so the correct one stands out. */
 .choice.dim {
   opacity: 0.4;
+}
+
+.ranking {
+  margin: 0.75rem 0 0;
+  padding-left: 1.8rem;
+  display: grid;
+  gap: clamp(0.4rem, 1.5vw, 0.75rem);
+}
+
+.rank-item {
+  font-size: clamp(1.15rem, 3.5vw, 1.9rem);
+  font-weight: 700;
+}
+
+/* The correct order stands out in the accent colour once revealed. */
+.ranking.revealed .rank-item {
+  color: var(--accent);
+}
+
+.ranking.revealed .rank-item::marker {
+  color: var(--accent);
+  font-weight: 800;
 }
 </style>

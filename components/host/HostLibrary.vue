@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GameDef } from '../../core/types'
 import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
-import { EMPTY_GAME_FILTER, filterGames, isFilterActive } from '../../core/library'
+import { activeFacetCount, filterGames, isFilterActive } from '../../core/library'
 import type { GameFilter } from '../../core/library'
 
 // Keep the library scannable — paginate once it grows past this.
@@ -41,11 +41,22 @@ const editing = ref<GameDef | null>(null)
 const adding = ref(false)
 const pendingDelete = ref<{ kind: 'game' | 'all'; id?: string; title?: string } | null>(null)
 
-const filter = ref<GameFilter>({ ...EMPTY_GAME_FILTER })
+// Fresh arrays per instance so ticking a box never mutates a shared constant.
+const filter = ref<GameFilter>({ query: '', kinds: [], locations: [] })
+const filtersOpen = ref(false)
 const filteredGames = computed(() => filterGames(games.value, filter.value))
 const filterActive = computed(() => isFilterActive(filter.value))
+const facetCount = computed(() => activeFacetCount(filter.value))
+
+/** Adds or removes a facet option, toggling its checkbox. */
+function toggleValue<T>(list: T[], value: T) {
+  const at = list.indexOf(value)
+  if (at === -1) list.push(value)
+  else list.splice(at, 1)
+}
+
 function clearFilter() {
-  filter.value = { ...EMPTY_GAME_FILTER }
+  filter.value = { query: '', kinds: [], locations: [] }
 }
 
 const page = ref(0)
@@ -125,39 +136,74 @@ async function confirmDelete() {
         </div>
 
         <div v-if="games.length" class="filter-row" data-testid="library-filter">
-          <input
-            v-model="filter.query"
-            type="search"
-            class="input grow"
-            :placeholder="$t('host.searchPlaceholder')"
-            :aria-label="$t('host.searchPlaceholder')"
-            data-testid="library-search"
-          />
-          <select
-            v-model="filter.kind"
-            class="input"
-            :aria-label="$t('host.gameForm.kind')"
-            data-testid="filter-kind"
+          <div class="search-line">
+            <input
+              v-model="filter.query"
+              type="search"
+              class="input grow"
+              :placeholder="$t('host.searchPlaceholder')"
+              :aria-label="$t('host.searchPlaceholder')"
+              data-testid="library-search"
+            />
+            <button
+              class="btn filter-toggle"
+              :class="{ active: facetCount > 0 }"
+              :aria-expanded="filtersOpen"
+              aria-controls="library-filters"
+              :aria-label="$t('host.filterLabel')"
+              :title="$t('host.filterLabel')"
+              data-testid="filter-toggle"
+              @click="filtersOpen = !filtersOpen"
+            >
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                <path d="M1 2h14l-5.5 7v5l-3-1.5V9L1 2z" fill="currentColor" />
+              </svg>
+              <span v-if="facetCount" class="facet-badge" data-testid="filter-count">
+                {{ facetCount }}
+              </span>
+              <span class="chevron" :class="{ open: filtersOpen }" aria-hidden="true">▾</span>
+            </button>
+          </div>
+
+          <div
+            v-show="filtersOpen"
+            id="library-filters"
+            class="filter-panel"
+            data-testid="filter-panel"
           >
-            <option value="all">{{ $t('host.filterAll') }}</option>
-            <option v-for="k in GAME_KINDS" :key="k" :value="k">
-              {{ $t(`host.gameForm.kindOption.${k}`) }}
-            </option>
-          </select>
-          <select
-            v-model="filter.location"
-            class="input"
-            :aria-label="$t('host.gameForm.location')"
-            data-testid="filter-location"
-          >
-            <option value="all">{{ $t('host.filterAll') }}</option>
-            <option v-for="loc in GAME_LOCATIONS" :key="loc" :value="loc">
-              {{ $t(`location.${loc}`) }}
-            </option>
-          </select>
-          <button v-if="filterActive" class="btn" data-testid="filter-clear" @click="clearFilter">
-            {{ $t('host.clearFilter') }}
-          </button>
+            <fieldset class="facet">
+              <legend>{{ $t('host.filterByType') }}</legend>
+              <label v-for="k in GAME_KINDS" :key="k" class="facet-option">
+                <input
+                  type="checkbox"
+                  :checked="filter.kinds.includes(k)"
+                  :data-testid="`filter-kind-${k}`"
+                  @change="toggleValue(filter.kinds, k)"
+                />
+                <span>{{ $t(`host.gameForm.kindOption.${k}`) }}</span>
+              </label>
+            </fieldset>
+            <fieldset class="facet">
+              <legend>{{ $t('host.filterByLocation') }}</legend>
+              <label v-for="loc in GAME_LOCATIONS" :key="loc" class="facet-option">
+                <input
+                  type="checkbox"
+                  :checked="filter.locations.includes(loc)"
+                  :data-testid="`filter-location-${loc}`"
+                  @change="toggleValue(filter.locations, loc)"
+                />
+                <span>{{ $t(`location.${loc}`) }}</span>
+              </label>
+            </fieldset>
+            <button
+              v-if="filterActive"
+              class="btn clear-filter"
+              data-testid="filter-clear"
+              @click="clearFilter"
+            >
+              {{ $t('host.clearFilter') }}
+            </button>
+          </div>
         </div>
 
         <p
@@ -311,19 +357,101 @@ async function confirmDelete() {
 
 .filter-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.5rem;
+}
+
+.search-line {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.search-line .grow {
+  flex: 1;
+}
+
+.filter-toggle {
+  display: inline-flex;
   align-items: center;
-}
-
-.filter-row .grow {
-  flex: 1 1 12rem;
-}
-
-/* Selects size to their content instead of the global full-width input. */
-.filter-row select.input {
-  width: auto;
+  gap: 0.35rem;
   flex: 0 0 auto;
+}
+
+.filter-toggle.active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.facet-badge {
+  min-width: 1.25rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--surface);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.chevron {
+  transition: transform 0.15s ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+
+.filter-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.facet {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.facet legend {
+  padding: 0;
+  margin-bottom: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.facet-option {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+}
+
+.facet-option input {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.clear-filter {
+  margin-left: auto;
+  align-self: center;
 }
 
 .result-hint {

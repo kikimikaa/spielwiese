@@ -2,18 +2,16 @@
 // no framework or state dependency so it can be unit-tested in isolation.
 import type { GameDef, GameKind, GameLocation } from './types'
 
-/** 'all' on a facet means "don't restrict by it". */
-export type KindFacet = GameKind | 'all'
-export type LocationFacet = GameLocation | 'all'
-
 export interface GameFilter {
   /** Free-text match against title + short description. */
   query: string
-  kind: KindFacet
-  location: LocationFacet
+  /** Selected game types; empty means "any type". */
+  kinds: GameKind[]
+  /** Selected locations; empty means "any location". */
+  locations: GameLocation[]
 }
 
-export const EMPTY_GAME_FILTER: GameFilter = { query: '', kind: 'all', location: 'all' }
+export const EMPTY_GAME_FILTER: GameFilter = { query: '', kinds: [], locations: [] }
 
 /** A missing `kind` is the default freeform game, so filtering treats it as such. */
 function gameKind(game: GameDef): GameKind {
@@ -26,13 +24,15 @@ function matchesQuery(game: GameDef, query: string): boolean {
 
 /**
  * Narrows the library by text query (title + short, case- and space-insensitive)
- * and the type / location facets. Order is preserved.
+ * and the type / location facets. Within a facet the ticked options are OR-ed
+ * (an empty facet imposes no restriction); across facets everything must match.
+ * Order is preserved.
  */
 export function filterGames(games: GameDef[], filter: GameFilter): GameDef[] {
   const query = filter.query.trim().toLowerCase()
   return games.filter((g) => {
-    if (filter.kind !== 'all' && gameKind(g) !== filter.kind) return false
-    if (filter.location !== 'all' && g.location !== filter.location) return false
+    if (filter.kinds.length && !filter.kinds.includes(gameKind(g))) return false
+    if (filter.locations.length && !filter.locations.includes(g.location)) return false
     if (query && !matchesQuery(g, query)) return false
     return true
   })
@@ -40,5 +40,10 @@ export function filterGames(games: GameDef[], filter: GameFilter): GameDef[] {
 
 /** Whether any facet is narrowing the list — drives the "clear filter" affordance. */
 export function isFilterActive(filter: GameFilter): boolean {
-  return filter.query.trim() !== '' || filter.kind !== 'all' || filter.location !== 'all'
+  return filter.query.trim() !== '' || filter.kinds.length > 0 || filter.locations.length > 0
+}
+
+/** How many facet options are ticked — shown as a badge on the collapsed filter toggle. */
+export function activeFacetCount(filter: GameFilter): number {
+  return filter.kinds.length + filter.locations.length
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { EMPTY_GAME_FILTER, filterGames, isFilterActive } from '../core/library'
+import { activeFacetCount, EMPTY_GAME_FILTER, filterGames, isFilterActive } from '../core/library'
 import type { GameDef } from '../core/types'
 
 const game = (over: Partial<GameDef> = {}): GameDef => ({
@@ -45,25 +45,35 @@ describe('filterGames', () => {
   })
 
   it('filters by kind, treating a missing kind as freeform', () => {
-    expect(filterGames(library, { ...EMPTY_GAME_FILTER, kind: 'quiz' }).map((g) => g.id)).toEqual([
-      'b',
-    ])
     expect(
-      filterGames(library, { ...EMPTY_GAME_FILTER, kind: 'freeform' }).map((g) => g.id),
+      filterGames(library, { ...EMPTY_GAME_FILTER, kinds: ['quiz'] }).map((g) => g.id),
+    ).toEqual(['b'])
+    expect(
+      filterGames(library, { ...EMPTY_GAME_FILTER, kinds: ['freeform'] }).map((g) => g.id),
     ).toEqual(['a', 'c'])
   })
 
   it('filters by location', () => {
     expect(
-      filterGames(library, { ...EMPTY_GAME_FILTER, location: 'indoor' }).map((g) => g.id),
+      filterGames(library, { ...EMPTY_GAME_FILTER, locations: ['indoor'] }).map((g) => g.id),
     ).toEqual(['b'])
   })
 
-  it('combines facets (all must match)', () => {
+  it('OR-combines multiple ticked options within a facet', () => {
     expect(
-      filterGames(library, { query: 'quiz', kind: 'quiz', location: 'indoor' }).map((g) => g.id),
+      filterGames(library, { ...EMPTY_GAME_FILTER, locations: ['outdoor', 'both'] }).map(
+        (g) => g.id,
+      ),
+    ).toEqual(['a', 'c'])
+  })
+
+  it('combines facets (all facets must match)', () => {
+    expect(
+      filterGames(library, { query: 'quiz', kinds: ['quiz'], locations: ['indoor'] }).map(
+        (g) => g.id,
+      ),
     ).toEqual(['b'])
-    expect(filterGames(library, { query: 'quiz', kind: 'freeform', location: 'all' })).toEqual([])
+    expect(filterGames(library, { query: 'quiz', kinds: ['freeform'], locations: [] })).toEqual([])
   })
 
   it('returns an empty list when nothing matches', () => {
@@ -75,9 +85,7 @@ describe('filterGames', () => {
   })
 
   it('preserves the original order', () => {
-    expect(
-      filterGames(library, { ...EMPTY_GAME_FILTER, location: 'all' }).map((g) => g.id),
-    ).toEqual(['a', 'b', 'c'])
+    expect(filterGames(library, EMPTY_GAME_FILTER).map((g) => g.id)).toEqual(['a', 'b', 'c'])
   })
 })
 
@@ -89,7 +97,15 @@ describe('isFilterActive', () => {
 
   it('is true when any facet narrows the list', () => {
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, query: 'a' })).toBe(true)
-    expect(isFilterActive({ ...EMPTY_GAME_FILTER, kind: 'quiz' })).toBe(true)
-    expect(isFilterActive({ ...EMPTY_GAME_FILTER, location: 'indoor' })).toBe(true)
+    expect(isFilterActive({ ...EMPTY_GAME_FILTER, kinds: ['quiz'] })).toBe(true)
+    expect(isFilterActive({ ...EMPTY_GAME_FILTER, locations: ['indoor'] })).toBe(true)
+  })
+})
+
+describe('activeFacetCount', () => {
+  it('counts ticked type and location options, ignoring the query', () => {
+    expect(activeFacetCount(EMPTY_GAME_FILTER)).toBe(0)
+    expect(activeFacetCount({ ...EMPTY_GAME_FILTER, query: 'anything' })).toBe(0)
+    expect(activeFacetCount({ query: '', kinds: ['quiz'], locations: ['indoor', 'both'] })).toBe(3)
   })
 })

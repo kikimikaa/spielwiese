@@ -227,6 +227,10 @@
       "reveal": "Reveal answer",
       "hide": "Hide answer"
     },
+    "ranking": {
+      "reveal": "Reveal order",
+      "hide": "Hide order"
+    },
     "gameForm": {
       "title": "Title",
       "kind": "Type",
@@ -234,7 +238,8 @@
         "freeform": "Free game",
         "quiz": "Quiz",
         "estimate": "Estimate",
-        "choice": "Multiple choice"
+        "choice": "Multiple choice",
+        "ranking": "Ordering"
       },
       "questions": "Questions",
       "question": "Question",
@@ -250,6 +255,12 @@
       "addOption": "Add option",
       "removeOption": "Remove option",
       "markCorrect": "Mark as correct",
+      "rankingPrompt": "Ordering question",
+      "rankingItems": "Items in the correct order",
+      "rankingHint": "Enter the items top to bottom in their correct order — the board shuffles them.",
+      "rankingItem": "Item",
+      "addItem": "Add item",
+      "removeItem": "Remove item",
       "short": "Short description",
       "rules": "Rules",
       "location": "Location",

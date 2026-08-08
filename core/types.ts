@@ -81,7 +81,8 @@ export interface GameDef {
    * host runs manually. `quiz` carries `questions` shown one at a time and
    * revealed by the host; `estimate` carries a single `estimate` prompt whose
    * solution the host reveals on cue; `choice` carries a single multiple-choice
-   * question whose correct option the host reveals. Scoring is unchanged for
+   * question whose correct option the host reveals; `ranking` carries items to
+   * put in the right order, revealed by the host. Scoring is unchanged for
    * every type.
    */
   kind?: GameKind
@@ -91,9 +92,11 @@ export interface GameDef {
   estimate?: EstimateSpec
   /** Multiple-choice question; only meaningful for `kind === 'choice'`. */
   choice?: ChoiceSpec
+  /** Ordering question; only meaningful for `kind === 'ranking'`. */
+  ranking?: RankingSpec
 }
 
-export type GameKind = 'freeform' | 'quiz' | 'estimate' | 'choice'
+export type GameKind = 'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking'
 
 /** A single quiz question and its answer (host-authored plain text). */
 export interface QuizQuestion {
@@ -116,6 +119,15 @@ export interface ChoiceSpec {
   prompt: string
   options: string[]
   correct: number
+}
+
+/**
+ * An ordering question: the prompt and the items stored in their correct order.
+ * The board shows them neutrally (alphabetical) until the host reveals the order.
+ */
+export interface RankingSpec {
+  prompt: string
+  items: string[]
 }
 
 export interface Player {

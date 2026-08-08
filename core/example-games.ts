@@ -108,6 +108,23 @@ export const EXAMPLE_GAMES: GameDef[] = [
       'Höchster Berg der Erde (Mount Everest)',
   },
   {
+    id: 'reihenfolge',
+    title: 'Reihenfolge',
+    short: 'Mehrere Dinge in die richtige Reihenfolge bringen.',
+    rules:
+      'Das Board zeigt die Begriffe ungeordnet. Jedes Team bringt sie in die richtige ' +
+      'Reihenfolge. Der Host deckt die Lösung auf — die meisten korrekten Positionen gewinnen.',
+    location: 'both',
+    scoringType: 'points',
+    kind: 'ranking',
+    ranking: {
+      prompt: 'Ordne diese Planeten nach Größe – der größte zuerst.',
+      items: ['Jupiter', 'Saturn', 'Uranus', 'Neptun', 'Erde'],
+    },
+    hostNote:
+      'Weitere Ideen: Flüsse nach Länge · Erfindungen nach Jahr · Städte nach Einwohnerzahl',
+  },
+  {
     id: 'geruche',
     title: 'Gerüche erraten',
     short: 'Boxen mit verschiedenen Gerüchen erschnüffeln und erraten.',

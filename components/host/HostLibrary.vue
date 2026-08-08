@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GameDef } from '../../core/types'
 import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
-import { activeFacetCount, filterGames, isFilterActive } from '../../core/library'
+import { activeFacetCount, emptyGameFilter, filterGames, isFilterActive } from '../../core/library'
 import type { GameFilter } from '../../core/library'
 
 // Keep the library scannable — paginate once it grows past this.
@@ -38,14 +38,12 @@ const editing = ref<GameDef | null>(null)
 const adding = ref(false)
 const pendingDelete = ref<{ kind: 'game' | 'all'; id?: string; title?: string } | null>(null)
 
-// Fresh arrays per instance so ticking a box never mutates a shared constant.
-const filter = ref<GameFilter>({ query: '', kinds: [], locations: [] })
+const filter = ref<GameFilter>(emptyGameFilter())
 const filtersOpen = ref(false)
 const filteredGames = computed(() => filterGames(games.value, filter.value))
 const filterActive = computed(() => isFilterActive(filter.value))
 const facetCount = computed(() => activeFacetCount(filter.value))
 
-/** Adds or removes a facet option, toggling its checkbox. */
 function toggleValue<T>(list: T[], value: T) {
   const at = list.indexOf(value)
   if (at === -1) list.push(value)
@@ -53,7 +51,7 @@ function toggleValue<T>(list: T[], value: T) {
 }
 
 function clearFilter() {
-  filter.value = { query: '', kinds: [], locations: [] }
+  filter.value = emptyGameFilter()
 }
 
 const libraryEl = ref<HTMLElement | null>(null)
@@ -209,7 +207,11 @@ async function confirmDelete() {
       </div>
     </div>
 
-    <p v-if="filterActive && games.length" class="muted result-hint" data-testid="filter-results">
+    <p
+      v-if="filterActive && filteredGames.length"
+      class="muted result-hint"
+      data-testid="filter-results"
+    >
       {{ $t('host.filterResults', { n: filteredGames.length, total: games.length }) }}
     </p>
 

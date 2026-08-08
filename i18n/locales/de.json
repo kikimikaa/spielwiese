@@ -162,7 +162,7 @@
     "filterLabel": "Filter",
     "filterByType": "Spieltyp",
     "filterByLocation": "Ort",
-    "filterResults": "{n} von {total} angezeigt",
+    "filterResults": "{n} von {total} Spielen passen",
     "clearFilter": "Filter zurücksetzen",
     "noMatches": "Keine Spiele passen zum Filter.",
     "pageOf": "Seite {page} von {total}",

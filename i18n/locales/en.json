@@ -162,7 +162,7 @@
     "filterLabel": "Filter",
     "filterByType": "Game type",
     "filterByLocation": "Location",
-    "filterResults": "{n} of {total} shown",
+    "filterResults": "{n} of {total} games match",
     "clearFilter": "Clear filter",
     "noMatches": "No games match the filter.",
     "pageOf": "Page {page} of {total}",

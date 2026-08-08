@@ -46,5 +46,22 @@ export function useHost() {
     unlocked.value = true
   }
 
-  return { pin, unlocked, error, command, unlock }
+  /**
+   * Re-validates a stored PIN once (e.g. on a host page mount) so a returning
+   * host skips the prompt. Returns whether the session is unlocked afterwards; a
+   * wrong PIN sets `error='wrongPin'`, a transient failure leaves both untouched
+   * so the caller can tell "rejected" (redirect) from "try again" (stay).
+   */
+  async function ensureUnlocked(): Promise<boolean> {
+    if (unlocked.value) return true
+    if (!pin.value) return false
+    try {
+      await unlock(pin.value)
+    } catch {
+      // unlocked stays false; `error` distinguishes a rejected PIN from a blip.
+    }
+    return unlocked.value
+  }
+
+  return { pin, unlocked, error, command, unlock, ensureUnlocked }
 }

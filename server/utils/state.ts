@@ -249,10 +249,10 @@ export function reorderGames(orderedIds: string[]): TournamentState {
  * (and any edits) untouched — so it's safe to press more than once.
  */
 export function loadExampleGames(): TournamentState {
+  // Append each missing seed at the end; its order is its position, like addGame.
   for (const def of missingGames(state.games, EXAMPLE_GAMES)) {
     state.games.push(toGame(def, state.games.length))
   }
-  reindexGames()
   return commit()
 }
 

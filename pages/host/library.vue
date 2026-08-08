@@ -2,20 +2,17 @@
 const { t } = useI18n()
 useHead({ title: () => `${t('host.library')} — ${t('app.name')}` })
 
-const { pin, unlocked, unlock } = useHost()
+const { pin, unlocked, error, ensureUnlocked } = useHost()
 
 // The library lives behind the same PIN gate as /host. On a direct visit or
-// refresh, re-validate the stored PIN; if there's none (or it fails), send the
-// host back to the unlock prompt.
+// refresh, re-validate the stored PIN; send the host to the unlock prompt only
+// when there's no PIN or it was rejected — a transient failure keeps us here so
+// a reload can recover in place.
 onMounted(async () => {
-  if (!unlocked.value && pin.value) {
-    try {
-      await unlock(pin.value)
-    } catch {
-      // Stored PIN no longer valid — fall through to the redirect.
-    }
+  await ensureUnlocked()
+  if (!unlocked.value && (!pin.value || error.value === 'wrongPin')) {
+    await navigateTo('/host')
   }
-  if (!unlocked.value) await navigateTo('/host')
 })
 </script>
 

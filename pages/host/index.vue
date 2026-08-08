@@ -3,7 +3,7 @@ const { t } = useI18n()
 useHead({ title: () => `${t('host.title')} — ${t('app.name')}` })
 
 const { state, teams, totals, leader } = useTournamentState()
-const { pin, unlocked, error, unlock, command } = useHost()
+const { unlocked, error, unlock, command, ensureUnlocked } = useHost()
 
 const pinInput = ref('')
 
@@ -15,16 +15,8 @@ async function doUnlock() {
   }
 }
 
-// Re-validate a stored PIN on load so a returning host skips the prompt.
-onMounted(async () => {
-  if (pin.value && !unlocked.value) {
-    try {
-      await unlock(pin.value)
-    } catch {
-      // Stored PIN no longer valid — fall back to the prompt.
-    }
-  }
-})
+// Re-validate a stored PIN on load; the prompt below shows if it isn't valid.
+onMounted(ensureUnlocked)
 
 const pause = computed(() => state.value?.pause ?? 'none')
 const status = computed(() => state.value?.status ?? 'setup')

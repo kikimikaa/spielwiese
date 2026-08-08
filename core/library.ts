@@ -11,7 +11,12 @@ export interface GameFilter {
   locations: GameLocation[]
 }
 
-export const EMPTY_GAME_FILTER: GameFilter = { query: '', kinds: [], locations: [] }
+/** A fresh, unrestricted filter — new arrays each call so instances never alias. */
+export function emptyGameFilter(): GameFilter {
+  return { query: '', kinds: [], locations: [] }
+}
+
+export const EMPTY_GAME_FILTER: GameFilter = emptyGameFilter()
 
 /** A missing `kind` is the default freeform game, so filtering treats it as such. */
 function gameKind(game: GameDef): GameKind {

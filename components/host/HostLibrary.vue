@@ -59,6 +59,7 @@ function clearFilter() {
   filter.value = { query: '', kinds: [], locations: [] }
 }
 
+const libraryEl = ref<HTMLElement | null>(null)
 const page = ref(0)
 const pageCount = computed(() =>
   Math.max(1, Math.ceil(filteredGames.value.length / GAMES_PER_PAGE)),
@@ -69,6 +70,12 @@ const pagedGames = computed(() =>
 watch(pageCount, (count: number) => {
   if (page.value > count - 1) page.value = count - 1
 })
+
+/** Flips the page and scrolls back up, so the new page reads from the top. */
+function goToPage(next: number) {
+  page.value = Math.min(pageCount.value - 1, Math.max(0, next))
+  nextTick(() => libraryEl.value?.closest('.modal')?.scrollTo({ top: 0 }))
+}
 // A narrower filter can leave you on a now-nonexistent page — jump back to the first.
 watch(filter, () => (page.value = 0), { deep: true })
 
@@ -112,7 +119,18 @@ async function confirmDelete() {
       :title="$t('host.library')"
       @cancel="emit('update:open', false)"
     >
-      <div class="stack" data-testid="library">
+      <template #headerActions>
+        <button
+          class="btn btn-primary add-game"
+          :aria-label="$t('host.addGame')"
+          :title="$t('host.addGame')"
+          data-testid="add-game"
+          @click="adding = true"
+        >
+          ＋
+        </button>
+      </template>
+      <div ref="libraryEl" class="stack" data-testid="library">
         <div v-if="games.length" class="cluster select-row" data-testid="select-all-row">
           <span class="muted grow">
             {{ $t('host.selectedCount', { n: enabledCount, total: games.length }) }}
@@ -256,7 +274,7 @@ async function confirmDelete() {
             class="btn"
             :disabled="page === 0"
             data-testid="page-prev"
-            @click="page = Math.max(0, page - 1)"
+            @click="goToPage(page - 1)"
           >
             ‹
           </button>
@@ -265,22 +283,13 @@ async function confirmDelete() {
             class="btn"
             :disabled="page >= pageCount - 1"
             data-testid="page-next"
-            @click="page = Math.min(pageCount - 1, page + 1)"
+            @click="goToPage(page + 1)"
           >
             ›
           </button>
         </div>
 
-        <div class="cluster">
-          <button
-            class="btn btn-primary"
-            :aria-label="$t('host.addGame')"
-            :title="$t('host.addGame')"
-            data-testid="add-game"
-            @click="adding = true"
-          >
-            ＋
-          </button>
+        <div class="cluster lib-actions">
           <button class="btn" data-testid="load-examples" @click="command('loadExampleGames')">
             {{ $t('host.loadExamples') }}
           </button>
@@ -457,6 +466,19 @@ async function confirmDelete() {
 .result-hint {
   margin: 0;
   font-size: 0.85rem;
+}
+
+/* Compact square "+" in the modal header. */
+.add-game {
+  flex: 0 0 auto;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.35rem 0.7rem;
+}
+
+/* Spread the maintenance actions evenly across the row instead of clumping left. */
+.lib-actions > .btn {
+  flex: 1 1 auto;
 }
 
 .no-matches {

@@ -56,11 +56,15 @@ shows a clear reconnect banner with a manual retry, on top of the automatic
 backoff reconnect — so guests and the board recover cleanly after a Wi-Fi or
 server blip.
 
+**Bilingual game presets.** Ready-made themed game packs (quiz night, party,
+sports, classics) in both German and English, loaded into the library in the
+current language. Non-destructive: a preset tops up the games it's missing (by
+id) and never swaps the library or clears play data.
+
 ## Planned
 
-**Bilingual game presets.** Ready-made game libraries in both German and English,
-loaded by the current language. Filtering by preset category can build on the
-type/location filters already in the library.
+**Preset category filter.** Filter the library by preset pack, building on the
+type/location facets already there (phase 2 of the bilingual presets).
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
 choice and ordering, each with its own add mask and board behaviour.

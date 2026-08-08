@@ -47,6 +47,11 @@ reload it later, so an event can be paused across sessions (beyond the automatic
 `data/state.json` recovery that already survives a crash or restart). Snapshots
 are host-only and never leave the machine.
 
+**Reconnect handling.** When the live connection drops mid-event, every view
+shows a clear reconnect banner with a manual retry, on top of the automatic
+backoff reconnect — so guests and the board recover cleanly after a Wi-Fi or
+server blip.
+
 ## Planned
 
 **Bilingual game presets.** Ready-made game libraries in both German and English,
@@ -55,9 +60,6 @@ type/location filters already in the library.
 
 **More game types.** Further tailored types beyond quiz, estimate and multiple
 choice, each with its own add mask and board behaviour.
-
-**Reconnect handling.** Clearer recovery on the guest and board views when the
-host server or the Wi-Fi drops mid-event.
 
 ## Ideas
 

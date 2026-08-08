@@ -23,6 +23,10 @@ board shows the question to everyone and reveals the answer on the host's cue.
 optional unit; the board shows the question and reveals the solution on cue.
 Closest guess wins — the host still taps the winner.
 
+**Multiple-choice game type.** A question with several answer options, one
+correct; the board shows the lettered options and highlights the right one on
+the host's cue while fading the rest.
+
 **Config export & import.** Share a games setup as a versioned file so a
 tournament can be reused or handed to another host (no guest names or scores).
 
@@ -49,8 +53,8 @@ are host-only and never leave the machine.
 loaded by the current language. Filtering by preset category can build on the
 type/location filters already in the library.
 
-**More game types.** Further tailored types beyond quiz and estimate, each with
-its own add mask and board behaviour.
+**More game types.** Further tailored types beyond quiz, estimate and multiple
+choice, each with its own add mask and board behaviour.
 
 **Reconnect handling.** Clearer recovery on the guest and board views when the
 host server or the Wi-Fi drops mid-event.

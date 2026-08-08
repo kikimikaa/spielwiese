@@ -8,7 +8,7 @@
 // snapshot (with live data) will build on.
 
 import { CONFIG_SCHEMA_VERSION, GAME_KINDS, GAME_LOCATIONS, SCORING_TYPES } from './constants'
-import type { EstimateSpec, GameDef, GameKind, QuizQuestion } from './types'
+import type { ChoiceSpec, EstimateSpec, GameDef, GameKind, QuizQuestion } from './types'
 
 export interface TournamentConfig {
   schemaVersion: number
@@ -163,6 +163,9 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (game.kind === 'estimate' && isRecord(raw.estimate)) {
     game.estimate = sanitizeEstimate(raw.estimate)
   }
+  if (game.kind === 'choice' && isRecord(raw.choice)) {
+    game.choice = sanitizeChoice(raw.choice)
+  }
   return game
 }
 
@@ -190,4 +193,25 @@ function sanitizeEstimate(raw: Record<string, unknown>): EstimateSpec {
   const unit = toText(raw['unit'])
   if (unit) spec.unit = unit
   return spec
+}
+
+/**
+ * Rebuilds a multiple-choice question from imported input: keeps only non-empty
+ * option texts and re-maps `correct` so it still points at the same option after
+ * empties are dropped (falling back to the first option if it can't be resolved).
+ */
+function sanitizeChoice(raw: Record<string, unknown>): ChoiceSpec {
+  const rawOptions = Array.isArray(raw['options']) ? raw['options'] : []
+  const rawCorrect = raw['correct']
+  const correctIndex =
+    typeof rawCorrect === 'number' && Number.isInteger(rawCorrect) ? rawCorrect : 0
+  const options: string[] = []
+  let correct = 0
+  rawOptions.forEach((option, i) => {
+    const text = toText(option).trim()
+    if (!text) return
+    if (i === correctIndex) correct = options.length
+    options.push(text)
+  })
+  return { prompt: toText(raw['prompt']).trim(), options, correct }
 }

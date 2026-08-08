@@ -118,6 +118,56 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('estimate')
   })
 
+  it('round-trips a choice, coercing numeric options and re-mapping correct past empties', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        {
+          ...game(),
+          id: 'c1',
+          kind: 'choice',
+          choice: { prompt: 'Largest?', options: ['Mars', 'Jupiter', 'Saturn'], correct: 1 },
+        },
+        {
+          ...game(),
+          id: 'c2',
+          kind: 'choice',
+          // An empty option before the correct one is dropped; `correct` follows it.
+          choice: { prompt: 'Pick', options: ['', 42, 'right'], correct: 2 },
+        },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.config.games[0]?.choice).toEqual({
+        prompt: 'Largest?',
+        options: ['Mars', 'Jupiter', 'Saturn'],
+        correct: 1,
+      })
+      // '' dropped, 42 coerced to '42', correct re-mapped from index 2 to 1.
+      expect(result.config.games[1]?.choice).toEqual({
+        prompt: 'Pick',
+        options: ['42', 'right'],
+        correct: 1,
+      })
+    }
+  })
+
+  it('drops the choice on a non-choice game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        { ...game(), kind: 'quiz', choice: { prompt: 'p', options: ['a', 'b'], correct: 0 } },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('choice')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

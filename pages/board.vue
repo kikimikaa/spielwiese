@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { optionLetter } from '../core/choice'
+
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
@@ -13,6 +15,7 @@ const {
   quiz,
   currentQuestion,
   currentEstimate,
+  currentChoice,
 } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 
@@ -39,6 +42,17 @@ const reveal = computed(() => {
     }
   }
   return null
+})
+
+// Multiple choice renders its options as a list (not a single answer), so it gets
+// its own block rather than sharing the reveal shape above.
+const choice = computed(() => (currentGame.value?.kind === 'choice' ? currentChoice.value : null))
+
+// Whether the active game is a content type that shows a prompt but has nothing
+// authored yet — then the board shows a "waiting" line instead of an empty gap.
+const contentKind = computed(() => {
+  const k = currentGame.value?.kind
+  return k === 'quiz' || k === 'estimate' || k === 'choice'
 })
 
 const showAwards = computed(
@@ -125,13 +139,27 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
               </p>
               <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
             </div>
-            <p
-              v-else-if="
-                (currentGame.kind === 'quiz' || currentGame.kind === 'estimate') &&
-                !currentGame.rules
-              "
-              class="muted rules"
-            >
+            <div v-else-if="choice" class="quiz" data-testid="board-choice">
+              <p class="quiz-q">{{ choice.prompt }}</p>
+              <ul class="choices">
+                <li
+                  v-for="(opt, i) in choice.options"
+                  :key="i"
+                  class="choice"
+                  :class="{
+                    correct: quiz.revealed && i === choice.correct,
+                    dim: quiz.revealed && i !== choice.correct,
+                  }"
+                  :data-testid="
+                    quiz.revealed && i === choice.correct ? 'board-choice-correct' : undefined
+                  "
+                >
+                  <span class="choice-key" aria-hidden="true">{{ optionLetter(i) }}</span>
+                  <span class="choice-text">{{ opt }}</span>
+                </li>
+              </ul>
+            </div>
+            <p v-else-if="contentKind && !currentGame.rules" class="muted rules">
               {{ $t('board.waiting') }}
             </p>
           </template>
@@ -234,5 +262,42 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 
 .quiz-hidden {
   color: var(--ink-soft);
+}
+
+.choices {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(0.4rem, 1.5vw, 0.75rem);
+}
+
+.choice {
+  display: flex;
+  gap: 0.75rem;
+  align-items: baseline;
+  font-size: clamp(1.15rem, 3.5vw, 1.9rem);
+  font-weight: 700;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
+}
+
+.choice-key {
+  color: var(--ink-soft);
+  min-width: 1.6rem;
+}
+
+.choice.correct {
+  color: var(--accent);
+}
+
+.choice.correct .choice-key {
+  color: var(--accent);
+}
+
+/* Once revealed, fade the wrong options so the correct one stands out. */
+.choice.dim {
+  opacity: 0.4;
 }
 </style>

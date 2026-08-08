@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Game } from '../../core/types'
+import { optionLetter } from '../../core/choice'
 
 const { command } = useHost()
 const { state, playableGames, teams, teamById, players, quiz, currentQuestion } =
@@ -155,6 +156,34 @@ function setNote(gameId: string, event: Event) {
             </button>
           </div>
 
+          <div
+            v-if="g.kind === 'choice' && g.choice"
+            class="quiz-control stack"
+            data-testid="choice-control"
+          >
+            <p class="quiz-q">{{ g.choice.prompt }}</p>
+            <ul class="choices">
+              <li
+                v-for="(opt, idx) in g.choice.options"
+                :key="idx"
+                class="choice"
+                :class="{ correct: quiz.revealed && idx === g.choice.correct }"
+              >
+                <span class="okey" aria-hidden="true">{{ optionLetter(idx) }}</span>
+                <span>{{ opt }}</span>
+              </li>
+            </ul>
+            <button
+              class="btn"
+              :class="{ 'btn-primary': quiz.revealed }"
+              :aria-pressed="quiz.revealed"
+              data-testid="choice-reveal"
+              @click="reveal(!quiz.revealed)"
+            >
+              {{ quiz.revealed ? $t('host.choice.hide') : $t('host.choice.reveal') }}
+            </button>
+          </div>
+
           <div class="cluster">
             <button
               v-for="team in teams"
@@ -302,6 +331,35 @@ function setNote(gameId: string, event: Event) {
   margin: 0;
   color: var(--accent);
   font-weight: 600;
+}
+
+.choices {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.choice {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.choice.correct {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.okey {
+  font-weight: 700;
+  color: var(--ink-soft);
+  min-width: 1.2rem;
+}
+
+.choice.correct .okey {
+  color: var(--accent);
 }
 
 .game-rules {

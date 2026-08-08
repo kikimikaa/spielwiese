@@ -218,13 +218,18 @@
       "reveal": "Lösung zeigen",
       "hide": "Lösung verbergen"
     },
+    "choice": {
+      "reveal": "Lösung zeigen",
+      "hide": "Lösung verbergen"
+    },
     "gameForm": {
       "title": "Titel",
       "kind": "Typ",
       "kindOption": {
         "freeform": "Freies Spiel",
         "quiz": "Quiz",
-        "estimate": "Schätzen"
+        "estimate": "Schätzen",
+        "choice": "Multiple Choice"
       },
       "questions": "Fragen",
       "question": "Frage",
@@ -234,6 +239,12 @@
       "estimatePrompt": "Schätzfrage",
       "estimateSolution": "Lösung",
       "estimateUnitPlaceholder": "z. B. cm, kg, Jahre",
+      "choicePrompt": "Multiple-Choice-Frage",
+      "choiceOptions": "Antwortoptionen (die richtige auswählen)",
+      "choiceOption": "Antwortoption",
+      "addOption": "Option hinzufügen",
+      "removeOption": "Option entfernen",
+      "markCorrect": "Als richtig markieren",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

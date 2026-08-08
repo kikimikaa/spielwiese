@@ -220,17 +220,17 @@ export const EXAMPLE_GAMES: GameDef[] = [
   },
   {
     id: 'schaetzfragen',
-    title: 'Schätzfragen',
-    short: 'Schätzfrage — welches Team liegt näher an der richtigen Zahl?',
+    title: 'Schätzfrage',
+    short: 'Beide Teams schätzen — wer näher an der Lösung liegt, gewinnt.',
     rules:
-      'Pro Runde eine Schätzfrage („Wie viele …?"). Das Team, das näher an der ' +
-      'richtigen Zahl liegt, gewinnt.',
+      'Beide Teams geben eine Schätzung ab. Das Team, das näher an der Lösung liegt, ' +
+      'gewinnt. Der Host deckt die Lösung auf dem Board auf.',
     location: 'both',
     scoringType: 'measure',
+    kind: 'estimate',
+    estimate: { prompt: 'Wie hoch ist der Eiffelturm?', solution: '330', unit: 'm' },
     materials: 'Zettel & Stift',
-    hostNote:
-      'Fragen: 1) Wie viele Knochen hat ein Mensch? (206)  ' +
-      '2) Höhe des Eiffelturms in m? (330)  3) Wie viele EU-Länder? (27)',
+    hostNote: 'Weitere Ideen: Knochen im Körper (206), EU-Länder (27), Tasten am Klavier (88)',
   },
   {
     id: 'zeitgefuehl',

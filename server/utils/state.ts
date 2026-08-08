@@ -201,8 +201,9 @@ export function addGame(def: Partial<GameDef>): TournamentState {
     materials: def.materials,
     hostNote: def.hostNote,
     kind: def.kind,
-    // Questions only belong to a quiz game.
+    // Type-specific content only rides along on its own game type.
     questions: def.kind === 'quiz' ? def.questions : undefined,
+    estimate: def.kind === 'estimate' ? def.estimate : undefined,
     order: state.games.length,
     status: 'todo',
   }
@@ -216,8 +217,9 @@ export function updateGame(gameId: string, patch: Partial<GameDef>): TournamentS
   if (!game) return state
   const { id: _id, ...rest } = patch
   Object.assign(game, rest)
-  // A game that is no longer a quiz must not keep stale questions.
+  // A game must not keep content from a type it no longer is.
   if (game.kind !== 'quiz') delete game.questions
+  if (game.kind !== 'estimate') delete game.estimate
   // Editing the live game (e.g. shortening a quiz) must keep the board pointer
   // valid and re-hide the answer.
   if (gameId === state.currentGameId) {
@@ -347,15 +349,23 @@ function currentQuizLength(): number {
   return g?.kind === 'quiz' ? (g.questions?.length ?? 0) : 0
 }
 
+/** Whether the current game has something to reveal (a quiz question or an estimate). */
+function currentGameReveals(): boolean {
+  const g = state.currentGameId ? findGame(state.currentGameId) : undefined
+  if (g?.kind === 'quiz') return (g.questions?.length ?? 0) > 0
+  if (g?.kind === 'estimate') return Boolean(g.estimate?.solution)
+  return false
+}
+
 /** Jumps the board to a quiz question (clamped), hiding the answer again. */
 export function setQuizQuestion(index: number): TournamentState {
   state.quiz = { index: clampIndex(index, currentQuizLength()), revealed: false }
   return commit()
 }
 
-/** Shows or hides the current quiz question's answer — only a real quiz reveals. */
+/** Shows or hides the current game's answer/solution — only if there is one to show. */
 export function setQuizRevealed(revealed: boolean): TournamentState {
-  state.quiz = { ...state.quiz, revealed: revealed && currentQuizLength() > 0 }
+  state.quiz = { ...state.quiz, revealed: revealed && currentGameReveals() }
   return commit()
 }
 

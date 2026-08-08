@@ -8,7 +8,7 @@
 // snapshot (with live data) will build on.
 
 import { CONFIG_SCHEMA_VERSION, GAME_KINDS, GAME_LOCATIONS, SCORING_TYPES } from './constants'
-import type { GameDef, GameKind, QuizQuestion } from './types'
+import type { EstimateSpec, GameDef, GameKind, QuizQuestion } from './types'
 
 export interface TournamentConfig {
   schemaVersion: number
@@ -156,9 +156,12 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (typeof raw.materials === 'string') game.materials = raw.materials
   if (typeof raw.hostNote === 'string') game.hostNote = raw.hostNote
   if (GAME_KINDS.includes(raw.kind as GameKind)) game.kind = raw.kind
-  // Questions only belong to a quiz — never carry them on a freeform game.
+  // Type-specific content only rides along on its own game type.
   if (game.kind === 'quiz' && Array.isArray(raw.questions)) {
     game.questions = sanitizeQuestions(raw.questions)
+  }
+  if (game.kind === 'estimate' && isRecord(raw.estimate)) {
+    game.estimate = sanitizeEstimate(raw.estimate)
   }
   return game
 }
@@ -172,4 +175,19 @@ function sanitizeQuestions(raw: unknown[]): QuizQuestion[] {
     }
   }
   return out
+}
+
+/** A number solution (e.g. `330`) is valid content, so coerce it to text rather than drop it. */
+function toText(v: unknown): string {
+  if (typeof v === 'string') return v
+  if (typeof v === 'number' && Number.isFinite(v)) return String(v)
+  return ''
+}
+
+/** Rebuilds an estimate from imported input as text fields (numbers coerced, not lost). */
+function sanitizeEstimate(raw: Record<string, unknown>): EstimateSpec {
+  const spec: EstimateSpec = { prompt: toText(raw['prompt']), solution: toText(raw['solution']) }
+  const unit = toText(raw['unit'])
+  if (unit) spec.unit = unit
+  return spec
 }

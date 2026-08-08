@@ -8,7 +8,8 @@ const { state, playableGames, teams, teamById, players, quiz, currentQuestion } 
 function quizGoto(index: number) {
   command('quizGoto', { index })
 }
-function quizReveal(revealed: boolean) {
+// Toggles the board reveal for the current game — a quiz answer or an estimate solution.
+function reveal(revealed: boolean) {
   command('quizReveal', { revealed })
 }
 
@@ -118,7 +119,7 @@ function setNote(gameId: string, event: Event) {
                 :class="{ 'btn-primary': quiz.revealed }"
                 :aria-pressed="quiz.revealed"
                 data-testid="quiz-reveal"
-                @click="quizReveal(!quiz.revealed)"
+                @click="reveal(!quiz.revealed)"
               >
                 {{ quiz.revealed ? $t('host.quiz.hide') : $t('host.quiz.reveal') }}
               </button>
@@ -131,6 +132,27 @@ function setNote(gameId: string, event: Event) {
                 {{ $t('host.quiz.next') }} ›
               </button>
             </div>
+          </div>
+
+          <div
+            v-if="g.kind === 'estimate' && g.estimate"
+            class="quiz-control stack"
+            data-testid="estimate-control"
+          >
+            <p class="quiz-q">{{ g.estimate.prompt }}</p>
+            <p v-if="quiz.revealed" class="quiz-a" data-testid="estimate-solution">
+              {{ g.estimate.solution
+              }}<template v-if="g.estimate.unit"> {{ g.estimate.unit }}</template>
+            </p>
+            <button
+              class="btn"
+              :class="{ 'btn-primary': quiz.revealed }"
+              :aria-pressed="quiz.revealed"
+              data-testid="estimate-reveal"
+              @click="reveal(!quiz.revealed)"
+            >
+              {{ quiz.revealed ? $t('host.estimate.hide') : $t('host.estimate.reveal') }}
+            </button>
           </div>
 
           <div class="cluster">

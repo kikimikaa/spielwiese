@@ -2,9 +2,44 @@
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
-const { state, connected, teams, totals, leader, currentGame, upcoming, quiz, currentQuestion } =
-  useTournamentState()
+const {
+  state,
+  connected,
+  teams,
+  totals,
+  leader,
+  currentGame,
+  upcoming,
+  quiz,
+  currentQuestion,
+  currentEstimate,
+} = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
+
+// The current game's reveal — a quiz question or an estimate solution — shown as
+// one block that hides the answer behind a "?" until the host reveals it. Null
+// unless the active game actually has something revealable.
+const reveal = computed(() => {
+  const g = currentGame.value
+  if (g?.kind === 'quiz' && currentQuestion.value) {
+    return {
+      testid: 'board-quiz',
+      answerTestid: 'board-quiz-answer',
+      prompt: currentQuestion.value.question,
+      answer: currentQuestion.value.answer,
+    }
+  }
+  const e = currentEstimate.value
+  if (g?.kind === 'estimate' && e?.solution) {
+    return {
+      testid: 'board-estimate',
+      answerTestid: 'board-estimate-solution',
+      prompt: e.prompt,
+      answer: e.unit ? `${e.solution} ${e.unit}` : e.solution,
+    }
+  }
+  return null
+})
 
 const showAwards = computed(
   () => state.value?.status === 'awards' || state.value?.status === 'finished',
@@ -83,18 +118,20 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
             <GameTags :game="currentGame" />
             <p v-if="currentGame.rules" class="rules">{{ currentGame.rules }}</p>
 
-            <div
-              v-if="currentGame.kind === 'quiz' && currentQuestion"
-              class="quiz"
-              data-testid="board-quiz"
-            >
-              <p class="quiz-q">{{ currentQuestion.question }}</p>
-              <p v-if="quiz.revealed" class="quiz-a" data-testid="board-quiz-answer">
-                {{ currentQuestion.answer }}
+            <div v-if="reveal" class="quiz" :data-testid="reveal.testid">
+              <p class="quiz-q">{{ reveal.prompt }}</p>
+              <p v-if="quiz.revealed" class="quiz-a" :data-testid="reveal.answerTestid">
+                {{ reveal.answer }}
               </p>
               <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
             </div>
-            <p v-else-if="currentGame.kind === 'quiz' && !currentGame.rules" class="muted rules">
+            <p
+              v-else-if="
+                (currentGame.kind === 'quiz' || currentGame.kind === 'estimate') &&
+                !currentGame.rules
+              "
+              class="muted rules"
+            >
               {{ $t('board.waiting') }}
             </p>
           </template>

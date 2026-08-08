@@ -203,18 +203,26 @@
       "reveal": "Reveal answer",
       "hide": "Hide answer"
     },
+    "estimate": {
+      "reveal": "Reveal solution",
+      "hide": "Hide solution"
+    },
     "gameForm": {
       "title": "Title",
       "kind": "Type",
       "kindOption": {
         "freeform": "Free game",
-        "quiz": "Quiz"
+        "quiz": "Quiz",
+        "estimate": "Estimate"
       },
       "questions": "Questions",
       "question": "Question",
       "answer": "Answer",
       "addQuestion": "Add question",
       "removeQuestion": "Remove question",
+      "estimatePrompt": "Estimate question",
+      "estimateSolution": "Solution",
+      "estimateUnitPlaceholder": "e.g. cm, kg, years",
       "short": "Short description",
       "rules": "Rules",
       "location": "Location",

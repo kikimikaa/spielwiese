@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import type { GameDef, GameLocation, QuizQuestion, ScoringType } from '../../core/types'
+import type {
+  EstimateSpec,
+  GameDef,
+  GameLocation,
+  QuizQuestion,
+  ScoringType,
+} from '../../core/types'
 import { GAME_KINDS } from '../../core/constants'
 
 const props = defineProps<{ game?: GameDef | null }>()
@@ -49,17 +55,34 @@ const cleanQuestions = computed<QuizQuestion[]>(() =>
     .filter((q: QuizQuestion) => q.question && q.answer),
 )
 
+const estimate = reactive<EstimateSpec>({
+  prompt: props.game?.estimate?.prompt ?? '',
+  solution: props.game?.estimate?.solution ?? '',
+  unit: props.game?.estimate?.unit ?? '',
+})
+
+// Trimmed estimate — needs a prompt and a solution to be saveable.
+const cleanEstimate = computed<EstimateSpec>(() => {
+  const spec: EstimateSpec = { prompt: estimate.prompt.trim(), solution: estimate.solution.trim() }
+  const unit = estimate.unit?.trim()
+  if (unit) spec.unit = unit
+  return spec
+})
+
 const canSave = computed(() => {
   if (form.title.trim().length === 0) return false
   if (form.kind === 'quiz') return cleanQuestions.value.length > 0
+  if (form.kind === 'estimate')
+    return Boolean(cleanEstimate.value.prompt && cleanEstimate.value.solution)
   return true
 })
 
 function submit() {
   if (!canSave.value) return
   const game: GameDef = { ...form, title: form.title.trim() }
-  // Only a quiz carries questions; the store clears them when kind changes away.
+  // Only the matching type carries its content; the store clears it on a type change.
   if (form.kind === 'quiz') game.questions = cleanQuestions.value
+  if (form.kind === 'estimate') game.estimate = cleanEstimate.value
   emit('save', game)
 }
 </script>
@@ -115,6 +138,44 @@ function submit() {
       <button type="button" class="btn" data-testid="quiz-add" @click="addQuestion">
         ＋ {{ $t('host.gameForm.addQuestion') }}
       </button>
+    </div>
+
+    <div v-if="form.kind === 'estimate'" class="stack quiz-editor" data-testid="estimate-editor">
+      <div>
+        <label class="label" for="g-est-prompt">{{ $t('host.gameForm.estimatePrompt') }}</label>
+        <input
+          id="g-est-prompt"
+          v-model="estimate.prompt"
+          class="input"
+          data-testid="estimate-prompt"
+        />
+      </div>
+      <div class="grid2">
+        <div>
+          <label class="label" for="g-est-solution">
+            {{ $t('host.gameForm.estimateSolution') }}
+          </label>
+          <input
+            id="g-est-solution"
+            v-model="estimate.solution"
+            class="input"
+            data-testid="estimate-solution-input"
+          />
+        </div>
+        <div>
+          <label class="label" for="g-est-unit">
+            {{ $t('host.gameForm.metricUnit') }}
+            <span class="opt">({{ $t('common.optional') }})</span>
+          </label>
+          <input
+            id="g-est-unit"
+            v-model="estimate.unit"
+            class="input"
+            :placeholder="$t('host.gameForm.estimateUnitPlaceholder')"
+            data-testid="estimate-unit"
+          />
+        </div>
+      </div>
     </div>
 
     <div>

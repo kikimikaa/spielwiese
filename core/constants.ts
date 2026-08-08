@@ -8,7 +8,7 @@ import type { AwardId, AwardTarget, GameKind, GameLocation, ScoringType } from '
 export const CONFIG_SCHEMA_VERSION = 1
 
 /** Every valid game type — the runtime source for validation and the form. */
-export const GAME_KINDS: GameKind[] = ['freeform', 'quiz']
+export const GAME_KINDS: GameKind[] = ['freeform', 'quiz', 'estimate']
 
 /** Every valid game location — the runtime source for import validation. */
 export const GAME_LOCATIONS: GameLocation[] = ['outdoor', 'indoor', 'both']

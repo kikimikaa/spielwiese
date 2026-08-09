@@ -205,6 +205,8 @@
     "filterResults": "{n} von {total} Spielen passen",
     "clearFilter": "Filter zurücksetzen",
     "pageOf": "Seite {page} von {total}",
+    "prevPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
     "library": "Spiele-Bibliothek",
     "lineupEmpty": "Noch keine Spiele ausgewählt. Öffne die Bibliothek und hake Spiele an.",
     "moveUp": "Nach oben",

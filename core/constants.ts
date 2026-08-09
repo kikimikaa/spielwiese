@@ -36,9 +36,6 @@ export const SCORING_TYPES: ScoringType[] = [
 /** WebSocket route (must match the handler under server/routes). */
 export const WS_ROUTE = '/_ws'
 
-/** Channel name that board updates are published on. */
-export const WS_TOPIC_STATE = 'state'
-
 /** Live-connection reconnect backoff: delay grows per attempt up to the ceiling. */
 export const RECONNECT_BASE_MS = 1000
 export const RECONNECT_MAX_MS = 10000
@@ -52,8 +49,8 @@ export const CONNECTION_GRACE_MS = 4000
 /** How many recent wins the spectator activity feed shows. */
 export const RECENT_ACTIVITY_LIMIT = 5
 
-/** 5 vs 5 — team size per the tournament plan. */
-export const TEAM_SIZE = 5
+/** Max length for user-entered names/titles — clamps host & guest input. */
+export const MAX_NAME_LENGTH = 80
 
 /** Scoring is dead simple: winning a game is worth exactly one point. */
 export const POINTS_PER_WIN = 1

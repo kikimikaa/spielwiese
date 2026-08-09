@@ -15,12 +15,13 @@ import { EXAMPLE_GAMES } from '../../core/example-games'
 import type { TournamentConfig } from '../../core/config'
 import {
   DEFAULT_TEAMS,
+  MAX_NAME_LENGTH,
   POINTS_PER_WIN,
   STATE_FILE,
   TOURNAMENT_DATE,
   TOURNAMENT_DEFAULT_NAME,
 } from '../../core/constants'
-import { clampIndex, drawTeams } from '../../core/logic'
+import { clampIndex, clampText, drawTeams } from '../../core/logic'
 import { missingGames } from '../../core/library'
 import { presetGames, type PresetLocale } from '../../core/presets'
 import { createJsonWriter } from './persist'
@@ -165,7 +166,7 @@ export function setRevealedAwards(awardIds: AwardId[]): TournamentState {
 
 export function renameTeam(teamId: string, name: string): TournamentState {
   const team = state.teams.find((t) => t.id === teamId)
-  if (team) team.name = name.trim() || team.name
+  if (team) team.name = clampText(name, MAX_NAME_LENGTH) || team.name
   return commit()
 }
 
@@ -304,8 +305,9 @@ export function clearGames(): TournamentState {
 /** Applies a name→team assignment: creates players, updates rosters, resets tips. */
 function applyTeams(assignment: { name: string; teamId: string }[]): TournamentState {
   const players: Player[] = assignment
-    .filter((a) => a.name.trim() && teamIds().includes(a.teamId))
-    .map((a) => ({ id: randomUUID(), name: a.name.trim(), teamId: a.teamId }))
+    .map((a) => ({ name: clampText(a.name, MAX_NAME_LENGTH), teamId: a.teamId }))
+    .filter((a) => a.name && teamIds().includes(a.teamId))
+    .map((a) => ({ id: randomUUID(), name: a.name, teamId: a.teamId }))
   state.roster = players.map((p) => p.name)
   state.players = players
   for (const team of state.teams) {
@@ -319,7 +321,8 @@ function applyTeams(assignment: { name: string; teamId: string }[]): TournamentS
 
 /** Draws the entered names randomly and evenly across the teams. */
 export function drawTournamentTeams(names: string[]): TournamentState {
-  return applyTeams(drawTeams(names, teamIds()))
+  const clean = (Array.isArray(names) ? names : []).map((n) => clampText(n, MAX_NAME_LENGTH))
+  return applyTeams(drawTeams(clean, teamIds()))
 }
 
 /** Sets teams from an explicit host-chosen assignment (manual mode). */
@@ -342,9 +345,12 @@ export function setCurrentGame(gameId: string | null): TournamentState {
   if (gameId) {
     const g = findGame(gameId)
     if (g) {
-      // Reopening a game clears its previous result so scores don't double-count.
+      // Reopening a game clears its previous result so scores don't double-count,
+      // and its recorded metrics so a replay can't leave a stale time/distance
+      // feeding the fastest/slowest awards.
       g.status = 'active'
       g.winnerTeamId = null
+      delete g.metricByTeam
       state.scoreEvents = state.scoreEvents.filter((e) => e.gameId !== gameId)
     }
     state.status = 'running'
@@ -466,7 +472,7 @@ export function upsertPrediction(
 /** A guest claims their player and sets the public display name (host sees both). */
 export function claimPlayer(playerId: string, displayName: string): TournamentState {
   const player = state.players.find((p) => p.id === playerId)
-  if (player) player.displayName = displayName.trim() || undefined
+  if (player) player.displayName = clampText(displayName, MAX_NAME_LENGTH) || undefined
   return commit()
 }
 

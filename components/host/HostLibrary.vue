@@ -263,19 +263,21 @@ async function confirmDelete() {
       <button
         class="btn"
         :disabled="page === 0"
+        :aria-label="$t('host.prevPage')"
         data-testid="page-prev"
         @click="goToPage(page - 1)"
       >
-        ‹
+        <span aria-hidden="true">‹</span>
       </button>
       <span class="muted">{{ $t('host.pageOf', { page: page + 1, total: pageCount }) }}</span>
       <button
         class="btn"
         :disabled="page >= pageCount - 1"
+        :aria-label="$t('host.nextPage')"
         data-testid="page-next"
         @click="goToPage(page + 1)"
       >
-        ›
+        <span aria-hidden="true">›</span>
       </button>
     </div>
 

@@ -15,7 +15,7 @@ const standing = computed(() =>
 <template>
   <section v-if="playerId" class="card personal" data-testid="watch-personal">
     <div class="muted eyebrow">{{ $t('watch.personal.title') }}</div>
-    <p v-if="standing" class="standing">
+    <p v-if="standing" class="standing" aria-live="polite">
       <span class="pts">{{ standing.points }}</span>
       <span class="unit">{{ $t('common.points') }}</span>
       <span class="rank">{{

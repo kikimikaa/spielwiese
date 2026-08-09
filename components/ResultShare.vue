@@ -47,7 +47,8 @@ async function share() {
   <section class="card share" data-testid="result-share">
     <p class="summary">{{ summary }}</p>
     <button class="btn btn-primary" data-testid="share-btn" @click="share">
-      🔗 {{ copied ? $t('watch.share.copied') : $t('watch.share.button') }}
+      <span aria-hidden="true">🔗</span>
+      {{ copied ? $t('watch.share.copied') : $t('watch.share.button') }}
     </button>
   </section>
 </template>

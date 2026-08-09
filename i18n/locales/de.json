@@ -359,5 +359,14 @@
       "label": "Pechvogel",
       "detail": "{guest} — {value} daneben"
     }
+  },
+  "recap": {
+    "title": "Turnier-Rückblick",
+    "gamesPlayed": "Spiele gespielt",
+    "leadChanges": "Führungswechsel",
+    "biggestLead": "Größte Führung",
+    "leadBy": "{team} +{margin}",
+    "streak": "{n}× in Folge",
+    "keyGame": "Schlüsselspiel: {title}"
   }
 }

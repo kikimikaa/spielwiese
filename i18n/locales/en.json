@@ -359,5 +359,14 @@
       "label": "Unlucky one",
       "detail": "{guest} — {value} wrong bets"
     }
+  },
+  "recap": {
+    "title": "Tournament recap",
+    "gamesPlayed": "Games played",
+    "leadChanges": "Lead changes",
+    "biggestLead": "Biggest lead",
+    "leadBy": "{team} +{margin}",
+    "streak": "{n} in a row",
+    "keyGame": "Key game: {title}"
   }
 }

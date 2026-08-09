@@ -6,6 +6,7 @@ import {
   leadingTeam,
   scorePredictions,
 } from '../core/logic'
+import { computeRecap } from '../core/analytics'
 
 /**
  * Reactive access to the shared tournament state plus derived getters. The
@@ -63,6 +64,9 @@ export function useTournamentState() {
   }
 
   const leader = computed<string | null>(() => leadingTeam(totals.value))
+
+  // How the standings evolved across the tournament — the end-of-event recap.
+  const recap = computed(() => computeRecap(playableGames.value, teamIds.value))
 
   // The tournament winner only exists once the ceremony has started; before
   // that, `leader` is just the live points lead and must not score tournament
@@ -135,6 +139,7 @@ export function useTournamentState() {
     playerById,
     playerLabel,
     leader,
+    recap,
     tournamentWinner,
     predictionBoard,
     awards,

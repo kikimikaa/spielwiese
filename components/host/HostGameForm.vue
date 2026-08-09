@@ -7,10 +7,12 @@ import type {
   QuizQuestion,
   RankingSpec,
   ScoringType,
+  TrueFalseSpec,
 } from '../../core/types'
 import { GAME_KINDS } from '../../core/constants'
 import { isChoiceComplete, MIN_CHOICE_OPTIONS, optionLetter } from '../../core/choice'
 import { isRankingComplete, MIN_RANKING_ITEMS } from '../../core/ranking'
+import { isTrueFalseComplete } from '../../core/truefalse'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
@@ -123,6 +125,17 @@ const cleanRanking = computed<RankingSpec>(() => ({
   items: rankingItems.value.map((item: string) => item.trim()).filter((item: string) => item),
 }))
 
+// True/false: a statement and which answer is correct.
+const trueFalse = reactive<TrueFalseSpec>({
+  statement: props.game?.truefalse?.statement ?? '',
+  answer: props.game?.truefalse?.answer ?? true,
+})
+
+const cleanTrueFalse = computed<TrueFalseSpec>(() => ({
+  statement: trueFalse.statement.trim(),
+  answer: trueFalse.answer,
+}))
+
 const canSave = computed(() => {
   if (form.title.trim().length === 0) return false
   if (form.kind === 'quiz') return cleanQuestions.value.length > 0
@@ -130,6 +143,7 @@ const canSave = computed(() => {
     return Boolean(cleanEstimate.value.prompt && cleanEstimate.value.solution)
   if (form.kind === 'choice') return isChoiceComplete(cleanChoice.value)
   if (form.kind === 'ranking') return isRankingComplete(cleanRanking.value)
+  if (form.kind === 'truefalse') return isTrueFalseComplete(cleanTrueFalse.value)
   return true
 })
 
@@ -141,6 +155,7 @@ function submit() {
   if (form.kind === 'estimate') game.estimate = cleanEstimate.value
   if (form.kind === 'choice') game.choice = cleanChoice.value
   if (form.kind === 'ranking') game.ranking = cleanRanking.value
+  if (form.kind === 'truefalse') game.truefalse = cleanTrueFalse.value
   emit('save', game)
 }
 </script>
@@ -312,6 +327,41 @@ function submit() {
       <button type="button" class="btn" data-testid="ranking-add" @click="addItem">
         ＋ {{ $t('host.gameForm.addItem') }}
       </button>
+    </div>
+
+    <div v-if="form.kind === 'truefalse'" class="stack quiz-editor" data-testid="truefalse-editor">
+      <div>
+        <label class="label" for="g-tf-statement">
+          {{ $t('host.gameForm.trueFalseStatement') }}
+        </label>
+        <input
+          id="g-tf-statement"
+          v-model="trueFalse.statement"
+          class="input"
+          data-testid="truefalse-statement"
+        />
+      </div>
+      <span class="label">{{ $t('host.gameForm.trueFalseAnswer') }}</span>
+      <div class="cluster">
+        <label class="check">
+          <input
+            v-model="trueFalse.answer"
+            type="radio"
+            :value="true"
+            data-testid="truefalse-true"
+          />
+          {{ $t('truefalse.true') }}
+        </label>
+        <label class="check">
+          <input
+            v-model="trueFalse.answer"
+            type="radio"
+            :value="false"
+            data-testid="truefalse-false"
+          />
+          {{ $t('truefalse.false') }}
+        </label>
+      </div>
     </div>
 
     <div>

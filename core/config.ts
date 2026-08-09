@@ -15,6 +15,7 @@ import type {
   GameKind,
   QuizQuestion,
   RankingSpec,
+  TrueFalseSpec,
 } from './types'
 
 export interface TournamentConfig {
@@ -176,6 +177,9 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (game.kind === 'ranking' && isRecord(raw.ranking)) {
     game.ranking = sanitizeRanking(raw.ranking)
   }
+  if (game.kind === 'truefalse' && isRecord(raw.truefalse)) {
+    game.truefalse = sanitizeTrueFalse(raw.truefalse)
+  }
   return game
 }
 
@@ -231,4 +235,9 @@ function sanitizeRanking(raw: Record<string, unknown>): RankingSpec {
   const rawItems = Array.isArray(raw['items']) ? raw['items'] : []
   const items = rawItems.map((item) => toText(item).trim()).filter((item) => item.length > 0)
   return { prompt: toText(raw['prompt']).trim(), items }
+}
+
+/** Rebuilds a true/false from imported input: a statement and a strict boolean answer. */
+function sanitizeTrueFalse(raw: Record<string, unknown>): TrueFalseSpec {
+  return { statement: toText(raw['statement']).trim(), answer: raw['answer'] === true }
 }

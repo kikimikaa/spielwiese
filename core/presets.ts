@@ -15,6 +15,7 @@ import type {
   QuizQuestion,
   RankingSpec,
   ScoringType,
+  TrueFalseSpec,
 } from './types'
 
 export type PresetLocale = 'de' | 'en'
@@ -36,6 +37,7 @@ interface LocalizedText {
   estimate?: EstimateSpec
   choice?: ChoiceSpec
   ranking?: RankingSpec
+  truefalse?: TrueFalseSpec
 }
 
 /** A preset game: language-neutral settings plus its text in each locale. */
@@ -80,6 +82,7 @@ function materialize(game: LocalizedGame, locale: PresetLocale): GameDef {
   if (game.kind === 'estimate' && t.estimate) def.estimate = t.estimate
   if (game.kind === 'choice' && t.choice) def.choice = t.choice
   if (game.kind === 'ranking' && t.ranking) def.ranking = t.ranking
+  if (game.kind === 'truefalse' && t.truefalse) def.truefalse = t.truefalse
   return def
 }
 
@@ -182,6 +185,27 @@ const PACKS: PresetPack[] = [
             prompt: 'Order these planets by size — the largest first.',
             items: ['Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Earth'],
           },
+        },
+      },
+      {
+        id: 'qn-truefalse-goldfish',
+        location: 'both',
+        scoringType: 'points',
+        kind: 'truefalse',
+        de: {
+          title: 'Wahr oder Falsch: Goldfische',
+          short: 'Eine Behauptung — wahr oder falsch?',
+          rules: 'Der Host liest die Behauptung vor; die Teams tippen und der Host deckt auf.',
+          truefalse: {
+            statement: 'Goldfische haben ein Gedächtnis von nur drei Sekunden.',
+            answer: false,
+          },
+        },
+        en: {
+          title: 'True or false: goldfish',
+          short: 'A claim — true or false?',
+          rules: 'The host reads the claim; teams guess and the host reveals.',
+          truefalse: { statement: 'Goldfish have a memory of only three seconds.', answer: false },
         },
       },
     ],

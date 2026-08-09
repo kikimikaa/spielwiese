@@ -83,6 +83,10 @@
     "indoor": "Drinnen",
     "both": "Drinnen & draußen"
   },
+  "truefalse": {
+    "true": "Wahr",
+    "false": "Falsch"
+  },
   "scoring": {
     "points": "Freie Punkte",
     "versus": "Duell",
@@ -241,6 +245,10 @@
       "reveal": "Reihenfolge zeigen",
       "hide": "Reihenfolge verbergen"
     },
+    "truefalse": {
+      "reveal": "Lösung zeigen",
+      "hide": "Lösung verbergen"
+    },
     "gameForm": {
       "title": "Titel",
       "kind": "Typ",
@@ -249,7 +257,8 @@
         "quiz": "Quiz",
         "estimate": "Schätzen",
         "choice": "Multiple Choice",
-        "ranking": "Reihenfolge"
+        "ranking": "Reihenfolge",
+        "truefalse": "Wahr / Falsch"
       },
       "questions": "Fragen",
       "question": "Frage",
@@ -271,6 +280,8 @@
       "rankingItem": "Begriff",
       "addItem": "Begriff hinzufügen",
       "removeItem": "Begriff entfernen",
+      "trueFalseStatement": "Aussage",
+      "trueFalseAnswer": "Richtige Antwort",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

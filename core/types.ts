@@ -82,8 +82,9 @@ export interface GameDef {
    * revealed by the host; `estimate` carries a single `estimate` prompt whose
    * solution the host reveals on cue; `choice` carries a single multiple-choice
    * question whose correct option the host reveals; `ranking` carries items to
-   * put in the right order, revealed by the host. Scoring is unchanged for
-   * every type.
+   * put in the right order, revealed by the host; `truefalse` carries a single
+   * statement the host reveals as true or false. Scoring is unchanged for every
+   * type.
    */
   kind?: GameKind
   /** Quiz question/answer pairs; only meaningful for `kind === 'quiz'`. */
@@ -94,9 +95,11 @@ export interface GameDef {
   choice?: ChoiceSpec
   /** Ordering question; only meaningful for `kind === 'ranking'`. */
   ranking?: RankingSpec
+  /** True/false statement; only meaningful for `kind === 'truefalse'`. */
+  truefalse?: TrueFalseSpec
 }
 
-export type GameKind = 'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking'
+export type GameKind = 'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking' | 'truefalse'
 
 /** A single quiz question and its answer (host-authored plain text). */
 export interface QuizQuestion {
@@ -129,6 +132,12 @@ export interface ChoiceSpec {
 export interface RankingSpec {
   prompt: string
   items: string[]
+}
+
+/** A true/false statement and whether it is actually true. */
+export interface TrueFalseSpec {
+  statement: string
+  answer: boolean
 }
 
 export interface Player {

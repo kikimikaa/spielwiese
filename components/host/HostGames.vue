@@ -204,6 +204,26 @@ function setNote(gameId: string, event: Event) {
             </button>
           </div>
 
+          <div
+            v-if="g.kind === 'truefalse' && g.truefalse"
+            class="quiz-control stack"
+            data-testid="truefalse-control"
+          >
+            <p class="quiz-q">{{ g.truefalse.statement }}</p>
+            <p v-if="quiz.revealed" class="quiz-a" data-testid="truefalse-answer">
+              {{ g.truefalse.answer ? $t('truefalse.true') : $t('truefalse.false') }}
+            </p>
+            <button
+              class="btn"
+              :class="{ 'btn-primary': quiz.revealed }"
+              :aria-pressed="quiz.revealed"
+              data-testid="truefalse-reveal"
+              @click="reveal(!quiz.revealed)"
+            >
+              {{ quiz.revealed ? $t('host.truefalse.hide') : $t('host.truefalse.reveal') }}
+            </button>
+          </div>
+
           <div class="cluster">
             <button
               v-for="team in teams"

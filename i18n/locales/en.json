@@ -83,6 +83,10 @@
     "indoor": "Indoors",
     "both": "Indoors & outdoors"
   },
+  "truefalse": {
+    "true": "True",
+    "false": "False"
+  },
   "scoring": {
     "points": "Free points",
     "versus": "Duel",
@@ -241,6 +245,10 @@
       "reveal": "Reveal order",
       "hide": "Hide order"
     },
+    "truefalse": {
+      "reveal": "Reveal answer",
+      "hide": "Hide answer"
+    },
     "gameForm": {
       "title": "Title",
       "kind": "Type",
@@ -249,7 +257,8 @@
         "quiz": "Quiz",
         "estimate": "Estimate",
         "choice": "Multiple choice",
-        "ranking": "Ordering"
+        "ranking": "Ordering",
+        "truefalse": "True / false"
       },
       "questions": "Questions",
       "question": "Question",
@@ -271,6 +280,8 @@
       "rankingItem": "Item",
       "addItem": "Add item",
       "removeItem": "Remove item",
+      "trueFalseStatement": "Statement",
+      "trueFalseAnswer": "Correct answer",
       "short": "Short description",
       "rules": "Rules",
       "location": "Location",

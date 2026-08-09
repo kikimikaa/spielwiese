@@ -14,11 +14,15 @@ const gameTitle = (event: ScoreEvent) =>
   <section v-if="recentActivity.length" class="card activity" data-testid="watch-activity">
     <div class="muted eyebrow">{{ $t('watch.activity.title') }}</div>
     <ul class="feed">
-      <li v-for="event in recentActivity" :key="event.id" class="row" data-testid="activity-row">
-        <span class="dot" :style="{ '--team': teamById(event.teamId)?.color }" aria-hidden="true" />
-        <span class="team team-text" :style="{ '--team': teamById(event.teamId)?.color }">
-          {{ teamById(event.teamId)?.name }}
-        </span>
+      <li
+        v-for="event in recentActivity"
+        :key="event.id"
+        class="row"
+        :style="{ '--team': teamById(event.teamId)?.color }"
+        data-testid="activity-row"
+      >
+        <span class="dot" aria-hidden="true" />
+        <span class="team team-text">{{ teamById(event.teamId)?.name }}</span>
         <span class="game muted">{{ gameTitle(event) }}</span>
       </li>
     </ul>

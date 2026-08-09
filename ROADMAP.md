@@ -105,8 +105,8 @@ behaviour.
 
 Further out, not committed yet.
 
-**Team-colour contrast.** Guard team-coloured text (winner name, toasts) so it
-stays legible on any theme, even with a dark custom team colour.
+**Sound & atmosphere, more.** Extra optional cues — a countdown before a game,
+a per-team jingle, a drumroll into the ceremony.
 
 ## Want to help?
 

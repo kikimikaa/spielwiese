@@ -76,6 +76,8 @@ preset-pack facet alongside game type and location.
 **Spectator mode.** A read-only `/watch` view for people who aren't playing:
 the live scoreboard, current game and reveals, awards and pause states — no
 host controls, no guest input. Shareable via its own QR code on the invite page.
+A watcher who has also joined sees their own live prediction score, there is a
+recent-results activity feed, and a shareable result card appears at the finish.
 
 **End-of-event analytics.** A tournament recap in the finished ceremony (on the
 board and the spectator view): each team's points progression as a sparkline,
@@ -110,8 +112,8 @@ board behaviour.
 
 Further out, not committed yet.
 
-**Spectator mode, more.** A live activity feed on the watch view, or a
-lightweight end-of-event summary to share.
+**Print / export a recap.** A printable one-pager or export of the final
+standings, awards and the points-progression recap to keep after the event.
 
 ## Want to help?
 

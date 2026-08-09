@@ -70,6 +70,11 @@ preset-pack facet alongside game type and location.
 the live scoreboard, current game and reveals, awards and pause states — no
 host controls, no guest input. Shareable via its own QR code on the invite page.
 
+**End-of-event analytics.** A tournament recap in the finished ceremony (on the
+board and the spectator view): each team's points progression as a sparkline,
+plus how often the lead changed, the biggest lead held, each team's longest win
+streak and the game where it first took the lead.
+
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
@@ -79,8 +84,8 @@ choice, ordering and true/false, each with its own add mask and board behaviour.
 
 Further out, not committed yet.
 
-**Deeper analytics.** Highest-scoring round, team performance over time, and a
-richer end-of-event recap.
+**Spectator extras.** Beyond the read-only view — e.g. a personal live prediction
+score for watchers, or a shareable end-of-event summary card.
 
 ## Want to help?
 

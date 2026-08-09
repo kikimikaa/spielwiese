@@ -206,6 +206,7 @@ pnpm typecheck   # vue-tsc
 pnpm lint        # eslint (zero warnings allowed)
 pnpm format      # prettier --write
 pnpm test:run    # vitest (once)
+pnpm test:e2e    # build + Playwright end-to-end smoke test
 pnpm check       # format check + lint + typecheck + tests
 ```
 
@@ -220,7 +221,8 @@ start fresh.
 
 Issues and PRs are welcome. Please keep the checks green (`pnpm check`): the UI
 is fully internationalised (add every key to both `de.json` and `en.json`), and
-pure logic lives in `core/` with unit tests.
+pure logic lives in `core/` with unit tests. A Playwright end-to-end smoke test
+(`pnpm test:e2e`) covers the core flow and runs in CI.
 
 ## License
 

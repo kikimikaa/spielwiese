@@ -1,5 +1,5 @@
 import type { CueNote } from '../core/sound'
-import { FANFARE_CUE, noteHz, WIN_CUE } from '../core/sound'
+import { COUNTDOWN_CUE, DRUMROLL_CUE, FANFARE_CUE, noteHz, WIN_CUE } from '../core/sound'
 
 // Gentle master volume per note, and a tiny attack so notes don't click on.
 const PEAK_GAIN = 0.18
@@ -65,5 +65,7 @@ export function useSound() {
     toggle,
     playWin: () => play(WIN_CUE),
     playFanfare: () => play(FANFARE_CUE),
+    playCountdown: () => play(COUNTDOWN_CUE),
+    playDrumroll: () => play(DRUMROLL_CUE),
   }
 }

@@ -19,7 +19,8 @@
     "format:check": "prettier --check .",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:run",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:e2e": "nuxt build && playwright test"
   },
   "dependencies": {
     "@nuxtjs/i18n": "^9.5.4",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^0.7.5",
+    "@playwright/test": "^1.62.1",
     "@types/qrcode": "^1.5.5",
     "@vue/eslint-config-prettier": "^10.2.0",
     "eslint": "^9.18.0",

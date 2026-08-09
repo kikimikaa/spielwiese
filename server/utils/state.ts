@@ -25,7 +25,9 @@ import { missingGames } from '../../core/library'
 import { presetGames, type PresetLocale } from '../../core/presets'
 import { createJsonWriter } from './persist'
 
-const STATE_PATH = resolve(process.cwd(), STATE_FILE)
+// The state file, overridable via env so e2e/tests can use an isolated file
+// without clobbering a running dev server's `data/state.json`.
+const STATE_PATH = resolve(process.cwd(), process.env['SPIELWIESE_STATE_FILE'] ?? STATE_FILE)
 
 /** Turns a game definition into a fresh runtime game at the given position. */
 function toGame(def: GameDef, order: number): Game {

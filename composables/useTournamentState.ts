@@ -101,6 +101,10 @@ export function useTournamentState() {
     const g = currentGame.value
     return g?.kind === 'truefalse' && g.truefalse?.statement ? g.truefalse : null
   })
+  const currentMatch = computed(() => {
+    const g = currentGame.value
+    return g?.kind === 'match' && g.match?.pairs.length ? g.match : null
+  })
 
   // Which honorable mentions the host has revealed on the board.
   const revealedAwards = computed<AwardId[]>(() => state.value?.revealedAwards ?? [])
@@ -152,5 +156,6 @@ export function useTournamentState() {
     currentChoice,
     currentRanking,
     currentTrueFalse,
+    currentMatch,
   }
 }

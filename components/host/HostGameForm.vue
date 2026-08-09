@@ -4,6 +4,8 @@ import type {
   EstimateSpec,
   GameDef,
   GameLocation,
+  MatchPair,
+  MatchSpec,
   QuizQuestion,
   RankingSpec,
   ScoringType,
@@ -13,6 +15,7 @@ import { GAME_KINDS } from '../../core/constants'
 import { isChoiceComplete, MIN_CHOICE_OPTIONS, optionLetter } from '../../core/choice'
 import { isRankingComplete, MIN_RANKING_ITEMS } from '../../core/ranking'
 import { isTrueFalseComplete } from '../../core/truefalse'
+import { isMatchComplete, MIN_MATCH_PAIRS } from '../../core/match'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
@@ -136,6 +139,28 @@ const cleanTrueFalse = computed<TrueFalseSpec>(() => ({
   answer: trueFalse.answer,
 }))
 
+// Matching: a prompt and left/right pairs. Rows start empty.
+const matchPrompt = ref(props.game?.match?.prompt ?? '')
+const matchPairs = ref<MatchPair[]>(
+  props.game?.match?.pairs.map((p) => ({ ...p })) ??
+    Array.from({ length: MIN_MATCH_PAIRS }, () => ({ left: '', right: '' })),
+)
+
+function addPair() {
+  matchPairs.value.push({ left: '', right: '' })
+}
+function removePair(i: number) {
+  matchPairs.value.splice(i, 1)
+}
+
+// Trimmed pairs with incomplete rows dropped; the surviving order is the answer.
+const cleanMatch = computed<MatchSpec>(() => ({
+  prompt: matchPrompt.value.trim(),
+  pairs: matchPairs.value
+    .map((p: MatchPair) => ({ left: p.left.trim(), right: p.right.trim() }))
+    .filter((p: MatchPair) => p.left && p.right),
+}))
+
 const canSave = computed(() => {
   if (form.title.trim().length === 0) return false
   if (form.kind === 'quiz') return cleanQuestions.value.length > 0
@@ -144,6 +169,7 @@ const canSave = computed(() => {
   if (form.kind === 'choice') return isChoiceComplete(cleanChoice.value)
   if (form.kind === 'ranking') return isRankingComplete(cleanRanking.value)
   if (form.kind === 'truefalse') return isTrueFalseComplete(cleanTrueFalse.value)
+  if (form.kind === 'match') return isMatchComplete(cleanMatch.value)
   return true
 })
 
@@ -156,6 +182,7 @@ function submit() {
   if (form.kind === 'choice') game.choice = cleanChoice.value
   if (form.kind === 'ranking') game.ranking = cleanRanking.value
   if (form.kind === 'truefalse') game.truefalse = cleanTrueFalse.value
+  if (form.kind === 'match') game.match = cleanMatch.value
   emit('save', game)
 }
 </script>
@@ -364,6 +391,43 @@ function submit() {
       </div>
     </div>
 
+    <div v-if="form.kind === 'match'" class="stack quiz-editor" data-testid="match-editor">
+      <div>
+        <label class="label" for="g-match-prompt">{{ $t('host.gameForm.matchPrompt') }}</label>
+        <input id="g-match-prompt" v-model="matchPrompt" class="input" data-testid="match-prompt" />
+      </div>
+      <span class="label">{{ $t('host.gameForm.matchPairs') }}</span>
+      <p class="muted hint">{{ $t('host.gameForm.matchHint') }}</p>
+      <div v-for="(_, i) in matchPairs" :key="i" class="prow">
+        <input
+          v-model="matchPairs[i].left"
+          class="input"
+          :placeholder="$t('host.gameForm.matchLeft')"
+          :data-testid="`match-left-${i}`"
+        />
+        <span class="parrow" aria-hidden="true">↔</span>
+        <input
+          v-model="matchPairs[i].right"
+          class="input"
+          :placeholder="$t('host.gameForm.matchRight')"
+          :data-testid="`match-right-${i}`"
+        />
+        <button
+          type="button"
+          class="btn btn-danger qdel"
+          :disabled="matchPairs.length <= MIN_MATCH_PAIRS"
+          :aria-label="$t('host.gameForm.removeItem')"
+          data-testid="match-remove"
+          @click="removePair(i)"
+        >
+          ✕
+        </button>
+      </div>
+      <button type="button" class="btn" data-testid="match-add" @click="addPair">
+        ＋ {{ $t('host.gameForm.addItem') }}
+      </button>
+    </div>
+
     <div>
       <label class="label" for="g-rules">
         {{ $t('host.gameForm.rules') }} <span class="opt">({{ $t('common.optional') }})</span>
@@ -511,6 +575,23 @@ function submit() {
   color: var(--ink-soft);
   min-width: 1.2rem;
   text-align: center;
+}
+
+.prow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.prow .input {
+  flex: 1;
+  min-width: 6rem;
+}
+
+.parrow {
+  color: var(--ink-soft);
+  font-weight: 700;
 }
 
 .qdel {

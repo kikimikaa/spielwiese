@@ -13,6 +13,7 @@ import type {
   EstimateSpec,
   GameDef,
   GameKind,
+  MatchSpec,
   QuizQuestion,
   RankingSpec,
   TrueFalseSpec,
@@ -180,6 +181,9 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (game.kind === 'truefalse' && isRecord(raw.truefalse)) {
     game.truefalse = sanitizeTrueFalse(raw.truefalse)
   }
+  if (game.kind === 'match' && isRecord(raw.match)) {
+    game.match = sanitizeMatch(raw.match)
+  }
   return game
 }
 
@@ -240,4 +244,14 @@ function sanitizeRanking(raw: Record<string, unknown>): RankingSpec {
 /** Rebuilds a true/false from imported input: a statement and a strict boolean answer. */
 function sanitizeTrueFalse(raw: Record<string, unknown>): TrueFalseSpec {
   return { statement: toText(raw['statement']).trim(), answer: raw['answer'] === true }
+}
+
+/** Rebuilds a matching question: prompt plus pairs that have both sides, in order. */
+function sanitizeMatch(raw: Record<string, unknown>): MatchSpec {
+  const rawPairs = Array.isArray(raw['pairs']) ? raw['pairs'] : []
+  const pairs = rawPairs
+    .filter(isRecord)
+    .map((p) => ({ left: toText(p['left']).trim(), right: toText(p['right']).trim() }))
+    .filter((p) => p.left.length > 0 && p.right.length > 0)
+  return { prompt: toText(raw['prompt']).trim(), pairs }
 }

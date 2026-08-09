@@ -83,8 +83,8 @@ export interface GameDef {
    * solution the host reveals on cue; `choice` carries a single multiple-choice
    * question whose correct option the host reveals; `ranking` carries items to
    * put in the right order, revealed by the host; `truefalse` carries a single
-   * statement the host reveals as true or false. Scoring is unchanged for every
-   * type.
+   * statement the host reveals as true or false; `match` carries pairs to
+   * connect, revealed by the host. Scoring is unchanged for every type.
    */
   kind?: GameKind
   /** Quiz question/answer pairs; only meaningful for `kind === 'quiz'`. */
@@ -97,9 +97,12 @@ export interface GameDef {
   ranking?: RankingSpec
   /** True/false statement; only meaningful for `kind === 'truefalse'`. */
   truefalse?: TrueFalseSpec
+  /** Matching pairs; only meaningful for `kind === 'match'`. */
+  match?: MatchSpec
 }
 
-export type GameKind = 'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking' | 'truefalse'
+export type GameKind =
+  'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking' | 'truefalse' | 'match'
 
 /** A single quiz question and its answer (host-authored plain text). */
 export interface QuizQuestion {
@@ -138,6 +141,22 @@ export interface RankingSpec {
 export interface TrueFalseSpec {
   statement: string
   answer: boolean
+}
+
+/** One matching pair: a left-hand term and the right-hand item it belongs to. */
+export interface MatchPair {
+  left: string
+  right: string
+}
+
+/**
+ * A matching question: the prompt and the correct pairs. The board shows the
+ * terms with the answers pooled in a neutral order (never row-aligned to the
+ * terms) until the host reveals the correct pairing.
+ */
+export interface MatchSpec {
+  prompt: string
+  pairs: MatchPair[]
 }
 
 export interface Player {

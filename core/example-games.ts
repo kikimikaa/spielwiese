@@ -140,6 +140,27 @@ export const EXAMPLE_GAMES: GameDef[] = [
       '„Honig verdirbt nie." (wahr)',
   },
   {
+    id: 'zuordnung',
+    title: 'Zuordnung',
+    short: 'Begriffe den passenden Antworten zuordnen.',
+    rules:
+      'Das Board zeigt zwei Spalten. Jedes Team ordnet die linken Begriffe den rechten ' +
+      'Antworten zu. Der Host deckt die richtigen Paare auf — die meisten Treffer gewinnen.',
+    location: 'both',
+    scoringType: 'points',
+    kind: 'match',
+    match: {
+      prompt: 'Ordne jedes Land seiner Hauptstadt zu.',
+      pairs: [
+        { left: 'Frankreich', right: 'Paris' },
+        { left: 'Japan', right: 'Tokio' },
+        { left: 'Ägypten', right: 'Kairo' },
+        { left: 'Kanada', right: 'Ottawa' },
+      ],
+    },
+    hostNote: 'Weitere Ideen: Erfinder → Erfindung · Tier → Laut · Element → Symbol',
+  },
+  {
     id: 'geruche',
     title: 'Gerüche erraten',
     short: 'Boxen mit verschiedenen Gerüchen erschnüffeln und erraten.',

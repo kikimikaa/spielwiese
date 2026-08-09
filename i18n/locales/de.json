@@ -255,6 +255,10 @@
       "reveal": "Lösung zeigen",
       "hide": "Lösung verbergen"
     },
+    "match": {
+      "reveal": "Paare zeigen",
+      "hide": "Paare verbergen"
+    },
     "gameForm": {
       "title": "Titel",
       "kind": "Typ",
@@ -264,7 +268,8 @@
         "estimate": "Schätzen",
         "choice": "Multiple Choice",
         "ranking": "Reihenfolge",
-        "truefalse": "Wahr / Falsch"
+        "truefalse": "Wahr / Falsch",
+        "match": "Zuordnung"
       },
       "questions": "Fragen",
       "question": "Frage",
@@ -288,6 +293,11 @@
       "removeItem": "Begriff entfernen",
       "trueFalseStatement": "Aussage",
       "trueFalseAnswer": "Richtige Antwort",
+      "matchPrompt": "Zuordnungs-Frage",
+      "matchPairs": "Paare (Begriff und passende Antwort)",
+      "matchHint": "Je Zeile einen Begriff und die passende Antwort eingeben – das Board zeigt die rechte Spalte gemischt, bis du die Paare aufdeckst.",
+      "matchLeft": "Begriff",
+      "matchRight": "Antwort",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

@@ -3,7 +3,7 @@ import type { GameDef } from '../../core/types'
 import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
 import { activeFacetCount, emptyGameFilter, filterGames, isFilterActive } from '../../core/library'
 import type { GameFilter } from '../../core/library'
-import { PRESET_PACKS, presetLocaleOf } from '../../core/presets'
+import { PRESET_PACKS, PRESET_PACK_IDS, presetLocaleOf } from '../../core/presets'
 
 // Keep the library scannable — paginate once it grows past this.
 const GAMES_PER_PAGE = 8
@@ -199,6 +199,18 @@ async function confirmDelete() {
               @change="toggleValue(filter.locations, loc)"
             />
             <span>{{ $t(`location.${loc}`) }}</span>
+          </label>
+        </fieldset>
+        <fieldset class="facet">
+          <legend>{{ $t('host.filterByPack') }}</legend>
+          <label v-for="packId in PRESET_PACK_IDS" :key="packId" class="facet-option">
+            <input
+              type="checkbox"
+              :checked="filter.packs.includes(packId)"
+              :data-testid="`filter-pack-${packId}`"
+              @change="toggleValue(filter.packs, packId)"
+            />
+            <span>{{ $t(`host.presets.pack.${packId}`) }}</span>
           </label>
         </fieldset>
         <button

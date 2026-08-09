@@ -168,6 +168,7 @@
     "filterLabel": "Filter",
     "filterByType": "Spieltyp",
     "filterByLocation": "Ort",
+    "filterByPack": "Vorlagen-Paket",
     "filterResults": "{n} von {total} Spielen passen",
     "clearFilter": "Filter zurücksetzen",
     "noMatches": "Keine Spiele passen zum Filter.",

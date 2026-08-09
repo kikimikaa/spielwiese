@@ -10,7 +10,15 @@ useHead({ title: () => `${t('nav.invite')} — ${t('app.name')}` })
       <div class="head">
         <h1>{{ $t('invite.title') }}</h1>
       </div>
-      <JoinQr class="qr-card" />
+      <div class="qr-grid">
+        <ShareQr class="qr-card" path="/join" :hint="$t('invite.hint')" :caption="$t('nav.join')" />
+        <ShareQr
+          class="qr-card"
+          path="/watch"
+          :hint="$t('invite.watchHint')"
+          :caption="$t('nav.watch')"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -25,8 +33,15 @@ useHead({ title: () => `${t('nav.invite')} — ${t('app.name')}` })
   max-width: 32rem;
 }
 
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 40rem;
+}
+
 .qr-card {
-  max-width: 22rem;
   width: 100%;
 }
 </style>

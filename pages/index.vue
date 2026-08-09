@@ -7,6 +7,7 @@ const tiles = [
   { to: '/host', key: 'host', emoji: '🎛️' },
   { to: '/join', key: 'join', emoji: '🙋' },
   { to: '/bets', key: 'bets', emoji: '🎲' },
+  { to: '/watch', key: 'watch', emoji: '👀' },
   { to: '/invite', key: 'invite', emoji: '📨' },
 ] as const
 </script>

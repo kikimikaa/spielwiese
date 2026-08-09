@@ -38,6 +38,7 @@
     "host": "Host",
     "join": "Join",
     "bets": "Bets",
+    "watch": "Watch",
     "invite": "Invite"
   },
   "home": {
@@ -46,6 +47,7 @@
     "hostDesc": "Run the show: draw teams, control games, award points.",
     "joinDesc": "Join as a guest and see your team.",
     "betsDesc": "Predict who wins.",
+    "watchDesc": "Just watch — follow the scores & game live.",
     "inviteDesc": "QR code to join.",
     "connected": "Connected",
     "offline": "Disconnected"
@@ -57,7 +59,11 @@
   },
   "invite": {
     "title": "Invitation",
-    "hint": "Scan to join"
+    "hint": "Scan to join",
+    "watchHint": "Scan to watch"
+  },
+  "watch": {
+    "title": "Watching"
   },
   "error": {
     "code": "Error {code}",

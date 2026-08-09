@@ -89,6 +89,15 @@ a {
   color: var(--ink-soft);
 }
 
+/* Small uppercase label above a section (e.g. "Current game", "Teams"). Spacing
+   is left to each usage — the shared identity is just the typography. */
+.eyebrow {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+}
+
 .err {
   color: var(--danger);
   font-weight: 600;

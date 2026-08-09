@@ -38,6 +38,7 @@
     "host": "Host",
     "join": "Mitmachen",
     "bets": "Wetten",
+    "watch": "Zuschauen",
     "invite": "Einladen"
   },
   "home": {
@@ -46,6 +47,7 @@
     "hostDesc": "Spielleitung: auslosen, Spiele steuern, Punkte vergeben.",
     "joinDesc": "Als Gast beitreten und dein Team sehen.",
     "betsDesc": "Tippe, wer gewinnt.",
+    "watchDesc": "Nur zuschauen – Punktestand & Spiel live verfolgen.",
     "inviteDesc": "QR-Code zum Beitreten.",
     "connected": "Verbunden",
     "offline": "Nicht verbunden"
@@ -57,7 +59,11 @@
   },
   "invite": {
     "title": "Einladung",
-    "hint": "Zum Mitmachen scannen"
+    "hint": "Zum Mitmachen scannen",
+    "watchHint": "Zum Zuschauen scannen"
+  },
+  "watch": {
+    "title": "Zuschauen"
   },
   "error": {
     "code": "Fehler {code}",

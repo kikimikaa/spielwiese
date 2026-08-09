@@ -88,6 +88,9 @@ instead of hard-cutting, the score number lifts as it changes, and everything
 respects "reduce motion". Live regions announce score and connection changes,
 and bet buttons expose their pressed state.
 
+**Board sound.** An opt-in sound toggle on the board plays a short chime on each
+win and a fanfare for the ceremony — synthesised in the browser, no audio files.
+
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
@@ -97,9 +100,6 @@ behaviour.
 ## Ideas
 
 Further out, not committed yet.
-
-**Sound & atmosphere.** Optional audio cues on the board — a win sting, a
-countdown, a fanfare for the ceremony.
 
 **Themes.** A few colour/branding themes for the board beyond the default and
 sun mode.

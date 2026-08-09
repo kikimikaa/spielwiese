@@ -35,6 +35,10 @@ host's cue.
 board shows the claim and reveals the answer on the host's cue. Also available as
 a bilingual preset.
 
+**Matching game type.** Pairs of terms and answers; the board shows the terms
+with the answers pooled in a neutral order, then reveals the correct pairing on
+the host's cue. Also available as a bilingual preset.
+
 **Config export & import.** Share a games setup as a versioned file so a
 tournament can be reused or handed to another host (no guest names or scores).
 
@@ -83,7 +87,8 @@ and bet buttons expose their pressed state.
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
-choice, ordering and true/false, each with its own add mask and board behaviour.
+choice, ordering, true/false and matching, each with its own add mask and board
+behaviour.
 
 ## Ideas
 

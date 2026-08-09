@@ -39,6 +39,9 @@ a bilingual preset.
 with the answers pooled in a neutral order, then reveals the correct pairing on
 the host's cue. Also available as a bilingual preset.
 
+**Buzzer game type.** A single quick-fire question; teams buzz in, the host taps
+the winner and reveals the answer on cue. Also available as a bilingual preset.
+
 **Config export & import.** Share a games setup as a versioned file so a
 tournament can be reused or handed to another host (no guest names or scores).
 
@@ -98,8 +101,8 @@ mode always overrides a theme when both are on.
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
-choice, ordering, true/false and matching, each with its own add mask and board
-behaviour.
+choice, ordering, true/false, matching and buzzer, each with its own add mask and
+board behaviour.
 
 ## Ideas
 

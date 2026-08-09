@@ -71,6 +71,9 @@
       "noTips": "You haven't placed any tips yet — predict under “Join”.",
       "joinHint": "Playing along? Join and predict who wins."
     },
+    "activity": {
+      "title": "Recent results"
+    },
     "share": {
       "won": "🏆 {winner} won {name} — {points} points!",
       "tie": "🤝 {name} ended in a draw!",

@@ -4,9 +4,11 @@ import {
   computeAwards,
   computeTotals,
   leadingTeam,
+  recentWins,
   scorePredictions,
 } from '../core/logic'
 import { computeRecap } from '../core/analytics'
+import { RECENT_ACTIVITY_LIMIT } from '../core/constants'
 
 /**
  * Reactive access to the shared tournament state plus derived getters. The
@@ -67,6 +69,9 @@ export function useTournamentState() {
 
   // How the standings evolved across the tournament — the end-of-event recap.
   const recap = computed(() => computeRecap(playableGames.value, teamIds.value))
+
+  // The latest game wins, newest first — for the spectator activity feed.
+  const recentActivity = computed(() => recentWins(scoredEvents.value, RECENT_ACTIVITY_LIMIT))
 
   // The tournament winner only exists once the ceremony has started; before
   // that, `leader` is just the live points lead and must not score tournament
@@ -148,6 +153,7 @@ export function useTournamentState() {
     playerLabel,
     leader,
     recap,
+    recentActivity,
     tournamentWinner,
     predictionBoard,
     awards,

@@ -10,6 +10,7 @@ import {
   leadingTeam,
   pickLanIp,
   predictionStanding,
+  recentWins,
   scorePredictions,
   shuffle,
   validateDisplayName,
@@ -375,5 +376,35 @@ describe('predictionStanding', () => {
   it('returns null for a player not on the board', () => {
     expect(predictionStanding(board, 'zzz')).toBeNull()
     expect(predictionStanding([], 'a')).toBeNull()
+  })
+})
+
+describe('recentWins', () => {
+  const ev = (id: string, ts: number, delta = 1): ScoreEvent => ({
+    id,
+    gameId: `g-${id}`,
+    teamId: 'a',
+    delta,
+    ts,
+  })
+
+  it('returns wins newest first, capped at the limit', () => {
+    const events = [ev('1', 100), ev('2', 300), ev('3', 200)]
+    expect(recentWins(events, 2).map((e) => e.id)).toEqual(['2', '3'])
+  })
+
+  it('ignores non-positive entries (e.g. corrections)', () => {
+    const events = [ev('1', 100), ev('2', 200, 0), ev('3', 300, -1)]
+    expect(recentWins(events, 5).map((e) => e.id)).toEqual(['1'])
+  })
+
+  it('does not mutate the input order', () => {
+    const events = [ev('1', 100), ev('2', 300)]
+    recentWins(events, 5)
+    expect(events.map((e) => e.id)).toEqual(['1', '2'])
+  })
+
+  it('handles an empty log', () => {
+    expect(recentWins([], 5)).toEqual([])
   })
 })

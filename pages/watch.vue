@@ -12,6 +12,7 @@ const finished = computed(() => state.value?.status === 'finished')
     <div class="muted eyebrow">{{ $t('watch.title') }}</div>
     <WatchPersonal class="mb" />
     <BoardStage />
+    <WatchActivity class="mt" />
     <ResultShare v-if="finished" class="mt" />
   </div>
 </template>

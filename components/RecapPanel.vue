@@ -86,12 +86,12 @@ function sparkline(teamId: string): string {
           <span class="team-points">{{ t.wins }} {{ $t('common.points') }}</span>
         </div>
 
+        <!-- Decorative: the team's point total is already stated as text above. -->
         <svg
           class="spark"
           :viewBox="`0 0 ${CHART_W} ${CHART_H}`"
           preserveAspectRatio="none"
-          role="img"
-          :aria-label="$t('recap.title')"
+          aria-hidden="true"
         >
           <polyline :points="sparkline(t.teamId)" />
         </svg>

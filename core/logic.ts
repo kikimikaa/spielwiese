@@ -93,6 +93,14 @@ export function leadingTeam(totals: Record<string, number>): string | null {
   return bestId && bestPts > 0 && !tied ? bestId : null
 }
 
+/** The most recent game wins from the event log, newest first, capped at `limit`. */
+export function recentWins(events: ScoreEvent[], limit: number): ScoreEvent[] {
+  return [...events]
+    .filter((e) => e.delta > 0)
+    .sort((a, b) => b.ts - a.ts)
+    .slice(0, limit)
+}
+
 /** Total points per team from the event log. */
 export function computeTotals(events: ScoreEvent[], teamIds: string[]): Record<string, number> {
   const totals: Record<string, number> = Object.fromEntries(teamIds.map((id) => [id, 0]))

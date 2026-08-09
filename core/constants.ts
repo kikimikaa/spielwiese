@@ -49,6 +49,9 @@ export const RECONNECT_MAX_MS = 10000
  */
 export const CONNECTION_GRACE_MS = 4000
 
+/** How many recent wins the spectator activity feed shows. */
+export const RECENT_ACTIVITY_LIMIT = 5
+
 /** 5 vs 5 — team size per the tournament plan. */
 export const TEAM_SIZE = 5
 

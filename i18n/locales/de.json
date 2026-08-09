@@ -71,6 +71,9 @@
       "noTips": "Du hast noch keine Tipps abgegeben – tippe unter „Mitmachen“.",
       "joinHint": "Spielst du mit? Tritt bei und tippe, wer gewinnt."
     },
+    "activity": {
+      "title": "Letzte Ergebnisse"
+    },
     "share": {
       "won": "🏆 {winner} gewinnt {name} – {points} Punkte!",
       "tie": "🤝 {name} endet unentschieden!",

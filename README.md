@@ -58,12 +58,16 @@ and the board reflows to fit a small screen too.
 
 - **Live scoreboard** pushed to every device over WebSocket — no reloads.
 - **One responsive board** that works on a phone in bright sunlight and
-  full-screen on a TV, with a **sun mode** for extra contrast.
+  full-screen on a TV, with a **sun mode** for extra contrast, a few **colour
+  themes** (default / dark / neon) and **optional sound cues** (a chime on each
+  win, a fanfare for the ceremony — synthesised in the browser, no audio files).
 - **Team draw** — random (with a suspense animation) or assign players by hand;
-  a soft **reset** keeps your games and names for a rerun.
-- **Game library** — build your own games, tick which ones are in this
-  tournament, tag each with a location & type, and optionally track a
-  time/distance. A set of example games ships as editable seed data.
+  a soft **reset** keeps your games and names for a rerun, and you can
+  **save & resume** a running tournament under a name.
+- **Game library on its own page** — build your own games in **seven game
+  types** (see below), tick which ones are in this tournament, filter by type,
+  location or preset pack, and optionally track a time/distance. **Ready-made
+  bilingual game packs** and a set of example games ship as editable seed data.
 - **Simple scoring** — one point per win, one tap, fully undoable.
 - **Predictions** — guests bet on the current game's winner, the tournament
   winner, and who becomes the prediction champion; a live ranking keeps score.
@@ -72,12 +76,36 @@ and the board reflows to fit a small screen too.
   daredevil, unluckiest bettor); nothing that just re-ranks teams by points,
   since that _is_ the winner. The host **reveals each one on the board at their
   own pace** before the winner ceremony (confetti, or a proper "It's a draw!"
-  if the teams tie).
+  if the teams tie), followed by an **end-of-event recap** — each team's points
+  progression, the lead changes and the biggest lead of the tournament.
+- **Spectator mode** — a read-only `/watch` view for people who aren't playing;
+  a guest who's also watching sees their own live prediction score, and a
+  **shareable result card** appears once the tournament finishes.
 - **Pause modes** — a short break, or a pre-ceremony pause that hides the
   scores to build suspense.
+- **Reconnect handling** — drop Wi-Fi mid-event and every view shows a clear
+  reconnect banner with a manual retry, on top of the automatic reconnect.
 - **Bilingual UI** (German / English) with a toggle.
 
-## The five views
+### Game types
+
+Every game is scored the same way (one tap for the winning team); the type only
+changes what the board shows and how the host reveals it. A game can be a plain
+**free game** run by hand, or one of seven guided types:
+
+| Type                | On the board                                                        |
+| ------------------- | ------------------------------------------------------------------- |
+| **Quiz**            | Question/answer pairs, stepped through and revealed one at a time   |
+| **Estimate**        | One prompt with a solution (and optional unit), revealed on cue     |
+| **Multiple choice** | Lettered options; the correct one is highlighted on reveal          |
+| **Ordering**        | Items shown in a neutral order, then the correct sequence           |
+| **True / false**    | A statement, revealed as true or false                              |
+| **Matching**        | Terms with a pooled bag of answers, then the correct pairs          |
+| **Buzzer**          | A quick-fire question; teams buzz in, the answer is revealed on cue |
+
+Several of them also ship as **bilingual presets** in the ready-made packs.
+
+## The views
 
 | View       | Path      | For                                                    |
 | ---------- | --------- | ------------------------------------------------------ |
@@ -85,7 +113,8 @@ and the board reflows to fit a small screen too.
 | **Host**   | `/host`   | You (PIN-protected) — draw, run games, award points    |
 | **Join**   | `/join`   | Guests — identify by name, see their team              |
 | **Bets**   | `/bets`   | Guests — predict winners                               |
-| **Invite** | `/invite` | A QR code that sends guests to `/join`                 |
+| **Watch**  | `/watch`  | Spectators — a read-only live view, no controls        |
+| **Invite** | `/invite` | QR codes that send guests to `/join` or `/watch`       |
 
 ## Roadmap
 

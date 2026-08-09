@@ -232,7 +232,7 @@ function setNote(gameId: string, event: Event) {
             <p class="quiz-q">{{ g.match.prompt }}</p>
             <ul class="match-list">
               <li v-for="(pair, idx) in g.match.pairs" :key="idx">
-                {{ pair.left }} ↔ {{ pair.right }}
+                {{ pair.left }} <span aria-hidden="true">↔</span> {{ pair.right }}
               </li>
             </ul>
             <button

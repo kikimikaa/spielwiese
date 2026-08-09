@@ -71,8 +71,8 @@ const ranking = computed(() => {
   return { prompt: r.prompt, items: quiz.value.revealed ? r.items : neutralOrder(r.items) }
 })
 
-// Matching: show the left column in order and the right column in a neutral
-// order (so the pairs don't line up) until the host reveals the correct pairing.
+// Matching: show the terms in order and the answers as a neutrally-ordered pool
+// until the host reveals the correct pairing.
 const match = computed(() => {
   const m = currentGame.value?.kind === 'match' ? currentMatch.value : null
   if (!m) return null
@@ -219,12 +219,17 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
                   <span class="match-right">{{ pair.right }}</span>
                 </li>
               </ul>
+              <!-- The answers are a pooled, neutrally-ordered bag (not a second
+                   column aligned row-for-row), so a viewer can't read the pairing
+                   off matching rows before the reveal. -->
               <div v-else class="match-cols" data-testid="board-match-neutral">
-                <ul class="match-col">
+                <ul class="match-terms">
                   <li v-for="(pair, i) in match.pairs" :key="i">{{ pair.left }}</li>
                 </ul>
-                <ul class="match-col match-col-right">
-                  <li v-for="(right, i) in match.rights" :key="i">{{ right }}</li>
+                <ul class="match-bag">
+                  <li v-for="(right, i) in match.rights" :key="i" class="match-chip">
+                    {{ right }}
+                  </li>
                 </ul>
               </div>
             </div>
@@ -386,12 +391,13 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 
 .match-cols {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: clamp(0.4rem, 1.5vw, 0.75rem) clamp(1rem, 5vw, 3rem);
+  grid-template-columns: auto 1fr;
+  gap: clamp(0.75rem, 4vw, 2.5rem);
   margin: 0.75rem 0 0;
+  align-items: start;
 }
 
-.match-col {
+.match-terms {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -401,9 +407,24 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
   font-weight: 700;
 }
 
-/* The scrambled right column sits in the third grid track. */
-.match-col-right {
-  grid-column: 3;
+/* The answers, pooled as neutrally-ordered chips (not row-aligned to the terms). */
+.match-bag {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.4rem, 1.5vw, 0.75rem);
+  align-content: start;
+}
+
+.match-chip {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  padding: 0.3rem 0.75rem;
+  font-size: clamp(1rem, 3vw, 1.6rem);
+  font-weight: 700;
 }
 
 .match-pairs {

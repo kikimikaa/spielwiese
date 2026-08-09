@@ -12,10 +12,10 @@ export function isMatchComplete(spec: MatchSpec): boolean {
 }
 
 /**
- * The right-hand column in a neutral display order, so the board can show the two
- * columns without lining the pairs up (which would give the answer away). Reuses
- * the ordering game's neutral shuffle — deterministic on every client and never
- * the correct order.
+ * The right-hand answers in a neutral display order for the board's answer pool.
+ * Reuses the ordering game's neutral sort — a deterministic UTF-16 code-unit sort
+ * that is unrelated to the pair order. (The board also renders these as a pooled
+ * bag rather than a row-aligned column, so the pairing can't be read off either.)
  */
 export function neutralRights(pairs: MatchSpec['pairs']): string[] {
   return neutralOrder(pairs.map((p) => p.right))

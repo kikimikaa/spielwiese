@@ -150,9 +150,9 @@ export interface MatchPair {
 }
 
 /**
- * A matching question: the prompt and the correct pairs. The board shows the two
- * columns with the right-hand side in a neutral order (never lined up with the
- * answer) until the host reveals the correct pairing.
+ * A matching question: the prompt and the correct pairs. The board shows the
+ * terms with the answers pooled in a neutral order (never row-aligned to the
+ * terms) until the host reveals the correct pairing.
  */
 export interface MatchSpec {
   prompt: string

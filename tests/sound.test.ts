@@ -56,9 +56,10 @@ describe('teamJingle', () => {
     expect(teamJingle(0)).not.toEqual(teamJingle(1))
   })
 
-  it('wraps around when there are more teams than jingles', () => {
+  it('wraps around for indices past the end and for negatives', () => {
     expect(teamJingle(TEAM_JINGLES.length)).toBe(TEAM_JINGLES[0])
     expect(teamJingle(TEAM_JINGLES.length + 1)).toBe(TEAM_JINGLES[1])
+    expect(teamJingle(-1)).toBe(TEAM_JINGLES[TEAM_JINGLES.length - 1])
   })
 
   it('never returns empty for any index', () => {

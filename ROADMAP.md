@@ -31,6 +31,10 @@ the host's cue while fading the rest.
 shows them in a neutral order and reveals the correct sequence, numbered, on the
 host's cue.
 
+**True/false game type.** A single statement that's either true or false; the
+board shows the claim and reveals the answer on the host's cue. Also available as
+a bilingual preset.
+
 **Config export & import.** Share a games setup as a versioned file so a
 tournament can be reused or handed to another host (no guest names or scores).
 
@@ -65,7 +69,7 @@ preset-pack facet alongside game type and location.
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
-choice and ordering, each with its own add mask and board behaviour.
+choice, ordering and true/false, each with its own add mask and board behaviour.
 
 ## Ideas
 

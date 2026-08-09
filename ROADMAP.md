@@ -91,6 +91,10 @@ and bet buttons expose their pressed state.
 **Board sound.** An opt-in sound toggle on the board plays a short chime on each
 win and a fanfare for the ceremony — synthesised in the browser, no audio files.
 
+**Board themes.** A theme cycle button on the board switches between colour
+palettes (default, dark, neon), persisted per device. The sun high-legibility
+mode always overrides a theme when both are on.
+
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
@@ -101,8 +105,8 @@ behaviour.
 
 Further out, not committed yet.
 
-**Themes.** A few colour/branding themes for the board beyond the default and
-sun mode.
+**Team-colour contrast.** Guard team-coloured text (winner name, toasts) so it
+stays legible on any theme, even with a dark custom team colour.
 
 ## Want to help?
 

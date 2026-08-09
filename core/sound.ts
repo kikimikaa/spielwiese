@@ -31,6 +31,26 @@ export const FANFARE_CUE: CueNote[] = [
   { semitones: 12, at: 0.48, dur: 0.45 },
 ]
 
+// Three even beeps and a higher "go" — a get-ready countdown when a game starts.
+export const COUNTDOWN_CUE: CueNote[] = [
+  { semitones: 0, at: 0, dur: 0.14 },
+  { semitones: 0, at: 0.4, dur: 0.14 },
+  { semitones: 0, at: 0.8, dur: 0.14 },
+  { semitones: 7, at: 1.2, dur: 0.35 },
+]
+
+// A fast roll of soft low taps building into a hit — a drumroll into the reveal.
+const ROLL_TAPS = 14
+const ROLL_STEP = 0.05
+export const DRUMROLL_CUE: CueNote[] = [
+  ...Array.from({ length: ROLL_TAPS }, (_, i) => ({
+    semitones: -12,
+    at: i * ROLL_STEP,
+    dur: ROLL_STEP,
+  })),
+  { semitones: 0, at: ROLL_TAPS * ROLL_STEP, dur: 0.3 },
+]
+
 /** Total length of a cue in seconds — the end of its latest note. */
 export function cueDuration(cue: CueNote[]): number {
   return cue.reduce((end, n) => Math.max(end, n.at + n.dur), 0)

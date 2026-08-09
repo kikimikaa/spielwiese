@@ -1,21 +1,42 @@
 <script setup lang="ts">
-import type { TournamentStatus } from '../core/types'
+import type { PauseMode, TournamentStatus } from '../core/types'
 
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
 const { state, connected } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
-const { enabled: sound, toggle: toggleSound, playWin, playFanfare } = useSound()
+const {
+  enabled: sound,
+  toggle: toggleSound,
+  playWin,
+  playFanfare,
+  playCountdown,
+  playDrumroll,
+} = useSound()
 const { theme, cycle: cycleTheme } = useTheme()
 
-// The board is where the atmosphere lives: a chime on each win, a fanfare when
-// the ceremony ends. Both no-op unless the host has switched sound on.
+// The board is where the atmosphere lives — all no-ops unless the host switched
+// sound on. A chime on each win; a get-ready countdown when a new game starts; a
+// drumroll on the pre-ceremony suspense pause; a fanfare when the winner shows.
+// Each watcher fires only on a real change (never on the initial page load).
 useGameWins(() => playWin())
 watch(
   () => state.value?.status,
   (status: TournamentStatus | undefined, prev: TournamentStatus | undefined) => {
     if (status === 'finished' && prev && prev !== 'finished') playFanfare()
+  },
+)
+watch(
+  () => state.value?.currentGameId,
+  (id: string | null | undefined, prev: string | null | undefined) => {
+    if (id && id !== prev && state.value?.status === 'running') playCountdown()
+  },
+)
+watch(
+  () => state.value?.pause,
+  (mode: PauseMode | undefined, prev: PauseMode | undefined) => {
+    if (mode === 'suspense' && prev && prev !== 'suspense') playDrumroll()
   },
 )
 </script>

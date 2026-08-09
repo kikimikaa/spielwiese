@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { A4_HZ, cueDuration, FANFARE_CUE, noteHz, WIN_CUE } from '../core/sound'
+import {
+  A4_HZ,
+  COUNTDOWN_CUE,
+  cueDuration,
+  DRUMROLL_CUE,
+  FANFARE_CUE,
+  noteHz,
+  WIN_CUE,
+} from '../core/sound'
 
 describe('noteHz', () => {
   it('returns the reference pitch at 0 semitones', () => {
@@ -32,9 +40,9 @@ describe('cueDuration', () => {
   })
 
   it('the shipped cues are non-empty and have positive length', () => {
-    expect(WIN_CUE.length).toBeGreaterThan(0)
-    expect(FANFARE_CUE.length).toBeGreaterThan(0)
-    expect(cueDuration(WIN_CUE)).toBeGreaterThan(0)
-    expect(cueDuration(FANFARE_CUE)).toBeGreaterThan(0)
+    for (const cue of [WIN_CUE, FANFARE_CUE, COUNTDOWN_CUE, DRUMROLL_CUE]) {
+      expect(cue.length).toBeGreaterThan(0)
+      expect(cueDuration(cue)).toBeGreaterThan(0)
+    }
   })
 })

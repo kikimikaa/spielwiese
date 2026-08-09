@@ -1,60 +1,22 @@
 <script setup lang="ts">
 import type { ScoreEvent } from '../core/types'
-import { freshWinId } from '../core/logic'
 
 // A small, self-clearing celebration on the board each time a game is won —
 // smaller than the final ceremony, just a quick "team X scored a point".
 const CELEBRATION_MS = 4500
 
-const { state, teamById } = useTournamentState()
-
-// Wins that count: positive score events tied to an enabled game — the same
-// events the standings use, so the toast never celebrates a point the scoreboard
-// doesn't award.
-const wins = computed<ScoreEvent[]>(() => {
-  const enabled = new Set(
-    (state.value?.games ?? []).filter((g) => g.enabled !== false).map((g) => g.id),
-  )
-  return (state.value?.scoreEvents ?? []).filter(
-    (e) => e.gameId && enabled.has(e.gameId) && e.delta > 0,
-  )
-})
+const { teamById } = useTournamentState()
 
 const celebrating = ref<{ name: string; color: string; points: number } | null>(null)
-// Win ids already accounted for. Seeded from the first loaded state (so a
-// pre-existing win never celebrates on page load); freshWinId then fires only
-// on a genuinely new, single win.
-const seen = new Set<string>()
-let initialized = false
 let timer: ReturnType<typeof setTimeout> | null = null
 
-function celebrate(event: ScoreEvent) {
+useGameWins((event: ScoreEvent) => {
   const team = teamById(event.teamId)
   if (!team) return
   celebrating.value = { name: team.name, color: team.color, points: event.delta }
   if (timer) clearTimeout(timer)
   timer = setTimeout(() => (celebrating.value = null), CELEBRATION_MS)
-}
-
-watch(
-  wins,
-  (current: ScoreEvent[]) => {
-    if (!state.value) return
-    const ids = current.map((e) => e.id)
-    if (!initialized) {
-      initialized = true
-      for (const id of ids) seen.add(id)
-      return
-    }
-    const fresh = freshWinId(seen, ids)
-    for (const id of ids) seen.add(id)
-    if (fresh) {
-      const event = current.find((e) => e.id === fresh)
-      if (event) celebrate(event)
-    }
-  },
-  { immediate: true },
-)
+})
 
 onBeforeUnmount(() => {
   if (timer) clearTimeout(timer)

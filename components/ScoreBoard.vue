@@ -20,7 +20,11 @@ defineProps<{
     >
       <div class="bar" aria-hidden="true" />
       <div class="name">{{ t.name }}</div>
-      <div class="score">{{ totals[t.id] ?? 0 }}</div>
+      <div class="score" :aria-label="`${t.name}: ${totals[t.id] ?? 0}`" aria-live="polite">
+        <Transition name="score" mode="out-in">
+          <span :key="totals[t.id] ?? 0">{{ totals[t.id] ?? 0 }}</span>
+        </Transition>
+      </div>
     </div>
   </div>
 </template>
@@ -67,5 +71,28 @@ defineProps<{
   color: var(--team);
   font-size: clamp(3.5rem, 16vw, 9rem);
   line-height: 1;
+}
+
+/* A quick lift as the number changes, so a scored point is felt, not just swapped
+   in. Neutralised for users who prefer reduced motion (see main.css). */
+.score span {
+  display: inline-block;
+}
+
+.score-enter-active,
+.score-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.score-enter-from {
+  opacity: 0;
+  transform: translateY(-0.2em);
+}
+
+.score-leave-to {
+  opacity: 0;
+  transform: translateY(0.2em);
 }
 </style>

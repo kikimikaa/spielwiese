@@ -11,7 +11,12 @@ const { enabled: sun, toggle: toggleSun } = useSunMode()
     <header class="topbar">
       <div class="cluster">
         <AppBrand />
-        <span class="pill pill-dot conn" :class="{ on: connected }" data-testid="board-conn">
+        <span
+          class="pill pill-dot conn"
+          :class="{ on: connected }"
+          aria-live="polite"
+          data-testid="board-conn"
+        >
           {{ connected ? $t('board.live') : $t('home.offline') }}
         </span>
       </div>
@@ -36,6 +41,7 @@ const { enabled: sun, toggle: toggleSun } = useSunMode()
 <style scoped>
 .topbar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;

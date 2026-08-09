@@ -12,7 +12,7 @@ const progressPct = computed(() => (total.value ? Math.round((done.value / total
 
 <template>
   <div class="stats-grid">
-    <section class="card stat">
+    <section v-if="total" class="card stat">
       <div class="muted eyebrow">🎮 {{ $t('board.stats.progress') }}</div>
       <div class="track"><div class="fill" :style="{ width: `${progressPct}%` }" /></div>
       <div class="stat-label">{{ $t('board.stats.gamesProgress', { done, total }) }}</div>

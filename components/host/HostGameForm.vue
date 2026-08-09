@@ -514,8 +514,8 @@ function submit() {
 }
 
 .qdel {
-  min-height: 0;
-  padding: 0.4rem 0.6rem;
+  min-height: 40px;
+  padding: 0.4rem 0.7rem;
   flex: none;
 }
 </style>

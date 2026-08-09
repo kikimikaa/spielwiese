@@ -13,6 +13,9 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{ confirm: []; cancel: [] }>()
 
+// Stable id so the dialog can be labelled by its title for screen readers.
+const titleId = useId()
+
 // Only teleport after mount: an SSR teleport to <body> can break page
 // hydration (dead buttons). Disabled teleport renders in place, matching SSR.
 const mounted = ref(false)
@@ -39,7 +42,11 @@ function onKey(e: KeyboardEvent) {
   }
   if (e.key !== 'Tab') return
   const items = focusables()
-  if (items.length === 0) return
+  // Nothing tabbable inside — keep focus on the dialog rather than let it escape.
+  if (items.length === 0) {
+    e.preventDefault()
+    return
+  }
   const first = items[0]!
   const last = items[items.length - 1]!
   if (e.shiftKey && document.activeElement === first) {
@@ -84,9 +91,10 @@ onUnmounted(() => {
           :class="{ wide }"
           role="dialog"
           aria-modal="true"
+          :aria-labelledby="title ? titleId : undefined"
           tabindex="-1"
         >
-          <h2 v-if="title">{{ title }}</h2>
+          <h2 v-if="title" :id="titleId">{{ title }}</h2>
           <p v-if="message" class="muted msg">{{ message }}</p>
           <slot />
           <div v-if="!hideActions" class="cluster actions">

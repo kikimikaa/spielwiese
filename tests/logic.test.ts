@@ -9,10 +9,12 @@ import {
   findPlayerByName,
   leadingTeam,
   pickLanIp,
+  predictionStanding,
   scorePredictions,
   shuffle,
   validateDisplayName,
 } from '../core/logic'
+import type { PredictionScore } from '../core/logic'
 import {
   PREDICTION_AWARD_POINTS,
   PREDICTION_GAME_POINTS,
@@ -345,5 +347,33 @@ describe('award bets', () => {
     ]
     const board = scorePredictions(predictions, games, null, awards)
     expect(board.find((b) => b.playerId === 'lee')?.points).toBe(PREDICTION_AWARD_POINTS)
+  })
+})
+
+describe('predictionStanding', () => {
+  const score = (playerId: string, points: number): PredictionScore => ({
+    playerId,
+    points,
+    correctGames: 0,
+    correctTournament: false,
+    correctAwards: 0,
+  })
+  // Board is pre-sorted by points desc, as scorePredictions returns it.
+  const board = [score('a', 5), score('b', 3), score('c', 3), score('d', 0)]
+
+  it('reports points, competition rank and field size', () => {
+    expect(predictionStanding(board, 'a')).toEqual({ rank: 1, points: 5, total: 4 })
+    expect(predictionStanding(board, 'd')).toEqual({ rank: 4, points: 0, total: 4 })
+  })
+
+  it('gives tied players the same rank', () => {
+    // b and c both have 3 points and rank behind only a.
+    expect(predictionStanding(board, 'b')).toEqual({ rank: 2, points: 3, total: 4 })
+    expect(predictionStanding(board, 'c')).toEqual({ rank: 2, points: 3, total: 4 })
+  })
+
+  it('returns null for a player not on the board', () => {
+    expect(predictionStanding(board, 'zzz')).toBeNull()
+    expect(predictionStanding([], 'a')).toBeNull()
   })
 })

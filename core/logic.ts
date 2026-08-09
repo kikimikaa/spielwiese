@@ -209,6 +209,21 @@ export function scorePredictions(
   )
 }
 
+/**
+ * One player's place on the prediction leaderboard: their points, their rank
+ * (1-based competition rank — players with more points rank ahead, ties share a
+ * rank) and the field size. Null if the player placed no bets (not on the board).
+ */
+export function predictionStanding(
+  board: PredictionScore[],
+  playerId: string,
+): { rank: number; points: number; total: number } | null {
+  const me = board.find((s) => s.playerId === playerId)
+  if (!me) return null
+  const rank = 1 + board.filter((s) => s.points > me.points).length
+  return { rank, points: me.points, total: board.length }
+}
+
 /** Longest run of consecutive game wins by one team, in play order. */
 export function longestWinStreak(games: Game[]): { teamId: string; length: number } | null {
   const ordered = [...games].sort((a, b) => a.order - b.order)

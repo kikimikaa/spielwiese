@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PauseMode, TournamentStatus } from '../core/types'
+import type { PauseMode, Team, TournamentStatus } from '../core/types'
 
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
-const { state, connected } = useTournamentState()
+const { state, connected, teams } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 const {
   enabled: sound,
@@ -20,7 +20,7 @@ const { theme, cycle: cycleTheme } = useTheme()
 // sound on. A chime on each win; a get-ready countdown when a new game starts; a
 // drumroll on the pre-ceremony suspense pause; a fanfare when the winner shows.
 // Each watcher fires only on a real change (never on the initial page load).
-useGameWins(() => playWin())
+useGameWins((event) => playWin(teams.value.findIndex((team: Team) => team.id === event.teamId)))
 watch(
   () => state.value?.status,
   (status: TournamentStatus | undefined, prev: TournamentStatus | undefined) => {

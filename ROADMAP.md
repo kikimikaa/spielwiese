@@ -92,7 +92,8 @@ respects "reduce motion". Live regions announce score and connection changes,
 and bet buttons expose their pressed state.
 
 **Board sound.** An opt-in sound toggle on the board plays a short chime on each
-win and a fanfare for the ceremony — synthesised in the browser, no audio files.
+win, a get-ready countdown when a game starts, a drumroll on the suspense pause
+and a fanfare for the ceremony — synthesised in the browser, no audio files.
 
 **Board themes.** A theme cycle button on the board switches between colour
 palettes (default, dark, neon), persisted per device. The sun high-legibility
@@ -108,8 +109,8 @@ board behaviour.
 
 Further out, not committed yet.
 
-**Sound & atmosphere, more.** Extra optional cues — a countdown before a game,
-a per-team jingle, a drumroll into the ceremony.
+**Per-team jingle.** An optional short signature sound per team, played when they
+win a game, on top of the shared win chime.
 
 ## Want to help?
 

@@ -13,6 +13,15 @@ export function normalizeName(name: string): string {
 }
 
 /**
+ * Coerces untrusted input to a trimmed string capped at `max` characters. Guards
+ * the name/title fields against a non-string payload (which would throw on
+ * `.trim()`) and against an absurdly long value being stored and broadcast.
+ */
+export function clampText(value: unknown, max: number): string {
+  return (typeof value === 'string' ? value : String(value ?? '')).trim().slice(0, max)
+}
+
+/**
  * Clamps an index into `[0, length - 1]`, or 0 when the list is empty. Keeps the
  * quiz question pointer valid however the host navigates or edits the questions.
  */

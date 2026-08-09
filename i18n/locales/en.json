@@ -205,6 +205,8 @@
     "filterResults": "{n} of {total} games match",
     "clearFilter": "Clear filter",
     "pageOf": "Page {page} of {total}",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
     "library": "Game library",
     "lineupEmpty": "No games selected yet. Open the library and tick some games.",
     "moveUp": "Move up",

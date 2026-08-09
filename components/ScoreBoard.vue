@@ -20,11 +20,7 @@ defineProps<{
     >
       <div class="bar" aria-hidden="true" />
       <div class="name">{{ t.name }}</div>
-      <div
-        class="score team-text"
-        :aria-label="`${t.name}: ${totals[t.id] ?? 0}`"
-        aria-live="polite"
-      >
+      <div class="score team-text" :aria-label="`${t.name}: ${totals[t.id] ?? 0}`">
         <Transition name="score" mode="out-in">
           <span :key="totals[t.id] ?? 0">{{ totals[t.id] ?? 0 }}</span>
         </Transition>

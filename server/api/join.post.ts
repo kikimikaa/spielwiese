@@ -1,5 +1,6 @@
 import { claimPlayer, getState } from '../utils/state'
-import { findPlayerByName, validateDisplayName } from '../../core/logic'
+import { clampText, findPlayerByName, validateDisplayName } from '../../core/logic'
+import { MAX_NAME_LENGTH } from '../../core/constants'
 
 // A guest types their real name (matched case-insensitively against the players
 // the host created) and a display name. No list is exposed, so you can't grab
@@ -18,7 +19,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const displayName = String(body?.displayName ?? '').trim()
+  const displayName = clampText(body?.displayName, MAX_NAME_LENGTH)
   const problem = validateDisplayName(displayName, state.players, player.id)
   if (problem) {
     const reason =

@@ -34,6 +34,9 @@ export function useGameWins(onWin: (event: ScoreEvent) => void) {
         return
       }
       const fresh = freshWinId(seen, ids)
+      // Track exactly the current win ids — event ids are one-shot UUIDs, so a
+      // dropped one never returns; this keeps `seen` from growing over re-awards.
+      seen.clear()
       for (const id of ids) seen.add(id)
       if (fresh) {
         const event = current.find((e) => e.id === fresh)

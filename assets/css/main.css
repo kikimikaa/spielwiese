@@ -183,6 +183,9 @@ a {
   background: var(--team);
   color: #fff;
   border-color: var(--team);
+  /* Team colours are host-editable, so a light one would wash out white text —
+     a soft dark halo keeps the label legible on any team colour. */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 
 /* A toggle button that highlights in the accent colour when active. */

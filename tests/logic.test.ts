@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   awardWinners,
   clampIndex,
+  clampText,
   freshWinId,
   computeAwards,
   computeTotals,
@@ -49,6 +50,18 @@ describe('clampIndex', () => {
   })
   it('truncates a fractional index', () => {
     expect(clampIndex(2.9, 5)).toBe(2)
+  })
+})
+
+describe('clampText', () => {
+  it('trims and caps a string at the limit', () => {
+    expect(clampText('  hello  ', 10)).toBe('hello')
+    expect(clampText('abcdefghij', 5)).toBe('abcde')
+  })
+  it('coerces non-strings without throwing, empty for nullish', () => {
+    expect(clampText(42, 10)).toBe('42')
+    expect(clampText(null, 10)).toBe('')
+    expect(clampText(undefined, 10)).toBe('')
   })
 })
 

@@ -7,6 +7,7 @@ useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 const { state, connected } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 const { enabled: sound, toggle: toggleSound, playWin, playFanfare } = useSound()
+const { theme, cycle: cycleTheme } = useTheme()
 
 // The board is where the atmosphere lives: a chime on each win, a fanfare when
 // the ceremony ends. Both no-op unless the host has switched sound on.
@@ -51,6 +52,14 @@ watch(
           @click="toggleSound"
         >
           {{ sound ? '🔊' : '🔇' }} {{ $t('board.sound') }}
+        </button>
+        <button
+          class="btn theme"
+          data-testid="theme-toggle"
+          :aria-label="$t('board.theme.aria', { name: $t(`board.theme.${theme}`) })"
+          @click="cycleTheme"
+        >
+          <span aria-hidden="true">🎨</span> {{ $t(`board.theme.${theme}`) }}
         </button>
         <LangToggle />
       </div>

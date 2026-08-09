@@ -139,6 +139,12 @@
     "scoreboard": "Punktestand",
     "sunMode": "Sonnen-Modus",
     "sound": "Ton",
+    "theme": {
+      "aria": "Board-Design: {name} – zum Wechseln tippen",
+      "default": "Standard",
+      "dark": "Dunkel",
+      "neon": "Neon"
+    },
     "leaderboard": "Tipp-Rangliste",
     "live": "Live",
     "gameWon": "{team} gewinnt ein Spiel!",

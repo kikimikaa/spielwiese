@@ -183,10 +183,12 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 
             <div v-if="reveal" class="quiz" :data-testid="reveal.testid">
               <p class="quiz-q">{{ reveal.prompt }}</p>
-              <p v-if="quiz.revealed" class="quiz-a" :data-testid="reveal.answerTestid">
+              <!-- Hidden until revealed; once revealed, show the answer — or nothing
+                   if there is none (a buzzer may be judged live with no stored answer). -->
+              <p v-if="!quiz.revealed" class="quiz-a quiz-hidden" aria-hidden="true">?</p>
+              <p v-else-if="reveal.answer" class="quiz-a" :data-testid="reveal.answerTestid">
                 {{ reveal.answer }}
               </p>
-              <p v-else class="quiz-a quiz-hidden" aria-hidden="true">?</p>
             </div>
             <div v-else-if="choice" class="quiz" data-testid="board-choice">
               <p class="quiz-q">{{ choice.prompt }}</p>

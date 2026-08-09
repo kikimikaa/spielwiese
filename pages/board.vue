@@ -30,7 +30,12 @@ watch(
 watch(
   () => state.value?.currentGameId,
   (id: string | null | undefined, prev: string | null | undefined) => {
-    if (id && id !== prev && state.value?.status === 'running') playCountdown()
+    // `prev === undefined` is the pre-hydration baseline (state was still null) —
+    // skip it so a reload mid-game doesn't fire a phantom countdown. A real
+    // deselect→select has `prev === null`, which still counts.
+    if (id && prev !== undefined && id !== prev && state.value?.status === 'running') {
+      playCountdown()
+    }
   },
 )
 watch(

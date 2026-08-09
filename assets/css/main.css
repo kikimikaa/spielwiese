@@ -172,6 +172,26 @@ a {
   width: 100%;
 }
 
+/* A choice button (predict/assign a team) that fills with the team's colour when
+   picked. The owner sets --team inline. */
+.btn-team {
+  border-left: 6px solid var(--team);
+  font-weight: 700;
+}
+
+.btn-team.picked {
+  background: var(--team);
+  color: #fff;
+  border-color: var(--team);
+}
+
+/* A toggle button that highlights in the accent colour when active. */
+.btn-toggle.active {
+  border-color: var(--accent);
+  border-width: 2px;
+  background: var(--surface-2);
+}
+
 .input,
 .textarea,
 .select {
@@ -269,6 +289,27 @@ html.sun .card {
 
 html.sun .btn {
   border-width: 2px;
+}
+
+/* Smooth add / remove / reorder for list rows (TransitionGroup name="row"). The
+   list container needs position: relative for the leave-out-of-flow to anchor. */
+.row-move,
+.row-enter-active,
+.row-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.row-enter-from,
+.row-leave-to {
+  opacity: 0;
+}
+
+/* Take a leaving row out of flow so the remaining rows glide up to fill the gap. */
+.row-leave-active {
+  position: absolute;
+  width: 100%;
 }
 
 /* Respect users who ask for less motion — neutralise all animation/transition

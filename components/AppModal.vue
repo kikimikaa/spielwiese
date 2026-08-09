@@ -20,16 +20,52 @@ onMounted(() => {
   mounted.value = true
 })
 
+const dialog = ref<HTMLElement | null>(null)
+// The element that had focus before the modal opened, restored on close.
+let lastFocused: HTMLElement | null = null
+
+const FOCUSABLE =
+  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+
+function focusables(): HTMLElement[] {
+  return dialog.value ? Array.from(dialog.value.querySelectorAll<HTMLElement>(FOCUSABLE)) : []
+}
+
+// Escape cancels; Tab is trapped so focus can't leave the open dialog.
 function onKey(e: KeyboardEvent) {
-  if (e.key === 'Escape') emit('cancel')
+  if (e.key === 'Escape') {
+    emit('cancel')
+    return
+  }
+  if (e.key !== 'Tab') return
+  const items = focusables()
+  if (items.length === 0) return
+  const first = items[0]!
+  const last = items[items.length - 1]!
+  if (e.shiftKey && document.activeElement === first) {
+    e.preventDefault()
+    last.focus()
+  } else if (!e.shiftKey && document.activeElement === last) {
+    e.preventDefault()
+    first.focus()
+  }
 }
 
 watch(
   () => props.open,
-  (open: boolean) => {
+  async (open: boolean) => {
     if (!import.meta.client) return
-    if (open) window.addEventListener('keydown', onKey)
-    else window.removeEventListener('keydown', onKey)
+    if (open) {
+      lastFocused = document.activeElement as HTMLElement | null
+      window.addEventListener('keydown', onKey)
+      await nextTick()
+      // Move focus into the dialog (first field/button, or the dialog itself).
+      ;(focusables()[0] ?? dialog.value)?.focus()
+    } else {
+      window.removeEventListener('keydown', onKey)
+      lastFocused?.focus?.()
+      lastFocused = null
+    }
   },
 )
 
@@ -42,7 +78,14 @@ onUnmounted(() => {
   <Teleport to="body" :disabled="!mounted">
     <Transition name="modal">
       <div v-if="open" class="overlay" data-testid="modal" @click.self="emit('cancel')">
-        <div class="modal card" :class="{ wide }" role="dialog" aria-modal="true">
+        <div
+          ref="dialog"
+          class="modal card"
+          :class="{ wide }"
+          role="dialog"
+          aria-modal="true"
+          tabindex="-1"
+        >
           <h2 v-if="title">{{ title }}</h2>
           <p v-if="message" class="muted msg">{{ message }}</p>
           <slot />

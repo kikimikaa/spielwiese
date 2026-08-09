@@ -230,7 +230,7 @@ async function confirmDelete() {
       {{ $t('host.filterResults', { n: filteredGames.length, total: games.length }) }}
     </p>
 
-    <ul class="lib-list">
+    <TransitionGroup tag="ul" name="row" class="lib-list">
       <li v-for="g in pagedGames" :key="g.id" class="lib-row" :class="{ off: !isEnabled(g) }">
         <label class="incl">
           <input
@@ -257,7 +257,7 @@ async function confirmDelete() {
           {{ $t('common.delete') }}
         </button>
       </li>
-    </ul>
+    </TransitionGroup>
 
     <div v-if="pageCount > 1" class="pager" data-testid="games-pager">
       <button
@@ -506,6 +506,7 @@ async function confirmDelete() {
   padding: 0;
   display: grid;
   gap: 0.5rem;
+  position: relative;
 }
 
 .lib-row {

@@ -52,7 +52,7 @@ function pickOf(scope: PredictionScope, refs: { gameId?: string; awardId?: strin
           <button
             v-for="team in teams"
             :key="team.id"
-            class="btn team-btn"
+            class="btn btn-team"
             :class="{ picked: pickOf('game', { gameId: currentGame.id }) === team.id }"
             :aria-pressed="pickOf('game', { gameId: currentGame.id }) === team.id"
             :style="{ '--team': team.color }"
@@ -75,7 +75,7 @@ function pickOf(scope: PredictionScope, refs: { gameId?: string; awardId?: strin
           <button
             v-for="team in teams"
             :key="team.id"
-            class="btn team-btn"
+            class="btn btn-team"
             :class="{ picked: pickOf('tournament') === team.id }"
             :aria-pressed="pickOf('tournament') === team.id"
             :style="{ '--team': team.color }"
@@ -101,7 +101,7 @@ function pickOf(scope: PredictionScope, refs: { gameId?: string; awardId?: strin
             <button
               v-for="team in teams"
               :key="team.id"
-              class="btn team-btn"
+              class="btn btn-team"
               :class="{ picked: pickOf('award', { awardId: bet.awardId }) === team.id }"
               :aria-pressed="pickOf('award', { awardId: bet.awardId }) === team.id"
               :style="{ '--team': team.color }"
@@ -134,17 +134,6 @@ function pickOf(scope: PredictionScope, refs: { gameId?: string; awardId?: strin
 <style scoped>
 .small {
   font-size: 0.85rem;
-}
-
-.team-btn {
-  border-left: 6px solid var(--team);
-  font-weight: 700;
-}
-
-.team-btn.picked {
-  background: var(--team);
-  color: #fff;
-  border-color: var(--team);
 }
 
 .person-btn {

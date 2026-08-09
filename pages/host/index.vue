@@ -85,7 +85,7 @@ async function doEnd() {
         <h2>{{ $t('host.sections.control') }}</h2>
         <div class="cluster">
           <button
-            class="btn toggle"
+            class="btn btn-toggle"
             :class="{ active: pause === 'break' }"
             :aria-pressed="pause === 'break'"
             data-testid="pause-break"
@@ -94,7 +94,7 @@ async function doEnd() {
             ⏸ {{ $t('host.pause') }}
           </button>
           <button
-            class="btn toggle"
+            class="btn btn-toggle"
             :class="{ active: pause === 'suspense' }"
             :aria-pressed="pause === 'suspense'"
             data-testid="pause-suspense"
@@ -103,7 +103,7 @@ async function doEnd() {
             {{ $t('host.pauseCeremony') }}
           </button>
           <button
-            class="btn toggle"
+            class="btn btn-toggle"
             :class="{ active: status === 'awards' }"
             :aria-pressed="status === 'awards'"
             data-testid="show-awards"
@@ -112,7 +112,7 @@ async function doEnd() {
             {{ $t('host.showAwards') }}
           </button>
           <button
-            class="btn toggle"
+            class="btn btn-toggle"
             :class="{ active: status === 'finished' }"
             :aria-pressed="status === 'finished'"
             data-testid="start-ceremony"
@@ -178,12 +178,6 @@ async function doEnd() {
 .sections h2 {
   border-bottom: 2px solid var(--line);
   padding-bottom: 0.3rem;
-}
-
-.toggle.active {
-  border-color: var(--accent);
-  border-width: 2px;
-  background: var(--surface-2);
 }
 
 .hint {

@@ -49,7 +49,7 @@ function setNote(gameId: string, event: Event) {
     </p>
 
     <!-- Tournament lineup: the enabled games, in order -->
-    <ul class="lineup">
+    <TransitionGroup tag="ul" name="row" class="lineup">
       <li
         v-for="(g, i) in playableGames"
         :key="g.id"
@@ -327,10 +327,15 @@ function setNote(gameId: string, event: Event) {
         </div>
       </li>
 
-      <li v-if="!playableGames.length" class="muted lineup-empty" data-testid="lineup-empty">
+      <li
+        v-if="!playableGames.length"
+        key="empty"
+        class="muted lineup-empty"
+        data-testid="lineup-empty"
+      >
         {{ $t('host.lineupEmpty') }}
       </li>
-    </ul>
+    </TransitionGroup>
 
     <NuxtLink class="btn" to="/host/library" data-testid="open-library">
       📚 {{ $t('host.library') }}
@@ -345,6 +350,7 @@ function setNote(gameId: string, event: Event) {
   padding: 0;
   display: grid;
   gap: 0.75rem;
+  position: relative;
 }
 
 .game.current {

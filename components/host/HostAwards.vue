@@ -39,7 +39,7 @@ function hideAll() {
             <span v-else class="value muted">{{ $t('host.awards.hidden') }}</span>
           </div>
           <button
-            class="btn toggle"
+            class="btn btn-toggle"
             :class="{ active: isAwardRevealed(a.id) }"
             :aria-pressed="isAwardRevealed(a.id)"
             :data-testid="`reveal-${a.id}`"
@@ -96,11 +96,5 @@ function hideAll() {
 
 .value {
   font-size: 0.95rem;
-}
-
-.toggle.active {
-  border-color: var(--accent);
-  border-width: 2px;
-  background: var(--surface-2);
 }
 </style>

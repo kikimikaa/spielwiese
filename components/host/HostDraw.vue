@@ -95,7 +95,7 @@ function rename(teamId: string, event: Event) {
           <button
             v-for="team in teams"
             :key="team.id"
-            class="btn team-pick"
+            class="btn btn-team"
             :class="{ picked: assign[i] === team.id }"
             :style="{ '--team': team.color }"
             @click="assign[i] = team.id"
@@ -176,16 +176,5 @@ function rename(teamId: string, event: Event) {
 
 .mname {
   font-weight: 700;
-}
-
-.team-pick {
-  border-left: 6px solid var(--team);
-  font-weight: 700;
-}
-
-.team-pick.picked {
-  background: var(--team);
-  color: #fff;
-  border-color: var(--team);
 }
 </style>

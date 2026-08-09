@@ -171,7 +171,6 @@
     "filterByPack": "Vorlagen-Paket",
     "filterResults": "{n} von {total} Spielen passen",
     "clearFilter": "Filter zurücksetzen",
-    "noMatches": "Keine Spiele passen zum Filter.",
     "pageOf": "Seite {page} von {total}",
     "library": "Spiele-Bibliothek",
     "lineupEmpty": "Noch keine Spiele ausgewählt. Öffne die Bibliothek und hake Spiele an.",

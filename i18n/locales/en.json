@@ -171,7 +171,6 @@
     "filterByPack": "Preset pack",
     "filterResults": "{n} of {total} games match",
     "clearFilter": "Clear filter",
-    "noMatches": "No games match the filter.",
     "pageOf": "Page {page} of {total}",
     "library": "Game library",
     "lineupEmpty": "No games selected yet. Open the library and tick some games.",

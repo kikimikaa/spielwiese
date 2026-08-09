@@ -224,23 +224,13 @@ async function confirmDelete() {
       </div>
     </div>
 
-    <p
-      v-if="filterActive && filteredGames.length"
-      class="muted result-hint"
-      data-testid="filter-results"
-    >
+    <!-- Always show the count while the library has games, so it never pops in and
+         out — even at zero matches it reads "0 of N", which is the empty state. -->
+    <p v-if="games.length" class="muted result-hint" data-testid="filter-results">
       {{ $t('host.filterResults', { n: filteredGames.length, total: games.length }) }}
     </p>
 
-    <p
-      v-if="games.length && !filteredGames.length"
-      class="muted no-matches"
-      data-testid="no-matches"
-    >
-      {{ $t('host.noMatches') }}
-    </p>
-
-    <ul v-else class="lib-list">
+    <ul class="lib-list">
       <li v-for="g in pagedGames" :key="g.id" class="lib-row" :class="{ off: !isEnabled(g) }">
         <label class="incl">
           <input
@@ -508,11 +498,6 @@ async function confirmDelete() {
 /* Spread the maintenance actions evenly across the row instead of clumping left. */
 .lib-actions > .btn {
   flex: 1 1 auto;
-}
-
-.no-matches {
-  text-align: center;
-  padding: 1.25rem 0;
 }
 
 .lib-list {

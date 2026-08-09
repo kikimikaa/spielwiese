@@ -23,6 +23,38 @@ export const WIN_CUE: CueNote[] = [
   { semitones: 12, at: 0.09, dur: 0.2 },
 ]
 
+// Short per-team signature jingles, played right after the win chime so each
+// team's win sounds a little different. Picked by the team's position, wrapping
+// if there are more teams than jingles — so no team is ever silent.
+export const TEAM_JINGLES: CueNote[][] = [
+  [
+    { semitones: 0, at: 0, dur: 0.12 },
+    { semitones: 7, at: 0.12, dur: 0.12 },
+    { semitones: 12, at: 0.24, dur: 0.22 },
+  ],
+  [
+    { semitones: 5, at: 0, dur: 0.12 },
+    { semitones: 2, at: 0.12, dur: 0.12 },
+    { semitones: -3, at: 0.24, dur: 0.22 },
+  ],
+  [
+    { semitones: 3, at: 0, dur: 0.1 },
+    { semitones: 3, at: 0.12, dur: 0.1 },
+    { semitones: 10, at: 0.24, dur: 0.24 },
+  ],
+  [
+    { semitones: -5, at: 0, dur: 0.12 },
+    { semitones: 0, at: 0.14, dur: 0.12 },
+    { semitones: 5, at: 0.28, dur: 0.22 },
+  ],
+]
+
+/** The signature jingle for the team at play-order `index` (wraps around). */
+export function teamJingle(index: number): CueNote[] {
+  const n = TEAM_JINGLES.length
+  return TEAM_JINGLES[((index % n) + n) % n] ?? []
+}
+
 // A short triumphant arpeggio for the ceremony (A major up to the octave).
 export const FANFARE_CUE: CueNote[] = [
   { semitones: 0, at: 0, dur: 0.16 },

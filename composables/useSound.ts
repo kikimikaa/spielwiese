@@ -1,5 +1,13 @@
 import type { CueNote } from '../core/sound'
-import { COUNTDOWN_CUE, DRUMROLL_CUE, FANFARE_CUE, noteHz, WIN_CUE } from '../core/sound'
+import {
+  COUNTDOWN_CUE,
+  cueDuration,
+  DRUMROLL_CUE,
+  FANFARE_CUE,
+  noteHz,
+  teamJingle,
+  WIN_CUE,
+} from '../core/sound'
 
 // Gentle master volume per note, and a tiny attack so notes don't click on.
 const PEAK_GAIN = 0.18
@@ -60,10 +68,20 @@ export function useSound() {
     if (enabled.value) void audioContext()?.resume()
   }
 
+  // The win chime, optionally followed by the winning team's signature jingle.
+  function playWin(teamIndex?: number) {
+    if (teamIndex === undefined || teamIndex < 0) {
+      play(WIN_CUE)
+      return
+    }
+    const after = cueDuration(WIN_CUE)
+    play([...WIN_CUE, ...teamJingle(teamIndex).map((n) => ({ ...n, at: n.at + after }))])
+  }
+
   return {
     enabled,
     toggle,
-    playWin: () => play(WIN_CUE),
+    playWin,
     playFanfare: () => play(FANFARE_CUE),
     playCountdown: () => play(COUNTDOWN_CUE),
     playDrumroll: () => play(DRUMROLL_CUE),

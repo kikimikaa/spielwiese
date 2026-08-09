@@ -6,6 +6,8 @@ import {
   DRUMROLL_CUE,
   FANFARE_CUE,
   noteHz,
+  TEAM_JINGLES,
+  teamJingle,
   WIN_CUE,
 } from '../core/sound'
 
@@ -40,9 +42,29 @@ describe('cueDuration', () => {
   })
 
   it('the shipped cues are non-empty and have positive length', () => {
-    for (const cue of [WIN_CUE, FANFARE_CUE, COUNTDOWN_CUE, DRUMROLL_CUE]) {
+    for (const cue of [WIN_CUE, FANFARE_CUE, COUNTDOWN_CUE, DRUMROLL_CUE, ...TEAM_JINGLES]) {
       expect(cue.length).toBeGreaterThan(0)
       expect(cueDuration(cue)).toBeGreaterThan(0)
+    }
+  })
+})
+
+describe('teamJingle', () => {
+  it('returns a distinct jingle per team position', () => {
+    expect(teamJingle(0)).toBe(TEAM_JINGLES[0])
+    expect(teamJingle(1)).toBe(TEAM_JINGLES[1])
+    expect(teamJingle(0)).not.toEqual(teamJingle(1))
+  })
+
+  it('wraps around for indices past the end and for negatives', () => {
+    expect(teamJingle(TEAM_JINGLES.length)).toBe(TEAM_JINGLES[0])
+    expect(teamJingle(TEAM_JINGLES.length + 1)).toBe(TEAM_JINGLES[1])
+    expect(teamJingle(-1)).toBe(TEAM_JINGLES[TEAM_JINGLES.length - 1])
+  })
+
+  it('never returns empty for any index', () => {
+    for (const i of [0, 1, 2, 3, 7, 99]) {
+      expect(teamJingle(i).length).toBeGreaterThan(0)
     }
   })
 })

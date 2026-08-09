@@ -6,6 +6,8 @@ const PEAK_GAIN = 0.18
 const ATTACK_S = 0.01
 const RELEASE_FLOOR = 0.0001
 const WAVEFORM: OscillatorType = 'triangle'
+// Let the release ramp finish before the oscillator is stopped.
+const STOP_PADDING_S = 0.02
 
 /**
  * Board sound: an opt-in, per-device toggle plus playback of the synthesised
@@ -47,7 +49,7 @@ export function useSound() {
       gain.gain.exponentialRampToValueAtTime(RELEASE_FLOOR, end)
       osc.connect(gain).connect(ac.destination)
       osc.start(start)
-      osc.stop(end + 0.02)
+      osc.stop(end + STOP_PADDING_S)
     }
   }
 

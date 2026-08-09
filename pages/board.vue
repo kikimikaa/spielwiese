@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TournamentStatus } from '../core/types'
+
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
@@ -11,7 +13,7 @@ const { enabled: sound, toggle: toggleSound, playWin, playFanfare } = useSound()
 useGameWins(() => playWin())
 watch(
   () => state.value?.status,
-  (status: string | undefined, prev: string | undefined) => {
+  (status: TournamentStatus | undefined, prev: TournamentStatus | undefined) => {
     if (status === 'finished' && prev && prev !== 'finished') playFanfare()
   },
 )

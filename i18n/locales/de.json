@@ -63,7 +63,19 @@
     "watchHint": "Zum Zuschauen scannen"
   },
   "watch": {
-    "title": "Zuschauen"
+    "title": "Zuschauen",
+    "personal": {
+      "title": "Deine Tipps",
+      "rank": "Platz {rank} von {total}",
+      "noTips": "Du hast noch keine Tipps abgegeben – tippe unter „Mitmachen“.",
+      "joinHint": "Spielst du mit? Tritt bei und tippe, wer gewinnt."
+    },
+    "share": {
+      "won": "🏆 {winner} gewinnt {name} – {points} Punkte!",
+      "tie": "🤝 {name} endet unentschieden!",
+      "button": "Ergebnis teilen",
+      "copied": "Kopiert!"
+    }
   },
   "error": {
     "code": "Fehler {code}",

@@ -79,6 +79,10 @@ board and the spectator view): each team's points progression as a sparkline,
 plus how often the lead changed, the biggest lead held, each team's longest win
 streak and the game where it first took the lead.
 
+**Spectator extras.** On the watch view, a guest who is also watching sees their
+own live prediction score and rank; once the tournament finishes, a shareable
+result card offers the native share sheet (or copies the result to the clipboard).
+
 **Motion & accessibility polish.** The board cross-fades between its states
 instead of hard-cutting, the score number lifts as it changes, and everything
 respects "reduce motion". Live regions announce score and connection changes,
@@ -94,8 +98,11 @@ behaviour.
 
 Further out, not committed yet.
 
-**Spectator extras.** Beyond the read-only view — e.g. a personal live prediction
-score for watchers, or a shareable end-of-event summary card.
+**Sound & atmosphere.** Optional audio cues on the board — a win sting, a
+countdown, a fanfare for the ceremony.
+
+**Themes.** A few colour/branding themes for the board beyond the default and
+sun mode.
 
 ## Want to help?
 

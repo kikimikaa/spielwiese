@@ -115,7 +115,7 @@ function rename(teamId: string, event: Event) {
     <div v-if="hasTeams && !drawing && !manual" class="teams" data-testid="drawn-teams">
       <div v-for="team in teams" :key="team.id" class="card team" :style="{ '--team': team.color }">
         <input
-          class="team-name"
+          class="team-name team-text"
           :value="team.name"
           :aria-label="$t('host.teamName')"
           @change="rename(team.id, $event)"
@@ -148,7 +148,6 @@ function rename(teamId: string, event: Event) {
   font: inherit;
   font-weight: 800;
   font-size: 1.2rem;
-  color: var(--team);
   border: none;
   border-bottom: 2px dashed var(--line);
   background: transparent;

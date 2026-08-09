@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
     >
       <span class="emoji" aria-hidden="true">🎉</span>
       <span class="msg">{{ $t('board.gameWon', { team: celebrating.name }) }}</span>
-      <span class="pts">+{{ celebrating.points }} {{ $t('common.point') }}</span>
+      <span class="pts team-text">+{{ celebrating.points }} {{ $t('common.point') }}</span>
     </div>
   </Transition>
 </template>
@@ -67,7 +67,6 @@ onBeforeUnmount(() => {
 .pts {
   margin-left: auto;
   font-weight: 700;
-  color: var(--team);
   white-space: nowrap;
 }
 

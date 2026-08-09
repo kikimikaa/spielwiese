@@ -110,7 +110,7 @@ async function confirmJoin() {
         data-testid="my-team"
       >
         <div class="label">{{ $t('join.yourTeam') }}</div>
-        <div class="team-name">{{ myTeam.name }}</div>
+        <div class="team-name team-text">{{ myTeam.name }}</div>
         <ul class="members">
           <li v-for="p in myTeamMembers" :key="p.id" :class="{ self: p.id === playerId }">
             <span>{{ p.name }}</span>
@@ -155,7 +155,6 @@ async function confirmJoin() {
 .team-name {
   font-weight: 800;
   font-size: 1.3rem;
-  color: var(--team);
   margin: 0.2rem 0 0.6rem;
 }
 

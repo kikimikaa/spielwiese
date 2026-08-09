@@ -89,6 +89,15 @@ a {
   color: var(--ink-soft);
 }
 
+/* Team-coloured display text (winner name, big score, toast points). A soft halo
+   in the theme's ink — which always contrasts with the surface — keeps the text
+   legible even when a team's colour is close to the surface, e.g. a dark custom
+   team colour on the dark or neon theme. */
+.team-text {
+  color: var(--team);
+  text-shadow: 0 0 3px color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
 /* Small uppercase label above a section (e.g. "Current game", "Teams"). Spacing
    is left to each usage — the shared identity is just the typography. */
 .eyebrow {

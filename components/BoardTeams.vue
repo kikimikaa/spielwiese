@@ -5,7 +5,7 @@ const { teams, playerLabel, playersOfTeam } = useTournamentState()
 <template>
   <div class="board-teams" data-testid="board-teams">
     <div v-for="team in teams" :key="team.id" class="card team" :style="{ '--team': team.color }">
-      <div class="tname">{{ team.name }}</div>
+      <div class="tname team-text">{{ team.name }}</div>
       <ul class="members">
         <li v-for="p in playersOfTeam(team.id)" :key="p.id">{{ playerLabel(p.id) }}</li>
       </ul>
@@ -27,7 +27,6 @@ const { teams, playerLabel, playersOfTeam } = useTournamentState()
 .tname {
   font-weight: 800;
   font-size: clamp(1.3rem, 4vw, 2rem);
-  color: var(--team);
   margin-bottom: 0.5rem;
 }
 

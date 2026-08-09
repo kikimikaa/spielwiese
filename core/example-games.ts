@@ -125,6 +125,21 @@ export const EXAMPLE_GAMES: GameDef[] = [
       'Weitere Ideen: Flüsse nach Länge · Erfindungen nach Jahr · Städte nach Einwohnerzahl',
   },
   {
+    id: 'wahr-falsch',
+    title: 'Wahr oder Falsch',
+    short: 'Eine Aussage — die Teams tippen wahr oder falsch.',
+    rules:
+      'Das Board zeigt eine Aussage. Beide Teams entscheiden sich für „wahr" oder „falsch". ' +
+      'Der Host deckt die Lösung auf. Richtig getippt gewinnt.',
+    location: 'both',
+    scoringType: 'points',
+    kind: 'truefalse',
+    truefalse: { statement: 'Ein Oktopus hat drei Herzen.', answer: true },
+    hostNote:
+      'Weitere Ideen: „Die Chinesische Mauer ist aus dem All sichtbar." (falsch) · ' +
+      '„Honig verdirbt nie." (wahr)',
+  },
+  {
     id: 'geruche',
     title: 'Gerüche erraten',
     short: 'Boxen mit verschiedenen Gerüchen erschnüffeln und erraten.',

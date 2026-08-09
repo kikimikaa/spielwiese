@@ -202,6 +202,45 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('ranking')
   })
 
+  it('round-trips a true/false, coercing the answer to a strict boolean', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        {
+          ...game(),
+          id: 'tf1',
+          kind: 'truefalse',
+          truefalse: { statement: 'Real?', answer: true },
+        },
+        // A truthy-but-not-true answer becomes false, never left as a stray value.
+        {
+          ...game(),
+          id: 'tf2',
+          kind: 'truefalse',
+          truefalse: { statement: 'Nope', answer: 'yes' },
+        },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.config.games[0]?.truefalse).toEqual({ statement: 'Real?', answer: true })
+      expect(result.config.games[1]?.truefalse).toEqual({ statement: 'Nope', answer: false })
+    }
+  })
+
+  it('drops the true/false on a non-truefalse game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [{ ...game(), kind: 'quiz', truefalse: { statement: 's', answer: true } }],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('truefalse')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

@@ -18,6 +18,7 @@ const {
   currentEstimate,
   currentChoice,
   currentRanking,
+  currentTrueFalse,
 } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
 
@@ -43,6 +44,15 @@ const reveal = computed(() => {
       answer: e.unit ? `${e.solution} ${e.unit}` : e.solution,
     }
   }
+  const tf = currentTrueFalse.value
+  if (g?.kind === 'truefalse' && tf) {
+    return {
+      testid: 'board-truefalse',
+      answerTestid: 'board-truefalse-answer',
+      prompt: tf.statement,
+      answer: t(tf.answer ? 'truefalse.true' : 'truefalse.false'),
+    }
+  }
   return null
 })
 
@@ -62,7 +72,7 @@ const ranking = computed(() => {
 // authored yet — then the board shows a "waiting" line instead of an empty gap.
 const contentKind = computed(() => {
   const k = currentGame.value?.kind
-  return k === 'quiz' || k === 'estimate' || k === 'choice' || k === 'ranking'
+  return k === 'quiz' || k === 'estimate' || k === 'choice' || k === 'ranking' || k === 'truefalse'
 })
 
 const showAwards = computed(

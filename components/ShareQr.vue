@@ -52,13 +52,6 @@ onMounted(async () => {
   text-align: center;
 }
 
-.eyebrow {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.8rem;
-}
-
 .share-qr img {
   border-radius: var(--radius-sm);
 }

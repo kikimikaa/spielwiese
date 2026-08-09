@@ -43,14 +43,6 @@ const progressPct = computed(() => (total.value ? Math.round((done.value / total
   gap: 0.6rem;
 }
 
-.eyebrow {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.8rem;
-  margin: 0;
-}
-
 .track {
   height: 0.9rem;
   background: var(--surface-2);

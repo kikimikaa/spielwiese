@@ -13,10 +13,6 @@ useHead({ title: () => `${t('nav.watch')} — ${t('app.name')}` })
 
 <style scoped>
 .eyebrow {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.8rem;
   margin-bottom: 0.75rem;
 }
 </style>

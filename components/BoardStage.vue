@@ -222,10 +222,6 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 }
 
 .eyebrow {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.8rem;
   margin-bottom: 0.5rem;
 }
 

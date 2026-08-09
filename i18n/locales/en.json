@@ -3,7 +3,8 @@
     "name": "Spielwiese"
   },
   "footer": {
-    "madeBy": "Open source with ♥ by kikimika GbR"
+    "madeBy": "Open source with ♥ by kikimika GbR",
+    "support": "Buy us a coffee"
   },
   "common": {
     "loading": "Loading …",

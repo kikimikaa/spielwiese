@@ -112,6 +112,7 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 
       <template v-if="showAwards">
         <AwardsPanel :show-winner="state?.status === 'finished'" class="mt" />
+        <RecapPanel v-if="state?.status === 'finished'" class="mt" />
       </template>
 
       <!-- Short break: scores stay up, but pause the game/stats. -->

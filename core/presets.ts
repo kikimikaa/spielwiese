@@ -12,6 +12,7 @@ import type {
   GameDef,
   GameKind,
   GameLocation,
+  MatchSpec,
   QuizQuestion,
   RankingSpec,
   ScoringType,
@@ -38,6 +39,7 @@ interface LocalizedText {
   choice?: ChoiceSpec
   ranking?: RankingSpec
   truefalse?: TrueFalseSpec
+  match?: MatchSpec
 }
 
 /** A preset game: language-neutral settings plus its text in each locale. */
@@ -83,6 +85,7 @@ function materialize(game: LocalizedGame, locale: PresetLocale): GameDef {
   if (game.kind === 'choice' && t.choice) def.choice = t.choice
   if (game.kind === 'ranking' && t.ranking) def.ranking = t.ranking
   if (game.kind === 'truefalse' && t.truefalse) def.truefalse = t.truefalse
+  if (game.kind === 'match' && t.match) def.match = t.match
   return def
 }
 
@@ -206,6 +209,40 @@ const PACKS: PresetPack[] = [
           short: 'A claim — true or false?',
           rules: 'The host reads the claim; teams guess and the host reveals.',
           truefalse: { statement: 'Goldfish have a memory of only three seconds.', answer: false },
+        },
+      },
+      {
+        id: 'qn-match-capitals',
+        location: 'both',
+        scoringType: 'points',
+        kind: 'match',
+        de: {
+          title: 'Zuordnung: Hauptstädte',
+          short: 'Länder ihren Hauptstädten zuordnen.',
+          rules: 'Das Board zeigt zwei Spalten; die Teams ordnen zu und der Host deckt auf.',
+          match: {
+            prompt: 'Ordne jedes Land seiner Hauptstadt zu.',
+            pairs: [
+              { left: 'Frankreich', right: 'Paris' },
+              { left: 'Japan', right: 'Tokio' },
+              { left: 'Ägypten', right: 'Kairo' },
+              { left: 'Kanada', right: 'Ottawa' },
+            ],
+          },
+        },
+        en: {
+          title: 'Matching: capitals',
+          short: 'Match countries to their capitals.',
+          rules: 'The board shows two columns; teams match them and the host reveals.',
+          match: {
+            prompt: 'Match each country to its capital.',
+            pairs: [
+              { left: 'France', right: 'Paris' },
+              { left: 'Japan', right: 'Tokyo' },
+              { left: 'Egypt', right: 'Cairo' },
+              { left: 'Canada', right: 'Ottawa' },
+            ],
+          },
         },
       },
     ],

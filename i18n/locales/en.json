@@ -255,6 +255,10 @@
       "reveal": "Reveal answer",
       "hide": "Hide answer"
     },
+    "match": {
+      "reveal": "Reveal pairs",
+      "hide": "Hide pairs"
+    },
     "gameForm": {
       "title": "Title",
       "kind": "Type",
@@ -264,7 +268,8 @@
         "estimate": "Estimate",
         "choice": "Multiple choice",
         "ranking": "Ordering",
-        "truefalse": "True / false"
+        "truefalse": "True / false",
+        "match": "Matching"
       },
       "questions": "Questions",
       "question": "Question",
@@ -288,6 +293,11 @@
       "removeItem": "Remove item",
       "trueFalseStatement": "Statement",
       "trueFalseAnswer": "Correct answer",
+      "matchPrompt": "Matching question",
+      "matchPairs": "Pairs (term and its match)",
+      "matchHint": "Enter one term and its match per row — the board shows the right column shuffled until you reveal the pairs.",
+      "matchLeft": "Term",
+      "matchRight": "Match",
       "short": "Short description",
       "rules": "Rules",
       "location": "Location",

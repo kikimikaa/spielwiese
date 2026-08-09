@@ -241,6 +241,53 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('truefalse')
   })
 
+  it('round-trips a match, coercing numeric sides and dropping incomplete pairs in order', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        {
+          ...game(),
+          kind: 'match',
+          match: {
+            prompt: 'Match them',
+            pairs: [
+              { left: 'One', right: 1 },
+              { left: '', right: 'orphan' },
+              { left: 'lonely', right: '  ' },
+              { left: 'Two', right: 'B' },
+            ],
+          },
+        },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      // Numeric side coerced to text, pairs missing a side dropped, order preserved.
+      expect(result.config.games[0]?.match).toEqual({
+        prompt: 'Match them',
+        pairs: [
+          { left: 'One', right: '1' },
+          { left: 'Two', right: 'B' },
+        ],
+      })
+    }
+  })
+
+  it('drops the match on a non-match game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        { ...game(), kind: 'quiz', match: { prompt: 'p', pairs: [{ left: 'a', right: 'b' }] } },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('match')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

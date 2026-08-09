@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { optionLetter } from '../core/choice'
 import { neutralOrder } from '../core/ranking'
+import { neutralRights } from '../core/match'
 
 // The live tournament display shared by the big-screen board (/board) and the
 // read-only spectator view (/watch): scoreboard, current game with its reveal,
@@ -21,6 +22,7 @@ const {
   currentChoice,
   currentRanking,
   currentTrueFalse,
+  currentMatch,
 } = useTournamentState()
 
 // The current game's reveal — a quiz question or an estimate solution — shown as
@@ -69,11 +71,26 @@ const ranking = computed(() => {
   return { prompt: r.prompt, items: quiz.value.revealed ? r.items : neutralOrder(r.items) }
 })
 
+// Matching: show the left column in order and the right column in a neutral
+// order (so the pairs don't line up) until the host reveals the correct pairing.
+const match = computed(() => {
+  const m = currentGame.value?.kind === 'match' ? currentMatch.value : null
+  if (!m) return null
+  return { prompt: m.prompt, pairs: m.pairs, rights: neutralRights(m.pairs) }
+})
+
 // Whether the active game is a content type that shows a prompt but has nothing
 // authored yet — then the board shows a "waiting" line instead of an empty gap.
 const contentKind = computed(() => {
   const k = currentGame.value?.kind
-  return k === 'quiz' || k === 'estimate' || k === 'choice' || k === 'ranking' || k === 'truefalse'
+  return (
+    k === 'quiz' ||
+    k === 'estimate' ||
+    k === 'choice' ||
+    k === 'ranking' ||
+    k === 'truefalse' ||
+    k === 'match'
+  )
 })
 
 const showAwards = computed(
@@ -192,6 +209,24 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
                   {{ item }}
                 </li>
               </component>
+            </div>
+            <div v-else-if="match" class="quiz" data-testid="board-match">
+              <p class="quiz-q">{{ match.prompt }}</p>
+              <ul v-if="quiz.revealed" class="match-pairs" data-testid="board-match-revealed">
+                <li v-for="(pair, i) in match.pairs" :key="i" class="match-pair">
+                  <span class="match-left">{{ pair.left }}</span>
+                  <span class="match-arrow" aria-hidden="true">→</span>
+                  <span class="match-right">{{ pair.right }}</span>
+                </li>
+              </ul>
+              <div v-else class="match-cols" data-testid="board-match-neutral">
+                <ul class="match-col">
+                  <li v-for="(pair, i) in match.pairs" :key="i">{{ pair.left }}</li>
+                </ul>
+                <ul class="match-col match-col-right">
+                  <li v-for="(right, i) in match.rights" :key="i">{{ right }}</li>
+                </ul>
+              </div>
             </div>
             <p v-else-if="contentKind && !currentGame.rules" class="muted rules">
               {{ $t('board.waiting') }}
@@ -347,5 +382,48 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
 .ranking.revealed .rank-item::marker {
   color: var(--accent);
   font-weight: 800;
+}
+
+.match-cols {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(0.4rem, 1.5vw, 0.75rem) clamp(1rem, 5vw, 3rem);
+  margin: 0.75rem 0 0;
+}
+
+.match-col {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(0.4rem, 1.5vw, 0.75rem);
+  font-size: clamp(1.15rem, 3.5vw, 1.9rem);
+  font-weight: 700;
+}
+
+/* The scrambled right column sits in the third grid track. */
+.match-col-right {
+  grid-column: 3;
+}
+
+.match-pairs {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(0.4rem, 1.5vw, 0.75rem);
+}
+
+.match-pair {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: clamp(1.15rem, 3.5vw, 1.9rem);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.match-arrow {
+  color: var(--ink-soft);
 }
 </style>

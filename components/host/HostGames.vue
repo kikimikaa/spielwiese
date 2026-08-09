@@ -224,6 +224,28 @@ function setNote(gameId: string, event: Event) {
             </button>
           </div>
 
+          <div
+            v-if="g.kind === 'match' && g.match"
+            class="quiz-control stack"
+            data-testid="match-control"
+          >
+            <p class="quiz-q">{{ g.match.prompt }}</p>
+            <ul class="match-list">
+              <li v-for="(pair, idx) in g.match.pairs" :key="idx">
+                {{ pair.left }} ↔ {{ pair.right }}
+              </li>
+            </ul>
+            <button
+              class="btn"
+              :class="{ 'btn-primary': quiz.revealed }"
+              :aria-pressed="quiz.revealed"
+              data-testid="match-reveal"
+              @click="reveal(!quiz.revealed)"
+            >
+              {{ quiz.revealed ? $t('host.match.hide') : $t('host.match.reveal') }}
+            </button>
+          </div>
+
           <div class="cluster">
             <button
               v-for="team in teams"
@@ -410,6 +432,18 @@ function setNote(gameId: string, event: Event) {
 }
 
 .ranking-list li {
+  font-weight: 600;
+}
+
+.match-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.match-list li {
   font-weight: 600;
 }
 

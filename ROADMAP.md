@@ -75,6 +75,11 @@ board and the spectator view): each team's points progression as a sparkline,
 plus how often the lead changed, the biggest lead held, each team's longest win
 streak and the game where it first took the lead.
 
+**Motion & accessibility polish.** The board cross-fades between its states
+instead of hard-cutting, the score number lifts as it changes, and everything
+respects "reduce motion". Live regions announce score and connection changes,
+and bet buttons expose their pressed state.
+
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple

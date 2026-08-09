@@ -91,7 +91,9 @@ result card offers the native share sheet (or copies the result to the clipboard
 **Motion & accessibility polish.** The board cross-fades between its states
 instead of hard-cutting, the score number lifts as it changes, and everything
 respects "reduce motion". Live regions announce score and connection changes,
-and bet buttons expose their pressed state.
+and bet buttons expose their pressed state. Modals trap focus and are labelled
+for screen readers, and the library and lineup animate on add, remove and
+reorder.
 
 **Board sound.** An opt-in sound toggle on the board plays a short chime on each
 win (followed by the winning team's own signature jingle), a get-ready countdown

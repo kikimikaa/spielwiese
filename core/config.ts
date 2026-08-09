@@ -9,6 +9,7 @@
 
 import { CONFIG_SCHEMA_VERSION, GAME_KINDS, GAME_LOCATIONS, SCORING_TYPES } from './constants'
 import type {
+  BuzzerSpec,
   ChoiceSpec,
   EstimateSpec,
   GameDef,
@@ -184,6 +185,9 @@ function sanitizeGame(raw: GameDef): GameDef {
   if (game.kind === 'match' && isRecord(raw.match)) {
     game.match = sanitizeMatch(raw.match)
   }
+  if (game.kind === 'buzzer' && isRecord(raw.buzzer)) {
+    game.buzzer = sanitizeBuzzer(raw.buzzer)
+  }
   return game
 }
 
@@ -244,6 +248,11 @@ function sanitizeRanking(raw: Record<string, unknown>): RankingSpec {
 /** Rebuilds a true/false from imported input: a statement and a strict boolean answer. */
 function sanitizeTrueFalse(raw: Record<string, unknown>): TrueFalseSpec {
   return { statement: toText(raw['statement']).trim(), answer: raw['answer'] === true }
+}
+
+/** Rebuilds a buzzer question from imported input: a prompt and its answer, as text. */
+function sanitizeBuzzer(raw: Record<string, unknown>): BuzzerSpec {
+  return { prompt: toText(raw['prompt']).trim(), answer: toText(raw['answer']).trim() }
 }
 
 /** Rebuilds a matching question: prompt plus pairs that have both sides, in order. */

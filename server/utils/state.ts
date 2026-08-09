@@ -192,6 +192,7 @@ export function addGame(def: Partial<GameDef>): TournamentState {
     ranking: def.kind === 'ranking' ? def.ranking : undefined,
     truefalse: def.kind === 'truefalse' ? def.truefalse : undefined,
     match: def.kind === 'match' ? def.match : undefined,
+    buzzer: def.kind === 'buzzer' ? def.buzzer : undefined,
     order: state.games.length,
     status: 'todo',
   }
@@ -212,6 +213,7 @@ export function updateGame(gameId: string, patch: Partial<GameDef>): TournamentS
   if (game.kind !== 'ranking') delete game.ranking
   if (game.kind !== 'truefalse') delete game.truefalse
   if (game.kind !== 'match') delete game.match
+  if (game.kind !== 'buzzer') delete game.buzzer
   // Editing the live game (e.g. shortening a quiz) must keep the board pointer
   // valid and re-hide the answer.
   if (gameId === state.currentGameId) {
@@ -354,7 +356,7 @@ function currentQuizLength(): number {
   return g?.kind === 'quiz' ? (g.questions?.length ?? 0) : 0
 }
 
-/** Whether the current game has something to reveal (quiz, estimate, choice, ranking, true/false or match). */
+/** Whether the current game has something to reveal (quiz, estimate, choice, ranking, true/false, match or buzzer). */
 function currentGameReveals(): boolean {
   const g = state.currentGameId ? findGame(state.currentGameId) : undefined
   if (g?.kind === 'quiz') return (g.questions?.length ?? 0) > 0
@@ -363,6 +365,7 @@ function currentGameReveals(): boolean {
   if (g?.kind === 'ranking') return (g.ranking?.items?.length ?? 0) > 0
   if (g?.kind === 'truefalse') return Boolean(g.truefalse?.statement)
   if (g?.kind === 'match') return (g.match?.pairs?.length ?? 0) > 0
+  if (g?.kind === 'buzzer') return Boolean(g.buzzer?.prompt)
   return false
 }
 

@@ -84,7 +84,9 @@ export interface GameDef {
    * question whose correct option the host reveals; `ranking` carries items to
    * put in the right order, revealed by the host; `truefalse` carries a single
    * statement the host reveals as true or false; `match` carries pairs to
-   * connect, revealed by the host. Scoring is unchanged for every type.
+   * connect, revealed by the host; `buzzer` carries a single quick-fire question
+   * whose answer the host reveals after a team buzzes. Scoring is unchanged for
+   * every type.
    */
   kind?: GameKind
   /** Quiz question/answer pairs; only meaningful for `kind === 'quiz'`. */
@@ -99,10 +101,12 @@ export interface GameDef {
   truefalse?: TrueFalseSpec
   /** Matching pairs; only meaningful for `kind === 'match'`. */
   match?: MatchSpec
+  /** Buzzer question; only meaningful for `kind === 'buzzer'`. */
+  buzzer?: BuzzerSpec
 }
 
 export type GameKind =
-  'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking' | 'truefalse' | 'match'
+  'freeform' | 'quiz' | 'estimate' | 'choice' | 'ranking' | 'truefalse' | 'match' | 'buzzer'
 
 /** A single quiz question and its answer (host-authored plain text). */
 export interface QuizQuestion {
@@ -157,6 +161,16 @@ export interface MatchPair {
 export interface MatchSpec {
   prompt: string
   pairs: MatchPair[]
+}
+
+/**
+ * A buzzer question: a single quick-fire prompt and its answer. The board shows
+ * the prompt; teams buzz in and the host awards the winner, then reveals the
+ * answer on cue (sharing the quiz/estimate reveal mechanic).
+ */
+export interface BuzzerSpec {
+  prompt: string
+  answer: string
 }
 
 export interface Player {

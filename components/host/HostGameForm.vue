@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type {
+  BuzzerSpec,
   ChoiceSpec,
   EstimateSpec,
   GameDef,
@@ -16,6 +17,7 @@ import { isChoiceComplete, MIN_CHOICE_OPTIONS, optionLetter } from '../../core/c
 import { isRankingComplete, MIN_RANKING_ITEMS } from '../../core/ranking'
 import { isTrueFalseComplete } from '../../core/truefalse'
 import { isMatchComplete, MIN_MATCH_PAIRS } from '../../core/match'
+import { isBuzzerComplete } from '../../core/buzzer'
 
 const props = defineProps<{ game?: GameDef | null }>()
 const emit = defineEmits<{ save: [GameDef]; cancel: [] }>()
@@ -161,6 +163,17 @@ const cleanMatch = computed<MatchSpec>(() => ({
     .filter((p: MatchPair) => p.left && p.right),
 }))
 
+// Buzzer: a quick-fire question and its answer.
+const buzzer = reactive<BuzzerSpec>({
+  prompt: props.game?.buzzer?.prompt ?? '',
+  answer: props.game?.buzzer?.answer ?? '',
+})
+
+const cleanBuzzer = computed<BuzzerSpec>(() => ({
+  prompt: buzzer.prompt.trim(),
+  answer: buzzer.answer.trim(),
+}))
+
 const canSave = computed(() => {
   if (form.title.trim().length === 0) return false
   if (form.kind === 'quiz') return cleanQuestions.value.length > 0
@@ -170,6 +183,7 @@ const canSave = computed(() => {
   if (form.kind === 'ranking') return isRankingComplete(cleanRanking.value)
   if (form.kind === 'truefalse') return isTrueFalseComplete(cleanTrueFalse.value)
   if (form.kind === 'match') return isMatchComplete(cleanMatch.value)
+  if (form.kind === 'buzzer') return isBuzzerComplete(cleanBuzzer.value)
   return true
 })
 
@@ -183,6 +197,7 @@ function submit() {
   if (form.kind === 'ranking') game.ranking = cleanRanking.value
   if (form.kind === 'truefalse') game.truefalse = cleanTrueFalse.value
   if (form.kind === 'match') game.match = cleanMatch.value
+  if (form.kind === 'buzzer') game.buzzer = cleanBuzzer.value
   emit('save', game)
 }
 </script>
@@ -426,6 +441,30 @@ function submit() {
       <button type="button" class="btn" data-testid="match-add" @click="addPair">
         ＋ {{ $t('host.gameForm.addItem') }}
       </button>
+    </div>
+
+    <div v-if="form.kind === 'buzzer'" class="stack quiz-editor" data-testid="buzzer-editor">
+      <div>
+        <label class="label" for="g-buzz-prompt">{{ $t('host.gameForm.buzzerPrompt') }}</label>
+        <input
+          id="g-buzz-prompt"
+          v-model="buzzer.prompt"
+          class="input"
+          data-testid="buzzer-prompt"
+        />
+      </div>
+      <div>
+        <label class="label" for="g-buzz-answer">
+          {{ $t('host.gameForm.buzzerAnswer') }}
+          <span class="opt">({{ $t('common.optional') }})</span>
+        </label>
+        <input
+          id="g-buzz-answer"
+          v-model="buzzer.answer"
+          class="input"
+          data-testid="buzzer-answer"
+        />
+      </div>
     </div>
 
     <div>

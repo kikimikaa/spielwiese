@@ -59,12 +59,10 @@ server blip.
 **Bilingual game presets.** Ready-made themed game packs (quiz night, party,
 sports, classics) in both German and English, loaded into the library in the
 current language. Non-destructive: a preset tops up the games it's missing (by
-id) and never swaps the library or clears play data.
+id) and never swaps the library or clears play data. The library filter has a
+preset-pack facet alongside game type and location.
 
 ## Planned
-
-**Preset category filter.** Filter the library by preset pack, building on the
-type/location facets already there (phase 2 of the bilingual presets).
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
 choice and ordering, each with its own add mask and board behaviour.

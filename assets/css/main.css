@@ -208,6 +208,37 @@ a {
   background: currentColor;
 }
 
+/* Colour themes (selected via data-theme on <html>). Guarded with :not(.sun) so
+   the sun high-legibility mode always wins over a theme when both are on. The
+   default theme needs no block — it uses the :root tokens above. */
+:root[data-theme='dark']:not(.sun) {
+  --bg: #14131a;
+  --surface: #1e1d27;
+  --surface-2: #2a2935;
+  --ink: #f2f0f7;
+  --ink-soft: #a9a6b8;
+  --line: #363442;
+  --accent: #4dd07a;
+  --accent-ink: #0d1f14;
+  --danger: #ff6b6b;
+  --focus: #74c0fc;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme='neon']:not(.sun) {
+  --bg: #0d0b1a;
+  --surface: #171335;
+  --surface-2: #241a4d;
+  --ink: #f0eaff;
+  --ink-soft: #b3a4e0;
+  --line: #3a2d6b;
+  --accent: #e930ff;
+  --accent-ink: #0d0b1a;
+  --danger: #ff3b6b;
+  --focus: #00e5ff;
+  --shadow: 0 0 24px rgba(233, 48, 255, 0.28);
+}
+
 /* Sun mode: maximise legibility in direct sunlight. */
 html.sun {
   --bg: #ffffff;

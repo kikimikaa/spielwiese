@@ -139,6 +139,12 @@
     "scoreboard": "Scoreboard",
     "sunMode": "Sun mode",
     "sound": "Sound",
+    "theme": {
+      "aria": "Board theme: {name} — tap to change",
+      "default": "Default",
+      "dark": "Dark",
+      "neon": "Neon"
+    },
     "leaderboard": "Prediction ranking",
     "live": "Live",
     "gameWon": "{team} wins a game!",

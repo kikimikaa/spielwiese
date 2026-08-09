@@ -66,6 +66,10 @@ current language. Non-destructive: a preset tops up the games it's missing (by
 id) and never swaps the library or clears play data. The library filter has a
 preset-pack facet alongside game type and location.
 
+**Spectator mode.** A read-only `/watch` view for people who aren't playing:
+the live scoreboard, current game and reveals, awards and pause states — no
+host controls, no guest input. Shareable via its own QR code on the invite page.
+
 ## Planned
 
 **More game types.** Further tailored types beyond quiz, estimate, multiple
@@ -74,8 +78,6 @@ choice, ordering and true/false, each with its own add mask and board behaviour.
 ## Ideas
 
 Further out, not committed yet.
-
-**Spectator mode.** A read-only view for people who aren't playing.
 
 **Deeper analytics.** Highest-scoring round, team performance over time, and a
 richer end-of-event recap.

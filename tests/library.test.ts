@@ -75,11 +75,33 @@ describe('filterGames', () => {
 
   it('combines facets (all facets must match)', () => {
     expect(
-      filterGames(library, { query: 'quiz', kinds: ['quiz'], locations: ['indoor'] }).map(
+      filterGames(library, {
+        query: 'quiz',
+        kinds: ['quiz'],
+        locations: ['indoor'],
+        packs: [],
+      }).map((g) => g.id),
+    ).toEqual(['b'])
+    expect(
+      filterGames(library, { query: 'quiz', kinds: ['freeform'], locations: [], packs: [] }),
+    ).toEqual([])
+  })
+
+  it('filters by preset pack via the game id, ignoring host/example games', () => {
+    const packed: GameDef[] = [
+      game({ id: 'qn-gk-quiz', title: 'Quiz' }), // quiz-night pack
+      game({ id: 'party-tabu', title: 'Tabu' }), // party pack
+      game({ id: 'mine', title: 'Eigenes' }), // no pack
+    ]
+    expect(
+      filterGames(packed, { ...EMPTY_GAME_FILTER, packs: ['quiz-night'] }).map((g) => g.id),
+    ).toEqual(['qn-gk-quiz'])
+    // OR within the facet.
+    expect(
+      filterGames(packed, { ...EMPTY_GAME_FILTER, packs: ['quiz-night', 'party'] }).map(
         (g) => g.id,
       ),
-    ).toEqual(['b'])
-    expect(filterGames(library, { query: 'quiz', kinds: ['freeform'], locations: [] })).toEqual([])
+    ).toEqual(['qn-gk-quiz', 'party-tabu'])
   })
 
   it('returns an empty list when nothing matches', () => {
@@ -105,6 +127,7 @@ describe('isFilterActive', () => {
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, query: 'a' })).toBe(true)
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, kinds: ['quiz'] })).toBe(true)
     expect(isFilterActive({ ...EMPTY_GAME_FILTER, locations: ['indoor'] })).toBe(true)
+    expect(isFilterActive({ ...EMPTY_GAME_FILTER, packs: ['quiz-night'] })).toBe(true)
   })
 })
 
@@ -131,9 +154,16 @@ describe('missingGames', () => {
 })
 
 describe('activeFacetCount', () => {
-  it('counts ticked type and location options, ignoring the query', () => {
+  it('counts ticked type, location and pack options, ignoring the query', () => {
     expect(activeFacetCount(EMPTY_GAME_FILTER)).toBe(0)
     expect(activeFacetCount({ ...EMPTY_GAME_FILTER, query: 'anything' })).toBe(0)
-    expect(activeFacetCount({ query: '', kinds: ['quiz'], locations: ['indoor', 'both'] })).toBe(3)
+    expect(
+      activeFacetCount({
+        query: '',
+        kinds: ['quiz'],
+        locations: ['indoor', 'both'],
+        packs: ['party'],
+      }),
+    ).toBe(4)
   })
 })

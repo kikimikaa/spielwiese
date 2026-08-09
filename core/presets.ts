@@ -454,6 +454,18 @@ export const PRESET_PACKS: PresetPack[] = PACKS
 /** Every valid preset pack id — the single source for the UI and server validation. */
 export const PRESET_PACK_IDS: string[] = PACKS.map((p) => p.id)
 
+// Game id → owning pack id. Preset ids are stable and disjoint across packs (and
+// from the example seeds), so a game's pack can be recovered from its id alone —
+// no marker is stored on the game itself.
+const PACK_BY_GAME_ID = new Map<string, string>(
+  PACKS.flatMap((pack) => pack.games.map((g): [string, string] => [g.id, pack.id])),
+)
+
+/** The preset pack a game belongs to (by id), or null for host-authored/example games. */
+export function packOfGameId(id: string): string | null {
+  return PACK_BY_GAME_ID.get(id) ?? null
+}
+
 /** The games of a preset pack, materialised for a locale (empty for an unknown id). */
 export function presetGames(packId: string, locale: PresetLocale): GameDef[] {
   const pack = PACKS.find((p) => p.id === packId)

@@ -3,7 +3,7 @@ import type { GameDef } from '../../core/types'
 import { GAME_KINDS, GAME_LOCATIONS } from '../../core/constants'
 import { activeFacetCount, emptyGameFilter, filterGames, isFilterActive } from '../../core/library'
 import type { GameFilter } from '../../core/library'
-import { PRESET_PACKS, presetLocaleOf } from '../../core/presets'
+import { PRESET_PACKS, PRESET_PACK_IDS, presetLocaleOf } from '../../core/presets'
 
 // Keep the library scannable — paginate once it grows past this.
 const GAMES_PER_PAGE = 8
@@ -201,6 +201,18 @@ async function confirmDelete() {
             <span>{{ $t(`location.${loc}`) }}</span>
           </label>
         </fieldset>
+        <fieldset class="facet">
+          <legend>{{ $t('host.filterByPack') }}</legend>
+          <label v-for="packId in PRESET_PACK_IDS" :key="packId" class="facet-option">
+            <input
+              type="checkbox"
+              :checked="filter.packs.includes(packId)"
+              :data-testid="`filter-pack-${packId}`"
+              @change="toggleValue(filter.packs, packId)"
+            />
+            <span>{{ $t(`host.presets.pack.${packId}`) }}</span>
+          </label>
+        </fieldset>
         <button
           class="btn clear-filter"
           :disabled="!filterActive"
@@ -212,23 +224,13 @@ async function confirmDelete() {
       </div>
     </div>
 
-    <p
-      v-if="filterActive && filteredGames.length"
-      class="muted result-hint"
-      data-testid="filter-results"
-    >
+    <!-- Always show the count while the library has games, so it never pops in and
+         out — even at zero matches it reads "0 of N", which is the empty state. -->
+    <p v-if="games.length" class="muted result-hint" data-testid="filter-results">
       {{ $t('host.filterResults', { n: filteredGames.length, total: games.length }) }}
     </p>
 
-    <p
-      v-if="games.length && !filteredGames.length"
-      class="muted no-matches"
-      data-testid="no-matches"
-    >
-      {{ $t('host.noMatches') }}
-    </p>
-
-    <ul v-else class="lib-list">
+    <ul class="lib-list">
       <li v-for="g in pagedGames" :key="g.id" class="lib-row" :class="{ off: !isEnabled(g) }">
         <label class="incl">
           <input
@@ -496,11 +498,6 @@ async function confirmDelete() {
 /* Spread the maintenance actions evenly across the row instead of clumping left. */
 .lib-actions > .btn {
   flex: 1 1 auto;
-}
-
-.no-matches {
-  text-align: center;
-  padding: 1.25rem 0;
 }
 
 .lib-list {

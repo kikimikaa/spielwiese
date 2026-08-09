@@ -12,6 +12,7 @@ import type {
   GameDef,
   GameKind,
   GameLocation,
+  BuzzerSpec,
   MatchSpec,
   QuizQuestion,
   RankingSpec,
@@ -40,6 +41,7 @@ interface LocalizedText {
   ranking?: RankingSpec
   truefalse?: TrueFalseSpec
   match?: MatchSpec
+  buzzer?: BuzzerSpec
 }
 
 /** A preset game: language-neutral settings plus its text in each locale. */
@@ -86,6 +88,7 @@ function materialize(game: LocalizedGame, locale: PresetLocale): GameDef {
   if (game.kind === 'ranking' && t.ranking) def.ranking = t.ranking
   if (game.kind === 'truefalse' && t.truefalse) def.truefalse = t.truefalse
   if (game.kind === 'match' && t.match) def.match = t.match
+  if (game.kind === 'buzzer' && t.buzzer) def.buzzer = t.buzzer
   return def
 }
 
@@ -243,6 +246,24 @@ const PACKS: PresetPack[] = [
               { left: 'Canada', right: 'Ottawa' },
             ],
           },
+        },
+      },
+      {
+        id: 'qn-buzzer-symbol',
+        location: 'both',
+        scoringType: 'points',
+        kind: 'buzzer',
+        de: {
+          title: 'Buzzer: Chemie',
+          short: 'Schnelle Frage — wer zuerst buzzert, antwortet.',
+          rules: 'Wer zuerst buzzert, darf antworten. Der Host tippt den Sieger an und deckt auf.',
+          buzzer: { prompt: 'Welches Element hat das chemische Symbol „Fe"?', answer: 'Eisen' },
+        },
+        en: {
+          title: 'Buzzer: chemistry',
+          short: 'A quick question — first to buzz answers.',
+          rules: 'Whoever buzzes first answers. The host taps the winner and reveals.',
+          buzzer: { prompt: 'Which element has the chemical symbol “Fe”?', answer: 'Iron' },
         },
       },
     ],

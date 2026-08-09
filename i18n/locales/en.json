@@ -279,6 +279,10 @@
       "reveal": "Reveal pairs",
       "hide": "Hide pairs"
     },
+    "buzzer": {
+      "reveal": "Reveal answer",
+      "hide": "Hide answer"
+    },
     "gameForm": {
       "title": "Title",
       "kind": "Type",
@@ -289,7 +293,8 @@
         "choice": "Multiple choice",
         "ranking": "Ordering",
         "truefalse": "True / false",
-        "match": "Matching"
+        "match": "Matching",
+        "buzzer": "Buzzer"
       },
       "questions": "Questions",
       "question": "Question",
@@ -318,6 +323,8 @@
       "matchHint": "Enter one term and its match per row — the board shows the right column shuffled until you reveal the pairs.",
       "matchLeft": "Term",
       "matchRight": "Match",
+      "buzzerPrompt": "Buzzer question",
+      "buzzerAnswer": "Answer",
       "short": "Short description",
       "rules": "Rules",
       "location": "Location",

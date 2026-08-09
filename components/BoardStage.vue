@@ -23,6 +23,7 @@ const {
   currentRanking,
   currentTrueFalse,
   currentMatch,
+  currentBuzzer,
 } = useTournamentState()
 
 // The current game's reveal — a quiz question or an estimate solution — shown as
@@ -54,6 +55,15 @@ const reveal = computed(() => {
       answerTestid: 'board-truefalse-answer',
       prompt: tf.statement,
       answer: t(tf.answer ? 'truefalse.true' : 'truefalse.false'),
+    }
+  }
+  const b = currentBuzzer.value
+  if (g?.kind === 'buzzer' && b) {
+    return {
+      testid: 'board-buzzer',
+      answerTestid: 'board-buzzer-answer',
+      prompt: b.prompt,
+      answer: b.answer,
     }
   }
   return null
@@ -89,7 +99,8 @@ const contentKind = computed(() => {
     k === 'choice' ||
     k === 'ranking' ||
     k === 'truefalse' ||
-    k === 'match'
+    k === 'match' ||
+    k === 'buzzer'
   )
 })
 

@@ -161,6 +161,20 @@ export const EXAMPLE_GAMES: GameDef[] = [
     hostNote: 'Weitere Ideen: Erfinder → Erfindung · Tier → Laut · Element → Symbol',
   },
   {
+    id: 'buzzer',
+    title: 'Buzzer',
+    short: 'Schnelle Frage — wer zuerst buzzert, antwortet.',
+    rules:
+      'Das Board zeigt eine Frage. Wer zuerst buzzert (Klingel, Hand heben, Ruf), darf antworten. ' +
+      'Der Host tippt das schnellste richtige Team an und deckt die Lösung auf.',
+    location: 'both',
+    scoringType: 'points',
+    kind: 'buzzer',
+    buzzer: { prompt: 'Welches Element hat das chemische Symbol „O"?', answer: 'Sauerstoff' },
+    hostNote:
+      'Weitere Ideen: „Hauptstadt von Kanada?" (Ottawa) · „Wie viele Beine hat eine Spinne?" (8)',
+  },
+  {
     id: 'geruche',
     title: 'Gerüche erraten',
     short: 'Boxen mit verschiedenen Gerüchen erschnüffeln und erraten.',

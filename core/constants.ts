@@ -16,6 +16,7 @@ export const GAME_KINDS: GameKind[] = [
   'ranking',
   'truefalse',
   'match',
+  'buzzer',
 ]
 
 /** Every valid game location — the runtime source for import validation. */

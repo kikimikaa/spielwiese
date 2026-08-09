@@ -288,6 +288,35 @@ describe('parseConfig round-trip', () => {
     if (result.ok) expect(result.config.games[0]).not.toHaveProperty('match')
   })
 
+  it('round-trips a buzzer, coercing a numeric answer to text', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [
+        { ...game(), kind: 'buzzer', buzzer: { prompt: 'How many legs has a spider?', answer: 8 } },
+      ],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.config.games[0]?.buzzer).toEqual({
+        prompt: 'How many legs has a spider?',
+        answer: '8',
+      })
+    }
+  })
+
+  it('drops the buzzer on a non-buzzer game', () => {
+    const result = parseConfig({
+      schemaVersion: CONFIG_SCHEMA_VERSION,
+      name: 'T',
+      date: 'x',
+      games: [{ ...game(), kind: 'quiz', buzzer: { prompt: 'p', answer: 'a' } }],
+    })
+    expect(result.ok).toBe(true)
+    if (result.ok) expect(result.config.games[0]).not.toHaveProperty('buzzer')
+  })
+
   it('keeps only known optional game fields', () => {
     const result = parseConfig({
       schemaVersion: CONFIG_SCHEMA_VERSION,

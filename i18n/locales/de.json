@@ -279,6 +279,10 @@
       "reveal": "Paare zeigen",
       "hide": "Paare verbergen"
     },
+    "buzzer": {
+      "reveal": "Lösung zeigen",
+      "hide": "Lösung verbergen"
+    },
     "gameForm": {
       "title": "Titel",
       "kind": "Typ",
@@ -289,7 +293,8 @@
         "choice": "Multiple Choice",
         "ranking": "Reihenfolge",
         "truefalse": "Wahr / Falsch",
-        "match": "Zuordnung"
+        "match": "Zuordnung",
+        "buzzer": "Buzzer"
       },
       "questions": "Fragen",
       "question": "Frage",
@@ -318,6 +323,8 @@
       "matchHint": "Je Zeile einen Begriff und die passende Antwort eingeben – das Board zeigt die rechte Spalte gemischt, bis du die Paare aufdeckst.",
       "matchLeft": "Begriff",
       "matchRight": "Antwort",
+      "buzzerPrompt": "Buzzer-Frage",
+      "buzzerAnswer": "Lösung",
       "short": "Kurzbeschreibung",
       "rules": "Regeln",
       "location": "Ort",

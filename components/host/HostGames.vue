@@ -246,6 +246,26 @@ function setNote(gameId: string, event: Event) {
             </button>
           </div>
 
+          <div
+            v-if="g.kind === 'buzzer' && g.buzzer"
+            class="quiz-control stack"
+            data-testid="buzzer-control"
+          >
+            <p class="quiz-q">{{ g.buzzer.prompt }}</p>
+            <p v-if="quiz.revealed && g.buzzer.answer" class="quiz-a" data-testid="buzzer-answer">
+              {{ g.buzzer.answer }}
+            </p>
+            <button
+              class="btn"
+              :class="{ 'btn-primary': quiz.revealed }"
+              :aria-pressed="quiz.revealed"
+              data-testid="buzzer-reveal"
+              @click="reveal(!quiz.revealed)"
+            >
+              {{ quiz.revealed ? $t('host.buzzer.hide') : $t('host.buzzer.reveal') }}
+            </button>
+          </div>
+
           <div class="cluster">
             <button
               v-for="team in teams"

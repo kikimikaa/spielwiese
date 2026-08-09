@@ -1,12 +1,16 @@
 import { test, expect, type APIRequestContext } from '@playwright/test'
-
-const PIN = '1909'
+import { HOST_PIN } from './constants'
 
 // Reset to a known state via the host command bus, then load games and draw
 // teams — the tedious setup, so each test starts from the same clean tournament.
 async function seed(request: APIRequestContext) {
-  const cmd = (command: string, payload: Record<string, unknown> = {}) =>
-    request.post('/api/host/command', { data: { pin: PIN, command, payload } })
+  const cmd = async (command: string, payload: Record<string, unknown> = {}) => {
+    const res = await request.post('/api/host/command', {
+      data: { pin: HOST_PIN, command, payload },
+    })
+    // Fail loudly here rather than later at an unrelated assertion.
+    expect(res.ok(), `seed command "${command}" failed`).toBeTruthy()
+  }
   await cmd('reset')
   await cmd('loadExampleGames')
   await cmd('draw', { names: ['Ann', 'Bo', 'Cy', 'Di'] })
@@ -24,7 +28,7 @@ test('core flow: unlock, play a game, award a point, crown a winner', async ({ p
 
   // Unlock the host area with the PIN.
   await page.goto('/host')
-  await page.getByTestId('pin-input').fill(PIN)
+  await page.getByTestId('pin-input').fill(HOST_PIN)
   await page.getByTestId('pin-input').press('Enter')
   await expect(page.getByTestId('pin-form')).toHaveCount(0)
 

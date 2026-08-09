@@ -10,6 +10,7 @@ const { connected } = useTournamentState()
         class="pill pill-dot conn"
         :class="{ on: connected }"
         :title="connected ? $t('home.connected') : $t('home.offline')"
+        aria-live="polite"
         data-testid="conn-state"
       >
         {{ connected ? $t('home.connected') : $t('home.offline') }}

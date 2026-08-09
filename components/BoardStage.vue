@@ -81,6 +81,22 @@ const showAwards = computed(
 )
 const pause = computed(() => state.value?.pause ?? 'none')
 
+// The single mutually-exclusive block shown below the scoreboard. Fading between
+// these (rather than a hard cut) keeps the big screen calm as the host moves
+// between games, breaks and the ceremony.
+type Phase = 'suspense' | 'awards' | 'break' | 'draw' | 'game'
+const phase = computed<Phase>(() => {
+  if (pause.value === 'suspense' && !showAwards.value) return 'suspense'
+  if (showAwards.value) return 'awards'
+  if (pause.value === 'break') return 'break'
+  if (state.value?.status === 'draw') return 'draw'
+  return 'game'
+})
+// Suspense hides the scores for the reveal; the awards ceremony replaces them.
+const showScoreboard = computed(
+  () => phase.value !== 'suspense' && state.value?.status !== 'awards',
+)
+
 // On the final game (nothing left to play) we clear the bottom of the board to
 // build anticipation for the ceremony — no stats, no leaderboard.
 const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.length === 0)
@@ -90,45 +106,46 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
   <div class="stage">
     <BoardWinToast />
 
-    <!-- Pre-ceremony suspense: hide the scores entirely to build excitement. -->
-    <section
-      v-if="pause === 'suspense' && !showAwards"
-      class="card curtain"
-      data-testid="board-suspense"
-    >
-      <div class="curtain-emoji" aria-hidden="true">🏆</div>
-      <h1 class="curtain-title">{{ $t('board.suspense') }}</h1>
-    </section>
+    <!-- Honorable mentions are about the side awards, not the standings — the
+         final score stays hidden until the ceremony, and suspense hides it too. -->
+    <ScoreBoard v-if="showScoreboard" :teams="teams" :totals="totals" :leader-id="leader" />
 
-    <template v-else>
-      <!-- Honorable mentions are about the side awards, not the standings — the
-           final score stays hidden until the ceremony (status 'finished'). -->
-      <ScoreBoard
-        v-if="state?.status !== 'awards'"
-        :teams="teams"
-        :totals="totals"
-        :leader-id="leader"
-      />
+    <Transition name="fade" mode="out-in">
+      <!-- Pre-ceremony suspense: hide the scores entirely to build excitement. -->
+      <section
+        v-if="phase === 'suspense'"
+        key="suspense"
+        class="card curtain"
+        data-testid="board-suspense"
+      >
+        <div class="curtain-emoji" aria-hidden="true">🏆</div>
+        <h1 class="curtain-title">{{ $t('board.suspense') }}</h1>
+      </section>
 
-      <template v-if="showAwards">
+      <div v-else-if="phase === 'awards'" key="awards">
         <AwardsPanel :show-winner="state?.status === 'finished'" class="mt" />
         <RecapPanel v-if="state?.status === 'finished'" class="mt" />
-      </template>
+      </div>
 
       <!-- Short break: scores stay up, but pause the game/stats. -->
-      <section v-else-if="pause === 'break'" class="card curtain mt" data-testid="board-paused">
+      <section
+        v-else-if="phase === 'break'"
+        key="break"
+        class="card curtain mt"
+        data-testid="board-paused"
+      >
         <div class="curtain-emoji" aria-hidden="true">⏸️</div>
         <h1 class="curtain-title">{{ $t('board.paused') }}</h1>
         <p class="muted">{{ $t('board.pausedHint') }}</p>
       </section>
 
       <!-- Right after the draw: show the teams on the big screen -->
-      <section v-else-if="state?.status === 'draw'" class="mt">
+      <section v-else-if="phase === 'draw'" key="draw" class="mt">
         <div class="muted eyebrow">{{ $t('common.teams') }}</div>
         <BoardTeams />
       </section>
 
-      <template v-else>
+      <div v-else key="game">
         <section class="card current mt" data-testid="current-game">
           <div class="muted eyebrow">{{ $t('board.currentGame') }}</div>
           <template v-if="currentGame">
@@ -187,14 +204,26 @@ const isLastGame = computed(() => Boolean(currentGame.value) && upcoming.value.l
         </section>
 
         <BoardStats v-if="!isLastGame" class="stats" data-testid="board-stats" />
-      </template>
-    </template>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
 .stage {
   display: contents;
+}
+
+/* Cross-fade between the board's states (game ↔ break ↔ draw ↔ ceremony) so the
+   big screen never hard-cuts. Reduced-motion users get an instant swap. */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .mt {

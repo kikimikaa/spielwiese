@@ -17,6 +17,7 @@ const tiles = [
     <AppHeader />
     <div class="stack hero">
       <h1>{{ $t('app.name') }}</h1>
+      <p class="muted">{{ $t('home.subtitle') }}</p>
     </div>
     <nav class="tiles">
       <NuxtLink

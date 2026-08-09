@@ -327,8 +327,8 @@ function setNote(gameId: string, event: Event) {
 }
 
 .move {
-  min-height: 0;
-  padding: 0.1rem 0.5rem;
+  min-height: 2rem;
+  padding: 0.2rem 0.6rem;
   line-height: 1.2;
 }
 
@@ -438,6 +438,7 @@ function setNote(gameId: string, event: Event) {
 
 .metric-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   border-left: 6px solid var(--team);
@@ -450,8 +451,9 @@ function setNote(gameId: string, event: Event) {
 }
 
 .metric-input {
-  width: 7rem;
-  min-height: 38px;
+  flex: 1;
+  min-width: 5rem;
+  min-height: 44px;
 }
 
 .note {

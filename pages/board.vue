@@ -2,8 +2,19 @@
 const { t } = useI18n()
 useHead({ title: () => `${t('nav.board')} — ${t('app.name')}` })
 
-const { connected } = useTournamentState()
+const { state, connected } = useTournamentState()
 const { enabled: sun, toggle: toggleSun } = useSunMode()
+const { enabled: sound, toggle: toggleSound, playWin, playFanfare } = useSound()
+
+// The board is where the atmosphere lives: a chime on each win, a fanfare when
+// the ceremony ends. Both no-op unless the host has switched sound on.
+useGameWins(() => playWin())
+watch(
+  () => state.value?.status,
+  (status: string | undefined, prev: string | undefined) => {
+    if (status === 'finished' && prev && prev !== 'finished') playFanfare()
+  },
+)
 </script>
 
 <template>
@@ -30,6 +41,15 @@ const { enabled: sun, toggle: toggleSun } = useSunMode()
         >
           ☀️ {{ $t('board.sunMode') }}
         </button>
+        <button
+          class="btn sound"
+          :class="{ active: sound }"
+          data-testid="sound-toggle"
+          :aria-pressed="sound"
+          @click="toggleSound"
+        >
+          {{ sound ? '🔊' : '🔇' }} {{ $t('board.sound') }}
+        </button>
         <LangToggle />
       </div>
     </header>
@@ -55,7 +75,8 @@ const { enabled: sun, toggle: toggleSun } = useSunMode()
   color: var(--accent);
 }
 
-.sun.active {
+.sun.active,
+.sound.active {
   border-color: var(--accent);
   background: var(--surface-2);
 }

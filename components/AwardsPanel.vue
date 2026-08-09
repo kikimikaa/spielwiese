@@ -21,7 +21,7 @@ const isTie = computed(
     >
       <Confetti />
       <div class="muted">{{ $t('awards.winner') }}</div>
-      <div class="winner-name">🏆 {{ winner.name }}</div>
+      <div class="winner-name team-text"><span aria-hidden="true">🏆</span> {{ winner.name }}</div>
       <div class="winner-score">{{ totals[winner.id] ?? 0 }} {{ $t('common.points') }}</div>
     </div>
 
@@ -79,7 +79,6 @@ const isTie = computed(
 .winner-name {
   font-weight: 800;
   font-size: clamp(2rem, 8vw, 3.5rem);
-  color: var(--team);
   line-height: 1.1;
 }
 
